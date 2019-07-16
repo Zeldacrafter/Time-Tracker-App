@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">uni_app</string>
+    <string name="app_name">Uni-App</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_calendar">Calendar</string>
+    <string name="title_settings">Settings</string>
 </resources>

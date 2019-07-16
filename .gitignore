@@ -7,7 +7,7 @@
 .externalNativeBuild
 app/**
 build.gradle
-gradle.properties 
+gradle.properties
 gradle/
 gradlew
 gradlew.bat
