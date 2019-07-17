@@ -1,4 +1,4 @@
-package com.example.uni_app;
+package com.uni.time_tracking;
 
 import android.content.Context;
 import android.widget.Toast;

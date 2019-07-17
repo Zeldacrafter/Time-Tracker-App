@@ -1,4 +1,4 @@
-package com.example.uni_app.database.tables;
+package com.uni.time_tracking.database.tables;
 
 import android.provider.BaseColumns;
 

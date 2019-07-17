@@ -1,5 +1,5 @@
 //add your package name here example: package com.example.dbm;
-package com.example.uni_app.activities;
+package com.uni.time_tracking.activities;
 //all required import files
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -30,8 +30,7 @@ import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.uni_app.R;
-import com.example.uni_app.database.DBHelper;
+import com.uni.time_tracking.database.DBHelper;
 
 
 /**

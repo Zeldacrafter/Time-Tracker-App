@@ -1,4 +1,4 @@
-package com.example.uni_app.database;
+package com.uni.time_tracking.database;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -11,10 +11,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 
-import com.example.uni_app.database.tables.ActivityDB;
+import com.uni.time_tracking.database.tables.ActivityDB;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * DBHelper is used for managing the database and its tables.

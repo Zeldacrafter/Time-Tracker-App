@@ -1,9 +1,9 @@
-package com.example.uni_app.activities;
+package com.uni.time_tracking.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.uni_app.R;
+import com.uni.time_tracking.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import static com.example.uni_app.General.showToast;
+import static com.uni.time_tracking.General.showToast;
 
 public class MainActivity extends AppCompatActivity {
 
