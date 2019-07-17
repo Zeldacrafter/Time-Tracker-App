@@ -7,4 +7,10 @@
         android:icon="@drawable/ic_developer_mode_24px"
         android:title="@string/dev_database_viewer"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_add_category"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_add_circle_24px"
+        android:title="@string/add_category"
+        app:showAsAction="always" />
 </menu>
