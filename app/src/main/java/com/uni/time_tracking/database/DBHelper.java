@@ -83,7 +83,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(ActivityDB.SQL_DELETE_TABLE);
     }
 
-    private void addEntryActivity(String name){
+    public void addEntryActivity(String name){
         ContentValues values = new ContentValues();
         values.put(ActivityDB.FeedEntry.COLUMN_NAME, name);
 

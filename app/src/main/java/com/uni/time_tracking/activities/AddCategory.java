@@ -4,10 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 import com.uni.time_tracking.R;
+import com.uni.time_tracking.database.DBHelper;
+
 import static com.uni.time_tracking.General.showToast;
 
 public class AddCategory extends AppCompatActivity {
@@ -20,10 +24,14 @@ public class AddCategory extends AppCompatActivity {
     private Menu menu;
     private MenuItem done;
 
+    private EditText nameText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_category);
+
+        nameText = findViewById(R.id.add_category_name_text);
     }
 
     @Override
@@ -39,9 +47,20 @@ public class AddCategory extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case (R.id.menu_add_category_done):
-                showToast("Saved new Category!", getApplicationContext());
-                finish();
+                DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
+                if(!"".equals(nameText.getText().toString())) {
+                    dbHelper.addEntryActivity(nameText.getText().toString());
+                    showToast("Saved new Category!", getApplicationContext());
+                    finish();
+                } else {
+                    //TODO: Highlight missing box (Wiggle?)
+                    //TODO: Error message not as toast
+                    showToast("Please name the new category", getApplicationContext());
+                }
                 break;
+
+            default:
+                Log.e(TAG, "Did not find menu item");
         }
 
         return super.onOptionsItemSelected(item);
