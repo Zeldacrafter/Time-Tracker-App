@@ -9,8 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.AddCategory"></activity>
         <activity
-            android:name="com.uni.time_tracking.activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,8 +20,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.uni.time_tracking.activities.DevAndroidDatabaseManager"
-            android:parentActivityName="com.uni.time_tracking.activities.MainActivity"
+            android:name=".activities.DevAndroidDatabaseManager"
+            android:parentActivityName=".activities.MainActivity"
             android:screenOrientation="portrait" />
     </application>
 

@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //Menu bar at top
-        getMenuInflater().inflate(R.menu.top_menu, menu);
+        getMenuInflater().inflate(R.menu.top_menu_home, menu);
         this.menu = menu;
         devDbViewer = this.menu.findItem(R.id.menu_dev_db_viewer);
         addCategory = this.menu.findItem(R.id.menu_add_category);
@@ -86,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(dbManager);
                 break;
             case (R.id.menu_add_category):
-                showToast("Item Added!", getApplicationContext());
+                Intent addCategory = new Intent(this, AddCategory.class);
+                startActivity(addCategory);
             default:
                 Log.e(TAG, "Did not find menu item");
         }
