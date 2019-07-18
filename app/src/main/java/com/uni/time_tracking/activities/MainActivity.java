@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void addCategoriesToList() {
 
-        //TODO: Only add new items
+        //TODO: Only add new items. Don't re-add every item
 
         categoryList.removeAllViews();
 
@@ -112,8 +112,13 @@ public class MainActivity extends AppCompatActivity {
         categoryList.addView(divider);
 
         //TODO: Maybe this should be a table-layout.
+        //TODO: Acually make this look kind of good..
         DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
         ActivityDB[] activities = dbHelper.getActiveActivities();
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(0, 20, 0, 20);
+
         for(ActivityDB activity : activities) {
 
             LinearLayout innerLayout = new LinearLayout(getApplicationContext());
@@ -121,21 +126,23 @@ public class MainActivity extends AppCompatActivity {
             innerLayout.setOrientation(LinearLayout.HORIZONTAL);
 
             TextView tv = new TextView(getApplicationContext());
-            tv.setText("ID:" + activity.getId());
-            innerLayout.addView(tv);
-
-            //TODO: Acually make this look kind of good..
-            View v = new View(getApplicationContext());
-            v.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 1));
-            innerLayout.addView(v);
-
             TextView tv2 = new TextView(getApplicationContext());
+            tv.setText("ID:" + activity.getId());
             tv2.setText("Name: " + activity.getName());
-            innerLayout.addView(tv2);
+            tv.setTextAppearance(R.style.TextAppearance_AppCompat_Medium);
+            tv2.setTextAppearance(R.style.TextAppearance_AppCompat_Medium);
+            tv.setLayoutParams(layoutParams);
+            tv2.setLayoutParams(layoutParams);
 
-            v = new View(getApplicationContext());
+            View v = new View(getApplicationContext());
+            View v2 = new View(getApplicationContext());
             v.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
+            v2.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
+
+            innerLayout.addView(tv);
             innerLayout.addView(v);
+            innerLayout.addView(tv2);
+            innerLayout.addView(v2);
 
             categoryList.addView(innerLayout);
 

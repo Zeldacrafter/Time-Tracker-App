@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:text="@string/add_category_name" />
 
             <EditText
@@ -44,6 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:inputType="textPersonName"
                 android:hint="@string/add_category_name_hint"
                 android:text="" />
