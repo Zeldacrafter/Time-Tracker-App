@@ -17,7 +17,7 @@ public class ActivityDB {
                     + " INTEGER NOT NULL DEFAULT 1)";
 
     public static final String SQL_DELETE_TABLE =
-            "DROP TABLES IF EXISTS "
+            "DROP TABLE IF EXISTS "
                     + FeedEntry.TABLE_NAME;
 
     private int id;

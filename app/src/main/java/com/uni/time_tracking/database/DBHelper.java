@@ -12,6 +12,7 @@ import android.util.Log;
 
 
 import com.uni.time_tracking.database.tables.ActivityDB;
+import com.uni.time_tracking.database.tables.ActivityTimeDB;
 
 import java.util.ArrayList;
 
@@ -77,10 +78,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static void createTables(SQLiteDatabase db){
         db.execSQL(ActivityDB.SQL_CREATE_TABLE);
+        db.execSQL(ActivityTimeDB.SQL_CREATE_TABLE);
     }
 
     private static void deleteEntries(SQLiteDatabase db){
         db.execSQL(ActivityDB.SQL_DELETE_TABLE);
+        db.execSQL(ActivityTimeDB.SQL_DELETE_TABLE);
     }
 
     public void addEntryActivity(String name){
@@ -90,17 +93,22 @@ public class DBHelper extends SQLiteOpenHelper {
         getWritableDatabase().insert(ActivityDB.FeedEntry.TABLE_NAME, null, values);
     }
 
+    public void resetDatabase() {
+        deleteEntries(getWritableDatabase());
+        createTables(getWritableDatabase());
+    }
+
     public ActivityDB[] getActiveActivities() {
 
         //Creating the 'query'-String
         String query =
                 "SELECT "
-                    + ActivityDB.FeedEntry._ID + ", "
-                    + ActivityDB.FeedEntry.COLUMN_NAME +
-                " FROM "
-                    + ActivityDB.FeedEntry.TABLE_NAME +
-                " WHERE "
-                    + ActivityDB.FeedEntry.COLUMN_ACTIVE + " = 1";
+                        + ActivityDB.FeedEntry._ID + ", "
+                        + ActivityDB.FeedEntry.COLUMN_NAME +
+                        " FROM "
+                        + ActivityDB.FeedEntry.TABLE_NAME +
+                        " WHERE "
+                        + ActivityDB.FeedEntry.COLUMN_ACTIVE + " = 1";
 
         //Getting the result-cursor
         Cursor cursor = getWritableDatabase().rawQuery(query, null);
@@ -123,6 +131,37 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
+
+    public void activityStartedOrStopped(int ActivityID){
+
+        //TODO: Make it do "isActivityActive()" check?
+        String query = "SELECT " + ActivityTimeDB.FeedEntry._ID +
+                " FROM " + ActivityTimeDB.FeedEntry.TABLE_NAME +
+                " WHERE " + ActivityTimeDB.FeedEntry.COLUMN_ACTIVITY_ID + " = ?" +
+                " AND " + ActivityTimeDB.FeedEntry.COLUMN_END + " IS NULL";
+        Cursor c = getWritableDatabase().rawQuery(query, new String[]{""+ActivityID});
+
+        assert(c.getCount() < 2) : "More than one instance of the activity active.";
+
+        if (c.getCount() == 0) {
+            // Activity is not active. Activate it.
+            ContentValues values = new ContentValues();
+            values.put(ActivityTimeDB.FeedEntry.COLUMN_START, System.currentTimeMillis());
+            values.put(ActivityTimeDB.FeedEntry.COLUMN_ACTIVITY_ID, ActivityID);
+            getWritableDatabase().insert(ActivityTimeDB.FeedEntry.TABLE_NAME, null, values);
+        }else if(c.getCount() == 1) {
+            //Activity is active. Deactivate it and set stop.
+            //TODO: Only count > 5 min?
+            c.moveToFirst();
+            int id = c.getInt(0);
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(ActivityTimeDB.FeedEntry.COLUMN_END, System.currentTimeMillis());
+            getWritableDatabase().update(ActivityTimeDB.FeedEntry.TABLE_NAME,  contentValues,
+                    ActivityTimeDB.FeedEntry._ID + " = ?", new String[] {""+id});
+        }
+        c.close();
+    }
 
     /**
      * This method is for the class 'DevAndroidDatabaseManager'

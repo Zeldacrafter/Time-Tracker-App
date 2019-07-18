@@ -2,6 +2,7 @@ package com.uni.time_tracking.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.DhcpInfo;
 import android.os.Bundle;
 
 import com.uni.time_tracking.R;
@@ -124,6 +125,8 @@ public class MainActivity extends AppCompatActivity {
             LinearLayout innerLayout = new LinearLayout(getApplicationContext());
             innerLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             innerLayout.setOrientation(LinearLayout.HORIZONTAL);
+            innerLayout.setId(activity.getId()); //TODO: is this problematic? And is there is a better way?
+            innerLayout.setOnClickListener(view -> DBHelper.getInstance(getApplicationContext()).activityStartedOrStopped(view.getId()));
 
             TextView tv = new TextView(getApplicationContext());
             TextView tv2 = new TextView(getApplicationContext());
