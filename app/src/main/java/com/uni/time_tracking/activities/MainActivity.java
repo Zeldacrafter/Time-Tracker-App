@@ -1,23 +1,28 @@
 package com.uni.time_tracking.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.uni.time_tracking.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.uni.time_tracking.database.DBHelper;
+import com.uni.time_tracking.database.tables.ActivityDB;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
+import android.text.Layout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.LinearLayout;
+import android.widget.Space;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 
 import static com.uni.time_tracking.General.showToast;
 
@@ -29,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem devDbViewer;
     private MenuItem addCategory;
 
-    private ListView categoryList;
+    private LinearLayout categoryList;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -59,13 +64,6 @@ public class MainActivity extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         categoryList = findViewById(R.id.home_category_list);
-        categoryList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<String>()));
-
-        TextView tv = new TextView(getApplicationContext());
-        tv.setText("ABC");
-        tv.setOnClickListener(view -> showToast("Hi", getApplicationContext()));
-        //categoryList.addHeaderView(tv);
-        categoryList.addFooterView(tv, null, true);
     }
 
     @Override
@@ -93,5 +91,56 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        addCategoriesToList();
+    }
+
+    private void addCategoriesToList() {
+
+        //TODO: Only add new items
+
+        categoryList.removeAllViews();
+
+        //Add all categories to the list.
+
+        LayoutInflater inflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View divider = inflater.inflate(R.layout.divider_horizontal, null);
+        categoryList.addView(divider);
+
+        //TODO: Maybe this should be a table-layout.
+        DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
+        ActivityDB[] activities = dbHelper.getActiveActivities();
+        for(ActivityDB activity : activities) {
+
+            LinearLayout innerLayout = new LinearLayout(getApplicationContext());
+            innerLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            innerLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+            TextView tv = new TextView(getApplicationContext());
+            tv.setText("ID:" + activity.getId());
+            innerLayout.addView(tv);
+
+            //TODO: Acually make this look kind of good..
+            View v = new View(getApplicationContext());
+            v.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 1));
+            innerLayout.addView(v);
+
+            TextView tv2 = new TextView(getApplicationContext());
+            tv2.setText("Name: " + activity.getName());
+            innerLayout.addView(tv2);
+
+            v = new View(getApplicationContext());
+            v.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
+            innerLayout.addView(v);
+
+            categoryList.addView(innerLayout);
+
+            divider = inflater.inflate(R.layout.divider_horizontal, null); //FIXME: Dont pass null?
+            categoryList.addView(divider);
+        }
     }
 }

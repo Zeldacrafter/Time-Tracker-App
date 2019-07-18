@@ -30,6 +30,19 @@ public class ActivityDB {
         this.active = active;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+
     public static final class FeedEntry implements BaseColumns {
         //Table name
         public static final String TABLE_NAME = "Activity";

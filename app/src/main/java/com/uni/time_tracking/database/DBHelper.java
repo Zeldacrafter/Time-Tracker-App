@@ -90,6 +90,37 @@ public class DBHelper extends SQLiteOpenHelper {
         getWritableDatabase().insert(ActivityDB.FeedEntry.TABLE_NAME, null, values);
     }
 
+    public ActivityDB[] getActiveActivities() {
+
+        //Creating the 'query'-String
+        String query =
+                "SELECT "
+                    + ActivityDB.FeedEntry._ID + ", "
+                    + ActivityDB.FeedEntry.COLUMN_NAME +
+                " FROM "
+                    + ActivityDB.FeedEntry.TABLE_NAME +
+                " WHERE "
+                    + ActivityDB.FeedEntry.COLUMN_ACTIVE + " = 1";
+
+        //Getting the result-cursor
+        Cursor cursor = getWritableDatabase().rawQuery(query, null);
+
+        //Putting the results in a 2-dimensional array
+        //where the first dimension is the entryNr
+        //and the second dimension a list of the wanted columns
+        ActivityDB[] values = new ActivityDB[cursor.getCount()];
+        int count = 0;
+        while (cursor.moveToNext()){
+            int id = Integer.parseInt(cursor.getString(0));
+            String name = cursor.getString(1);
+            values[count] = new ActivityDB(id, name, true);
+            count++;
+        }
+
+        cursor.close();
+
+        return values;
+    }
 
 
 
