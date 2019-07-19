@@ -2,30 +2,30 @@ package com.uni.time_tracking.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.DhcpInfo;
 import android.os.Bundle;
 
+import com.uni.time_tracking.General;
+import com.uni.time_tracking.Pair;
 import com.uni.time_tracking.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
+import com.uni.time_tracking.database.tables.TimeDB;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 
-import android.text.Layout;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Space;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 
-import static com.uni.time_tracking.General.showToast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem addCategory;
 
     private LinearLayout categoryList;
+
+    private ArrayList<Pair<TextView, Integer>> toRefreshRunningActivities;
+    final Handler runningTimerUpdateHandler = new Handler();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -65,6 +68,17 @@ public class MainActivity extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         categoryList = findViewById(R.id.home_category_list);
+
+        toRefreshRunningActivities = new ArrayList<>();
+
+        runningTimerUpdateHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (Pair<TextView, Integer> p : toRefreshRunningActivities)
+                    updateRunningText(p.item1, p.item2);
+                runningTimerUpdateHandler.postDelayed(this, 100);
+            }
+        });
     }
 
     @Override
@@ -112,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         View divider = inflater.inflate(R.layout.divider_horizontal, null);
         categoryList.addView(divider);
 
-        //TODO: Maybe this should be a table-layout.
+        //TODO: Maybe this should be activityClicked table-layout.
         //TODO: Acually make this look kind of good..
         DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
         ActivityDB[] activities = dbHelper.getActiveActivities();
@@ -125,32 +139,62 @@ public class MainActivity extends AppCompatActivity {
             LinearLayout innerLayout = new LinearLayout(getApplicationContext());
             innerLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             innerLayout.setOrientation(LinearLayout.HORIZONTAL);
-            innerLayout.setId(activity.getId()); //TODO: is this problematic? And is there is a better way?
-            innerLayout.setOnClickListener(view -> DBHelper.getInstance(getApplicationContext()).activityStartedOrStopped(view.getId()));
+            innerLayout.setId(activity.getId()); //TODO: is this problematic? And is there is activityClicked better way?
+            innerLayout.setOnClickListener(view -> MainActivity.activityClicked((LinearLayout)view, view.getId()));
 
-            TextView tv = new TextView(getApplicationContext());
-            TextView tv2 = new TextView(getApplicationContext());
-            tv.setText("ID:" + activity.getId());
-            tv2.setText("Name: " + activity.getName());
-            tv.setTextAppearance(R.style.TextAppearance_AppCompat_Medium);
-            tv2.setTextAppearance(R.style.TextAppearance_AppCompat_Medium);
-            tv.setLayoutParams(layoutParams);
-            tv2.setLayoutParams(layoutParams);
+            TextView idText = new TextView(getApplicationContext());
+            TextView nameText = new TextView(getApplicationContext());
+            TextView runningText = new TextView(getApplicationContext());
+            idText.setText("ID:" + activity.getId());
+            nameText.setText("Name: " + activity.getName());
+            updateRunningText(runningText, activity.getId());
+            idText.setTextAppearance(R.style.TextAppearance_AppCompat_Medium);
+            nameText.setTextAppearance(R.style.TextAppearance_AppCompat_Medium);
+            runningText.setTextAppearance(R.style.TextAppearance_AppCompat_Medium);
+            idText.setLayoutParams(layoutParams);
+            nameText.setLayoutParams(layoutParams);
+            runningText.setLayoutParams(layoutParams);
 
-            View v = new View(getApplicationContext());
-            View v2 = new View(getApplicationContext());
-            v.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
-            v2.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
+            toRefreshRunningActivities.add(new Pair<>(runningText, activity.getId()));
 
-            innerLayout.addView(tv);
-            innerLayout.addView(v);
-            innerLayout.addView(tv2);
-            innerLayout.addView(v2);
+            View space1 = new View(getApplicationContext());
+            View space2 = new View(getApplicationContext());
+            space1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
+            space2.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
+            innerLayout.addView(idText);
+            innerLayout.addView(space1);
+            innerLayout.addView(nameText);
+            innerLayout.addView(space2);
+            innerLayout.addView(runningText);
 
             categoryList.addView(innerLayout);
 
             divider = inflater.inflate(R.layout.divider_horizontal, null); //FIXME: Dont pass null?
             categoryList.addView(divider);
+        }
+    }
+
+    private static void activityClicked(LinearLayout layout, int activityID){
+
+        DBHelper dbHelper = DBHelper.getInstance(layout.getContext());
+        TimeDB time = dbHelper.getActiveTime(activityID);
+        if(time == null) {
+            // No active time. activate now.
+            dbHelper.activateActivity(activityID);
+        }else {
+            // The activity is active. Deactivate it.
+            dbHelper.deactivateTime(time.getId());
+        }
+    }
+
+    private void updateRunningText(TextView runningText, int activityID) {
+        TimeDB time = DBHelper.getInstance(runningText.getContext()).getActiveTime(activityID);
+        if(time != null) {
+            Log.d(TAG,System.currentTimeMillis()/1000 + "-" + time.getStart()/1000+" = " + (System.currentTimeMillis()-time.getStart()) / 1000);
+            String timeString = General.millisToTimeString(System.currentTimeMillis() - time.getStart());
+            runningText.setText(timeString);
+        }else {
+            runningText.setText("Inactive!");
         }
     }
 }
