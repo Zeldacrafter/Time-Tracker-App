@@ -2,15 +2,8 @@
 .gradle
 .idea
 .DS_Store
-/build
 /captures
 .externalNativeBuild
 app/build
-gradle/
-gradlew
-gradlew.bat
 local.properties
-settings.gradle
-app/src/test/
-app/src/androidTest/
 app/proguard-rules.pro
