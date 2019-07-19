@@ -12,7 +12,7 @@ import android.util.Log;
 
 
 import com.uni.time_tracking.database.tables.ActivityDB;
-import com.uni.time_tracking.database.tables.ActivityTimeDB;
+import com.uni.time_tracking.database.tables.TimeDB;
 
 import java.util.ArrayList;
 
@@ -78,12 +78,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static void createTables(SQLiteDatabase db){
         db.execSQL(ActivityDB.SQL_CREATE_TABLE);
-        db.execSQL(ActivityTimeDB.SQL_CREATE_TABLE);
+        db.execSQL(TimeDB.SQL_CREATE_TABLE);
     }
 
     private static void deleteEntries(SQLiteDatabase db){
         db.execSQL(ActivityDB.SQL_DELETE_TABLE);
-        db.execSQL(ActivityTimeDB.SQL_DELETE_TABLE);
+        db.execSQL(TimeDB.SQL_DELETE_TABLE);
     }
 
     public void addEntryActivity(String name){
@@ -130,37 +130,52 @@ public class DBHelper extends SQLiteOpenHelper {
         return values;
     }
 
+    public boolean isActivityActive(int activityID) {
+        return getActiveTime(activityID) != null;
+    }
 
+    public TimeDB getActiveTime(int activityID) {
+        String query = "SELECT " + TimeDB.FeedEntry._ID + ", " +
+                TimeDB.FeedEntry.COLUMN_START + ", " +
+                TimeDB.FeedEntry.COLUMN_END +
+                " FROM " + TimeDB.FeedEntry.TABLE_NAME +
+                " WHERE " + TimeDB.FeedEntry.COLUMN_ACTIVITY_ID + " = ?" +
+                " AND " + TimeDB.FeedEntry.COLUMN_END + " IS NULL";
+        Cursor c = getWritableDatabase().rawQuery(query, new String[]{""+activityID});
 
-    public void activityStartedOrStopped(int ActivityID){
+        assert(c.getCount() < 2) : "More than one instance of the activity active."; //FIXME
 
-        //TODO: Make it do "isActivityActive()" check?
-        String query = "SELECT " + ActivityTimeDB.FeedEntry._ID +
-                " FROM " + ActivityTimeDB.FeedEntry.TABLE_NAME +
-                " WHERE " + ActivityTimeDB.FeedEntry.COLUMN_ACTIVITY_ID + " = ?" +
-                " AND " + ActivityTimeDB.FeedEntry.COLUMN_END + " IS NULL";
-        Cursor c = getWritableDatabase().rawQuery(query, new String[]{""+ActivityID});
-
-        assert(c.getCount() < 2) : "More than one instance of the activity active.";
-
-        if (c.getCount() == 0) {
-            // Activity is not active. Activate it.
-            ContentValues values = new ContentValues();
-            values.put(ActivityTimeDB.FeedEntry.COLUMN_START, System.currentTimeMillis());
-            values.put(ActivityTimeDB.FeedEntry.COLUMN_ACTIVITY_ID, ActivityID);
-            getWritableDatabase().insert(ActivityTimeDB.FeedEntry.TABLE_NAME, null, values);
-        }else if(c.getCount() == 1) {
-            //Activity is active. Deactivate it and set stop.
-            //TODO: Only count > 5 min?
+        if(c.getCount() == 0) {
+            c.close();
+            return null;
+        }else {
             c.moveToFirst();
             int id = c.getInt(0);
-
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(ActivityTimeDB.FeedEntry.COLUMN_END, System.currentTimeMillis());
-            getWritableDatabase().update(ActivityTimeDB.FeedEntry.TABLE_NAME,  contentValues,
-                    ActivityTimeDB.FeedEntry._ID + " = ?", new String[] {""+id});
+            long start = c.getLong(1);
+            long end = -1; //No end yet. TODO: This is ugly
+            c.close();
+            return new TimeDB(id, start, end, activityID);
         }
-        c.close();
+    }
+
+    public void activateActivity(int activityID) {
+        //TODO: Exception
+        assert(getActiveTime(activityID) == null);
+
+        ContentValues values = new ContentValues();
+        values.put(TimeDB.FeedEntry.COLUMN_START, System.currentTimeMillis());
+        values.put(TimeDB.FeedEntry.COLUMN_ACTIVITY_ID, activityID);
+        getWritableDatabase().insert(TimeDB.FeedEntry.TABLE_NAME, null, values);
+    }
+
+    public void deactivateTime(int timeID) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TimeDB.FeedEntry.COLUMN_END, System.currentTimeMillis());
+        getWritableDatabase().update(
+                TimeDB.FeedEntry.TABLE_NAME,
+                contentValues,
+                TimeDB.FeedEntry._ID + " = ?",
+                new String[] {""+timeID});
     }
 
     /**
