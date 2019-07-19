@@ -13,6 +13,11 @@ public class General {
         Toast.makeText(context, msg, duration).show();
     }
 
+    /**
+     * Converts milliseconds to string formatted like "h:mm.ss".
+     * @param millis The amount of milliseconds.
+     * @return The formatted string.
+     */
     public static String millisToTimeString(long millis) {
         int seconds = (int) (millis / 1000) % 60 ;
         String secondsString = (seconds < 10 ? "0" : "") + seconds;

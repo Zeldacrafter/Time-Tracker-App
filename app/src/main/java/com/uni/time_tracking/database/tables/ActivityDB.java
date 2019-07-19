@@ -49,7 +49,7 @@ public class ActivityDB {
 
         //Table columns
         public static final String COLUMN_NAME = "Name";
-        public static final String COLUMN_ACTIVE = "Active";
+        public static final String COLUMN_ACTIVE = "Enabled";
     }
 
 }

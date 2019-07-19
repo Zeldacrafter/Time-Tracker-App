@@ -93,11 +93,19 @@ public class DBHelper extends SQLiteOpenHelper {
         getWritableDatabase().insert(ActivityDB.FeedEntry.TABLE_NAME, null, values);
     }
 
+    /**
+     * Deleting and re-creating all tables in the database.
+     */
     public void resetDatabase() {
         deleteEntries(getWritableDatabase());
         createTables(getWritableDatabase());
     }
 
+    /**
+     * Returns an array of all {@link ActivityDB} entries
+     * where {@link ActivityDB.FeedEntry#COLUMN_ACTIVE} is set to false.
+     * @return Array with {@link ActivityDB} objects.
+     */
     public ActivityDB[] getActiveActivities() {
 
         //Creating the 'query'-String
@@ -130,10 +138,22 @@ public class DBHelper extends SQLiteOpenHelper {
         return values;
     }
 
+    /**
+     * Returns whether there is a active {@link TimeDB} database entry
+     * ({@link TimeDB.FeedEntry#COLUMN_END} = null) for a specified activity.
+     * @param activityID The ID of the activity.
+     * @return {@code true} if such an entry exists, {@code false} otherwise.
+     */
     public boolean isActivityActive(int activityID) {
         return getActiveTime(activityID) != null;
     }
 
+    /**
+     * Returns {@link TimeDB} database entry that is currently active
+     * ({@link TimeDB.FeedEntry#COLUMN_END} = null) for a specified activity.
+     * @param activityID The ID of the activity.
+     * @return {@link TimeDB} object corresponding to the entry. {@code null} if no such entry exists.
+     */
     public TimeDB getActiveTime(int activityID) {
         String query = "SELECT " + TimeDB.FeedEntry._ID + ", " +
                 TimeDB.FeedEntry.COLUMN_START + ", " +
@@ -158,9 +178,12 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Adds a new active {@link TimeDB} entry for an activity starting at the current system-time.
+     * @param activityID The ID of the activity.
+     */
     public void activateActivity(int activityID) {
-        //TODO: Exception
-        assert(getActiveTime(activityID) == null);
+        assert(!isActivityActive(activityID));
 
         ContentValues values = new ContentValues();
         values.put(TimeDB.FeedEntry.COLUMN_START, System.currentTimeMillis());
@@ -168,7 +191,13 @@ public class DBHelper extends SQLiteOpenHelper {
         getWritableDatabase().insert(TimeDB.FeedEntry.TABLE_NAME, null, values);
     }
 
+    /**
+     * Deactivating a {@link TimeDB} entry by setting {@link TimeDB.FeedEntry#COLUMN_END}
+     * to the current system-time.
+     * @param timeID The ID of the {@link TimeDB} entry.
+     */
     public void deactivateTime(int timeID) {
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(TimeDB.FeedEntry.COLUMN_END, System.currentTimeMillis());
         getWritableDatabase().update(

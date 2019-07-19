@@ -21,9 +21,6 @@ public class AddCategory extends AppCompatActivity {
 
     public static final String TAG = "AddCategory";
 
-    private Menu menu;
-    private MenuItem done;
-
     private EditText nameText;
 
     @Override
@@ -38,8 +35,6 @@ public class AddCategory extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         //Menu bar at top
         getMenuInflater().inflate(R.menu.top_menu_add_category, menu);
-        this.menu = menu;
-        done = this.menu.findItem(R.id.menu_add_category_done);
         return true;
     }
 
