@@ -11,6 +11,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
 import com.uni.time_tracking.database.tables.TimeDB;
+import com.uni.time_tracking.test_calendar.BasicActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
@@ -98,6 +99,11 @@ public class MainActivity extends AppCompatActivity {
             case (R.id.menu_add_category):
                 Intent addCategory = new Intent(this, AddCategory.class);
                 startActivity(addCategory);
+                 break;
+            case (R.id.menu_test_calender):
+                Intent testCalender = new Intent(this, BasicActivity.class);
+                startActivity(testCalender);
+                break;
             default:
                 Log.e(TAG, "Did not find menu item");
         }
