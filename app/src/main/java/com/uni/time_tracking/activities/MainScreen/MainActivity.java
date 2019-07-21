@@ -7,7 +7,6 @@ import com.uni.time_tracking.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.uni.time_tracking.activities.AddCategory;
 import com.uni.time_tracking.activities.DevAndroidDatabaseManager;
-import com.uni.time_tracking.test_calendar.BasicActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;

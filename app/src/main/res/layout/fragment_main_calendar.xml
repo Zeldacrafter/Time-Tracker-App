@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.alamkanak.weekview.WeekView
+        android:id="@+id/fragment_week_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:autoLimitTime="false"
+        app:dayBackgroundColor="#05000000"
+        app:headerColumnTextColor="@color/toolbar_text"
+        app:headerRowBackgroundColor="@color/toolbar"
+        app:maxTime="16"
+        app:minOverlappingMinutes="5"
+        app:minTime="4"
+        app:newEventTimeResolutionInMinutes="15"
+        app:noOfVisibleDays="3"
+        app:timeColumnResolution="60"
+        app:todayColumnBackgroundColor="#1848adff"
+        app:todayHeaderTextColor="@color/accent"
+        app:untitledEventText="@string/untitled_event"/>
+
+    <TextView
+        android:id="@+id/fragment_draggable_view" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:background="#ffff0000" android:padding="3dp" android:text="@string/drag_me"
+        android:textColor="@android:color/white"/>
+
+</RelativeLayout>
