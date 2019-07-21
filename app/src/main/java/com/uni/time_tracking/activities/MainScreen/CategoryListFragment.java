@@ -1,36 +1,29 @@
-package com.uni.time_tracking.activities;
+package com.uni.time_tracking.activities.MainScreen;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.uni.time_tracking.General;
 import com.uni.time_tracking.Pair;
 import com.uni.time_tracking.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
 import com.uni.time_tracking.database.tables.TimeDB;
-import com.uni.time_tracking.test_calendar.BasicActivity;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.annotation.NonNull;
-
-import android.os.Handler;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
+public class CategoryListFragment extends Fragment {
 
-public class MainActivity extends AppCompatActivity {
-
-    private static final String TAG = "MainActivity";
 
     /** Hold one element for each activity-entry. Also see {@link #addCategoriesToList()}. */
     private LinearLayout categoryList;
@@ -51,74 +44,30 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    categoryList.setVisibility(View.VISIBLE);
-                    return true;
-                case R.id.navigation_calendar:
-                    categoryList.setVisibility(View.GONE);
-                    return true;
-                case R.id.navigation_settings:
-                    categoryList.setVisibility(View.GONE);
-                    return true;
-            }
-            return false;
-        }
-    };
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        categoryList = findViewById(R.id.home_category_list);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        categoryList = view.findViewById(R.id.home_category_list);
 
         viewRefreshHandler.post(viewRefreshRunnable);
+
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.top_menu_home, menu);
-        return true;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_main_category_list, container, false);
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case (R.id.menu_dev_db_viewer):
-                Intent dbManager = new Intent(this, DevAndroidDatabaseManager.class);
-                startActivity(dbManager);
-                break;
-            case (R.id.menu_add_category):
-                Intent addCategory = new Intent(this, AddCategory.class);
-                startActivity(addCategory);
-                 break;
-            case (R.id.menu_test_calender):
-                Intent testCalender = new Intent(this, BasicActivity.class);
-                startActivity(testCalender);
-                break;
-            default:
-                Log.e(TAG, "Did not find menu item");
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         addCategoriesToList();
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         viewRefreshHandler.removeCallbacks(viewRefreshRunnable);
     }
@@ -137,12 +86,12 @@ public class MainActivity extends AppCompatActivity {
 
         //Add all categories to the list.
 
-        LayoutInflater inflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View divider = inflater.inflate(R.layout.divider_horizontal, null);
         categoryList.addView(divider);
 
         //TODO: Maybe this should be a table-layout.
-        DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
+        DBHelper dbHelper = DBHelper.getInstance(getContext());
         ActivityDB[] activities = dbHelper.getActiveActivities();
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -150,15 +99,15 @@ public class MainActivity extends AppCompatActivity {
 
         for(ActivityDB activity : activities) {
 
-            LinearLayout innerLayout = new LinearLayout(getApplicationContext());
+            LinearLayout innerLayout = new LinearLayout(getContext());
             innerLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             innerLayout.setOrientation(LinearLayout.HORIZONTAL);
             innerLayout.setId(activity.getId()); //TODO: is this problematic with potential collisions?
-            innerLayout.setOnClickListener(view -> MainActivity.activityClicked(view.getContext(), view.getId()));
+            innerLayout.setOnClickListener(view -> CategoryListFragment.activityClicked(view.getContext(), view.getId()));
 
-            TextView idText = new TextView(getApplicationContext());
-            TextView nameText = new TextView(getApplicationContext());
-            TextView runningText = new TextView(getApplicationContext());
+            TextView idText = new TextView(getContext());
+            TextView nameText = new TextView(getContext());
+            TextView runningText = new TextView(getContext());
             idText.setText("ID:" + activity.getId());
             nameText.setText("Name: " + activity.getName());
             updateTime(runningText, activity.getId());
@@ -171,8 +120,8 @@ public class MainActivity extends AppCompatActivity {
 
             toRefreshRunningActivities.add(new Pair<>(runningText, activity.getId()));
 
-            View space1 = new View(getApplicationContext());
-            View space2 = new View(getApplicationContext());
+            View space1 = new View(getContext());
+            View space2 = new View(getContext());
             space1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
             space2.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
             innerLayout.addView(idText);
