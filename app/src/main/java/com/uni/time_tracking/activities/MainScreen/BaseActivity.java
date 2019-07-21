@@ -4,14 +4,18 @@ import android.content.ClipData;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.MonthLoader;
@@ -30,7 +34,7 @@ import java.util.Locale;
 
 import java.text.DateFormat;
 
-abstract class BaseActivity extends AppCompatActivity implements
+abstract class BaseActivity extends Fragment implements
             WeekView.EventClickListener, MonthLoader.MonthChangeListener,
             WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener,
             WeekView.EmptyViewClickListener, WeekView.AddEventClickListener, WeekView.DropListener {
@@ -46,45 +50,41 @@ abstract class BaseActivity extends AppCompatActivity implements
     WeekView weekView;
     TextView draggableView;
 
+    @Nullable
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_main_calendar, container, false);
+    }
 
-        setContentView(R.layout.fragment_main_calendar);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        shortDateFormat = WeekViewUtil.getWeekdayWithNumericDayAndMonthFormat(this, true);
-        timeFormat = android.text.format.DateFormat.getTimeFormat(this);
+        weekView = view.findViewById(R.id.fragment_week_view);
+        draggableView = getView().findViewById(R.id.fragment_draggable_view);
+
+
+        shortDateFormat = WeekViewUtil.getWeekdayWithNumericDayAndMonthFormat(getContext(), true);
+        timeFormat = android.text.format.DateFormat.getTimeFormat(getContext());
         if (timeFormat == null) {
             timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         }
-        setContentView(R.layout.fragment_main_calendar);
-
-        weekView = findViewById(R.id.fragment_week_view);
-        draggableView = findViewById(R.id.fragment_draggable_view);
 
         draggableView.setOnLongClickListener(new DragTapListener());
 
-        // Get a reference for the week view in the layout.
-
         // Show a toast message about the touched event.
         weekView.setEventClickListener(this);
-
         // The week view has infinite scrolling horizontally. We have to provide the events of a
         // month every time the month changes on the week view.
         weekView.setMonthChangeListener(this);
-
         // Set long press listener for events.
         weekView.setEventLongPressListener(this);
-
         // Set long press listener for empty view
         weekView.setEmptyViewLongPressListener(this);
-
         // Set EmptyView Click Listener
         weekView.setEmptyViewClickListener(this);
-
         // Set AddEvent Click Listener
         weekView.setAddEventClickListener(this);
-
         // Set Drag and Drop Listener
         weekView.setDropListener(this);
 
@@ -115,6 +115,13 @@ abstract class BaseActivity extends AppCompatActivity implements
         setupDateTimeInterpreter(false);
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
+    }
+
 //    override fun onResume() {
 //        super.onResume()
 //        mWeekView.setShowDistinctPastFutureColor(true);
@@ -136,13 +143,15 @@ abstract class BaseActivity extends AppCompatActivity implements
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.test_main, menu);
-        return true;
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Do something that differs the Activity's menu here
+        inflater.inflate(R.menu.calendar_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_today:
@@ -220,7 +229,7 @@ abstract class BaseActivity extends AppCompatActivity implements
             set(Calendar.MILLISECOND, 0)
         }
         */
-        DateFormat normalDateFormat = WeekViewUtil.getWeekdayWithNumericDayAndMonthFormat(getApplicationContext(), false);
+        DateFormat normalDateFormat = WeekViewUtil.getWeekdayWithNumericDayAndMonthFormat(getActivity().getApplicationContext(), false);
         weekView.setDateTimeInterpreter(new DateTimeInterpreter() {
             @Override
             public @NotNull String getFormattedTimeOfDay(int hour, int minutes) {
@@ -274,22 +283,22 @@ abstract class BaseActivity extends AppCompatActivity implements
 
     @Override
     public void onEventClick(@NotNull WeekViewEvent event, @NotNull RectF rectF) {
-        Toast.makeText(this, "Clicked " + event.getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Clicked " + event.getName(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onEventLongPress(@NotNull WeekViewEvent event, @NotNull RectF rectF) {
-        Toast.makeText(this, "Long pressed event: " + event.getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Long pressed event: " + event.getName(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onEmptyViewLongPress(@NotNull Calendar time) {
-        Toast.makeText(this, "Empty view long pressed: " + getEventTitle(time), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Empty view long pressed: " + getEventTitle(time), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onEmptyViewClicked(@NotNull Calendar date) {
-        Toast.makeText(this, "Empty view" + " clicked: " + getEventTitle(date), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Empty view" + " clicked: " + getEventTitle(date), Toast.LENGTH_SHORT).show();
     }
 
     @org.jetbrains.annotations.Nullable
@@ -300,11 +309,11 @@ abstract class BaseActivity extends AppCompatActivity implements
 
     @Override
     public void onAddEventClicked(@NotNull Calendar calendar, @NotNull Calendar calendar1) {
-        Toast.makeText(this, "Add event clicked.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Add event clicked.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onDrop(@NotNull View view, @NotNull Calendar date) {
-        Toast.makeText(this, "View dropped to " + date.toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "View dropped to " + date.toString(), Toast.LENGTH_SHORT).show();
     }
 }

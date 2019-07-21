@@ -1,7 +1,9 @@
 package com.uni.time_tracking.activities.MainScreen;
 
 import android.os.Bundle;
+import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -17,15 +19,14 @@ public class BasicActivity extends BaseActivity {
 
     private long uniqueId = 0;
 
-    WeekView weekView;
+   private WeekView weekView;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        weekView = findViewById(R.id.fragment_week_view);
-
-        weekView.setTypeface(ResourcesCompat.getFont(getApplicationContext(), R.font.lato));
+        weekView = view.findViewById(R.id.fragment_week_view);
+        weekView.setTypeface(ResourcesCompat.getFont(getActivity().getApplicationContext(), R.font.lato));
     }
 
     @Override

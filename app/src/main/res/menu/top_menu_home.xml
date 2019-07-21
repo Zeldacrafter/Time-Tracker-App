@@ -12,11 +12,5 @@
         android:orderInCategory="100"
         android:icon="@drawable/ic_add_circle_24px"
         android:title="@string/nav_top_add_category"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/menu_test_calender"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_calendar_24px"
-        android:title="test"
         app:showAsAction="ifRoom" />
 </menu>

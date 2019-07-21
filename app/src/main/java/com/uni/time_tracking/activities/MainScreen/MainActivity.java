@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
                         loadFragment(new CategoryListFragment());
                         return true;
                     case R.id.navigation_calendar:
+                        loadFragment(new BasicActivity());
                         return true;
                     case R.id.navigation_settings:
                         return true;
@@ -64,10 +65,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent addCategory = new Intent(this, AddCategory.class);
                 startActivity(addCategory);
                  break;
-            case (R.id.menu_test_calender):
-                Intent testCalender = new Intent(this, BasicActivity.class);
-                startActivity(testCalender);
-                break;
             default:
                 Log.e(TAG, "Did not find menu item");
         }
