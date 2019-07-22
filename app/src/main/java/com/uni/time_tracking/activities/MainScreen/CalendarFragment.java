@@ -1,6 +1,7 @@
 package com.uni.time_tracking.activities.MainScreen;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
@@ -12,6 +13,8 @@ import androidx.core.content.res.ResourcesCompat;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.uni.time_tracking.R;
+import com.uni.time_tracking.database.DBHelper;
+import com.uni.time_tracking.database.tables.TimeDB;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,6 +39,20 @@ public class CalendarFragment extends BaseCalendarFragment {
         // Populate the week view with some events.
         List<WeekViewEvent> events = new ArrayList<>();
 
+        DBHelper dbHelper = DBHelper.getInstance(getContext());
+        TimeDB[] dbEvents = dbHelper.getAllEvents();
+
+        for(TimeDB event : dbEvents) {
+            Calendar startTime = Calendar.getInstance();
+            startTime.setTimeInMillis(event.getStart());
+            Calendar endTime = Calendar.getInstance();
+            endTime.setTimeInMillis(event.getEnd());
+
+            WeekViewEvent weekViewEvent = new WeekViewEvent(event.getId() + "", "", startTime, endTime);
+            weekViewEvent.setColor(Color.BLUE);
+            events.add(weekViewEvent);
+        }
+        /*
         Context context = getActivity().getApplicationContext();
 
         Calendar startTime = Calendar.getInstance();
@@ -188,8 +205,9 @@ public class CalendarFragment extends BaseCalendarFragment {
         event = new WeekViewEvent(22+"", getEventTitle(startTime), startTime, endTime);
         event.setColor(ContextCompat.getColor(context, R.color.calendar_event_color_02));
         events.add(event);
-
+        */
         return events;
+
     }
 
     public long getUniqueId() {

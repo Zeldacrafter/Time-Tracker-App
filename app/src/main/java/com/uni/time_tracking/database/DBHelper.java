@@ -166,7 +166,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 " FROM " + TimeDB.FeedEntry.TABLE_NAME +
                 " WHERE " + TimeDB.FeedEntry.COLUMN_ACTIVITY_ID + " = ?" +
                 " AND " + TimeDB.FeedEntry.COLUMN_END + " IS NULL";
-        Cursor c = getWritableDatabase().rawQuery(query, new String[]{""+activityID});
+        Cursor c = getReadableDatabase().rawQuery(query, new String[]{""+activityID});
 
         assert(c.getCount() < 2) : "More than one instance of the activity active."; //FIXME
 
@@ -210,6 +210,35 @@ public class DBHelper extends SQLiteOpenHelper {
                 contentValues,
                 TimeDB.FeedEntry._ID + " = ?",
                 new String[] {""+timeID});
+    }
+
+    public TimeDB[] getAllEvents() {
+
+        String query = "SELECT " +
+                TimeDB.FeedEntry._ID + ", " +
+                TimeDB.FeedEntry.COLUMN_START + ", " +
+                TimeDB.FeedEntry.COLUMN_END + ", " +
+                TimeDB.FeedEntry.COLUMN_ACTIVITY_ID  +
+                " FROM " + TimeDB.FeedEntry.TABLE_NAME;
+
+        Cursor c = getReadableDatabase().rawQuery(query, null);
+
+        TimeDB[] result = new TimeDB[c.getCount()];
+
+        int i = 0;
+        while(c.moveToNext()) {
+
+            int id = c.getInt(0);
+            long start = c.getLong(1);
+            long end = c.isNull(2) ? System.currentTimeMillis() : c.getLong(2);
+            int activity_id = c.getInt(3);
+
+            result[i] = new TimeDB(id, start, end, activity_id);
+            i++;
+        }
+
+        c.close();
+        return result;
     }
 
     /**
