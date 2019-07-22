@@ -4,24 +4,31 @@
     tools:context=".MyActivity">
     <item
         android:id="@+id/action_today"
-        android:title="@string/action_today"
+        android:title="@string/calendar_action_today"
         android:orderInCategory="1000"
         app:showAsAction="ifRoom" />
+    <Spinner>
+        android:id="@+id/spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true"
+        android:entries="@array/array_name"
+    </Spinner>
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/action_day_view"
-            android:title="@string/action_day_view"
+            android:title="@string/calendar_action_day_view"
             android:orderInCategory="1"
             app:showAsAction="ifRoom" />
         <item
             android:id="@+id/action_three_day_view"
-            android:title="@string/action_three_day_view"
+            android:title="@string/calendar_action_three_day_view"
             android:orderInCategory="2"
             app:showAsAction="ifRoom"
             android:checked="true" />
         <item
             android:id="@+id/action_week_view"
-            android:title="@string/action_week_view"
+            android:title="@string/calendar_action_week_view"
             android:orderInCategory="3"
             app:showAsAction="ifRoom" />
     </group>

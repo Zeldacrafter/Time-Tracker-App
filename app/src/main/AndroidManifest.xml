@@ -23,9 +23,6 @@
             android:name=".activities.DevAndroidDatabaseManager"
             android:parentActivityName=".activities.MainScreen.MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activities.MainScreen.BasicActivity"
-            android:parentActivityName=".activities.MainScreen.MainActivity"
-            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

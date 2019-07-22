@@ -1,10 +1,12 @@
 package com.uni.time_tracking.activities.MainScreen;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.alamkanak.weekview.WeekView;
@@ -15,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class BasicActivity extends BaseActivity {
+public class CalendarFragment extends BaseCalendarFragment {
 
     private long uniqueId = 0;
 
@@ -32,7 +34,9 @@ public class BasicActivity extends BaseActivity {
     @Override
     public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
         // Populate the week view with some events.
-        List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
+        List<WeekViewEvent> events = new ArrayList<>();
+
+        Context context = getActivity().getApplicationContext();
 
         Calendar startTime = Calendar.getInstance();
         startTime.set(Calendar.HOUR_OF_DAY, 3);
@@ -43,7 +47,7 @@ public class BasicActivity extends BaseActivity {
         endTime.add(Calendar.HOUR, 1);
         endTime.set(Calendar.MONTH, newMonth - 1);
         WeekViewEvent event = new WeekViewEvent("First", getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_01));
+        event.setColor(ContextCompat.getColor(context, R.color.calendar_event_color_01));
         events.add(event);
 
         startTime = Calendar.getInstance();
@@ -56,7 +60,7 @@ public class BasicActivity extends BaseActivity {
         endTime.set(Calendar.MINUTE, 30);
         endTime.set(Calendar.MONTH, newMonth - 1);
         event = new WeekViewEvent("Second", getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_05));
+        event.setColor(ContextCompat.getColor(context, R.color.calendar_event_color_05));
         events.add(event);
 
         startTime = Calendar.getInstance();
@@ -68,7 +72,7 @@ public class BasicActivity extends BaseActivity {
         endTime.set(Calendar.HOUR_OF_DAY, 5);
         endTime.set(Calendar.MINUTE, 0);
         event = new WeekViewEvent(10+"", getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_03));
+        event.setColor(ContextCompat.getColor(context, R.color.calendar_event_color_03));
         events.add(event);
 
         startTime = Calendar.getInstance();
@@ -80,7 +84,7 @@ public class BasicActivity extends BaseActivity {
         endTime.add(Calendar.HOUR_OF_DAY, 2);
         endTime.set(Calendar.MONTH, newMonth - 1);
         event = new WeekViewEvent(2+"", getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_02));
+        event.setColor(ContextCompat.getColor(context, R.color.calendar_event_color_02));
         events.add(event);
 
         startTime = Calendar.getInstance();
@@ -93,7 +97,7 @@ public class BasicActivity extends BaseActivity {
         endTime.add(Calendar.HOUR_OF_DAY, 3);
         endTime.set(Calendar.MONTH, newMonth - 1);
         event = new WeekViewEvent(3+"", getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_03));
+        event.setColor(ContextCompat.getColor(context, R.color.calendar_event_color_03));
         events.add(event);
 
         startTime = Calendar.getInstance();
@@ -105,7 +109,7 @@ public class BasicActivity extends BaseActivity {
         endTime = (Calendar) startTime.clone();
         endTime.add(Calendar.HOUR_OF_DAY, 3);
         event = new WeekViewEvent(4+"", getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_04));
+        event.setColor(ContextCompat.getColor(context, R.color.calendar_event_color_04));
         events.add(event);
 
         startTime = Calendar.getInstance();
@@ -117,7 +121,7 @@ public class BasicActivity extends BaseActivity {
         endTime = (Calendar) startTime.clone();
         endTime.add(Calendar.HOUR_OF_DAY, 3);
         event = new WeekViewEvent(5+"", getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_01));
+        event.setColor(ContextCompat.getColor(context, R.color.calendar_event_color_01));
         events.add(event);
 
         startTime = Calendar.getInstance();
@@ -129,7 +133,7 @@ public class BasicActivity extends BaseActivity {
         endTime = (Calendar) startTime.clone();
         endTime.add(Calendar.HOUR_OF_DAY, 3);
         event = new WeekViewEvent(5+"", getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_02));
+        event.setColor(ContextCompat.getColor(context, R.color.calendar_event_color_02));
         events.add(event);
 
         //AllDay event
@@ -141,7 +145,7 @@ public class BasicActivity extends BaseActivity {
         endTime = (Calendar) startTime.clone();
         endTime.add(Calendar.HOUR_OF_DAY, 23);
         event = new WeekViewEvent(7+"", getEventTitle(startTime), null, startTime, endTime, true);
-        event.setColor(getResources().getColor(R.color.event_color_04));
+        event.setColor(ContextCompat.getColor(context, R.color.calendar_event_color_04));
         events.add(event);
         events.add(event);
 
@@ -155,7 +159,7 @@ public class BasicActivity extends BaseActivity {
         endTime.set(Calendar.DAY_OF_MONTH, 10);
         endTime.set(Calendar.HOUR_OF_DAY, 23);
         event = new WeekViewEvent(8+"", getEventTitle(startTime), null, startTime, endTime, true);
-        event.setColor(getResources().getColor(R.color.event_color_03));
+        event.setColor(ContextCompat.getColor(context, R.color.calendar_event_color_03));
         events.add(event);
 
         // All day event until 00:00 next day
@@ -170,7 +174,7 @@ public class BasicActivity extends BaseActivity {
         endTime = (Calendar) startTime.clone();
         endTime.set(Calendar.DAY_OF_MONTH, 11);
         event = new WeekViewEvent(8+"", getEventTitle(startTime), null, startTime, endTime, true);
-        event.setColor(getResources().getColor(R.color.event_color_01));
+        event.setColor(ContextCompat.getColor(context, R.color.calendar_event_color_01));
 
         startTime = Calendar.getInstance();
         startTime.set(Calendar.HOUR_OF_DAY, 18);
@@ -182,7 +186,7 @@ public class BasicActivity extends BaseActivity {
         endTime.set(Calendar.MINUTE, 30);
         endTime.set(Calendar.MONTH, newMonth - 1);
         event = new WeekViewEvent(22+"", getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_02));
+        event.setColor(ContextCompat.getColor(context, R.color.calendar_event_color_02));
         events.add(event);
 
         return events;

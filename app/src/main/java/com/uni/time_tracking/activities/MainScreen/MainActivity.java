@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
                         loadFragment(new CategoryListFragment());
                         return true;
                     case R.id.navigation_calendar:
-                        loadFragment(new BasicActivity());
+                        loadFragment(new CalendarFragment());
                         return true;
                     case R.id.navigation_settings:
                         return true;

@@ -1,6 +1,7 @@
 package com.uni.time_tracking.activities.MainScreen;
 
 import android.content.ClipData;
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -34,7 +35,7 @@ import java.util.Locale;
 
 import java.text.DateFormat;
 
-abstract class BaseActivity extends Fragment implements
+abstract class BaseCalendarFragment extends Fragment implements
             WeekView.EventClickListener, MonthLoader.MonthChangeListener,
             WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener,
             WeekView.EmptyViewClickListener, WeekView.AddEventClickListener, WeekView.DropListener {
@@ -122,15 +123,18 @@ abstract class BaseActivity extends Fragment implements
         setHasOptionsMenu(true);
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        mWeekView.setShowDistinctPastFutureColor(true);
-//        mWeekView.setShowDistinctWeekendColor(true);
-//        mWeekView.setFutureBackgroundColor(Color.rgb(24,85,96));
-//        mWeekView.setFutureWeekendBackgroundColor(Color.rgb(255,0,0));
-//        mWeekView.setPastBackgroundColor(Color.rgb(85,189,200));
-//        mWeekView.setPastWeekendBackgroundColor(Color.argb(50, 0,255,0));
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        /*
+        weekView.setShowDistinctPastFutureColor(true);
+        weekView.setShowDistinctWeekendColor(true);
+        weekView.setFutureBackgroundColor(Color.rgb(24,85,96));
+        weekView.setFutureWeekendBackgroundColor(Color.rgb(255,0,0));
+        weekView.setPastBackgroundColor(Color.rgb(85,189,200));
+        weekView.setPastWeekendBackgroundColor(Color.argb(50, 0,255,0));
+        */
+    }
 
     private class DragTapListener implements View.OnLongClickListener {
         @Override
@@ -143,7 +147,7 @@ abstract class BaseActivity extends Fragment implements
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NotNull Menu menu, @NotNull MenuInflater inflater) {
         // Do something that differs the Activity's menu here
         inflater.inflate(R.menu.calendar_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
