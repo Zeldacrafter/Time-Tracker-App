@@ -18,7 +18,7 @@ import com.uni.time_tracking.Pair;
 import com.uni.time_tracking.R;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
-import com.uni.time_tracking.database.tables.TimeDB;
+import com.uni.time_tracking.database.tables.EntryDB;
 
 import java.util.ArrayList;
 
@@ -77,7 +77,7 @@ public class CategoryListFragment extends Fragment {
      * {@link com.uni.time_tracking.database.tables.ActivityDB}: <br>
      * - Showing if/how long its been active <br>
      * - Making it possible to toggle if a category is currently used
-     *   (add {@link com.uni.time_tracking.database.tables.TimeDB} entries).
+     *   (add {@link EntryDB} entries).
      */
     private void addCategoriesToList() {
 
@@ -141,13 +141,13 @@ public class CategoryListFragment extends Fragment {
     }
 
     /**
-     * Toggle whether the activity has an active {@link TimeDB} entry.
+     * Toggle whether the activity has an active {@link EntryDB} entry.
      * @param context Application context.
      * @param activityID ID of the activity that we want to toggle.
      */
     private static void activityClicked(Context context, int activityID){
         DBHelper dbHelper = DBHelper.getInstance(context);
-        TimeDB time = dbHelper.getActiveTime(activityID);
+        EntryDB time = dbHelper.getActiveTime(activityID);
         if(time == null) {
             // No active Time-Entry. activate now.
             dbHelper.activateActivity(activityID);
@@ -162,7 +162,7 @@ public class CategoryListFragment extends Fragment {
      * @param activityID The activity that is active/inactive.
      */
     private void updateTime(TextView runningText, int activityID) {
-        TimeDB time = DBHelper.getInstance(runningText.getContext()).getActiveTime(activityID);
+        EntryDB time = DBHelper.getInstance(runningText.getContext()).getActiveTime(activityID);
         if(time != null) {
             String timeString = General.millisToTimeString(System.currentTimeMillis() - time.getStart());
             runningText.setText(timeString);

@@ -2,7 +2,7 @@ package com.uni.time_tracking.database.tables;
 
 import android.provider.BaseColumns;
 
-public class TimeDB {
+public class EntryDB {
 
     private int id;
     private long start;
@@ -22,7 +22,7 @@ public class TimeDB {
             "DROP TABLE IF EXISTS "
                     + FeedEntry.TABLE_NAME;
 
-    public TimeDB(int id, long start, long end, int activityID) {
+    public EntryDB(int id, long start, long end, int activityID) {
         this.id = id;
         this.start = start;
         this.end = end;
@@ -48,7 +48,7 @@ public class TimeDB {
 
     public static final class FeedEntry implements BaseColumns {
         //Table name
-        public static final String TABLE_NAME = "Time";
+        public static final String TABLE_NAME = "Entry";
 
         //Table columns
         public static final String COLUMN_START = "Start";
