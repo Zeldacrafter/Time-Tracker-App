@@ -35,4 +35,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-alpha02'
 
     implementation 'com.github.AndroidDeveloperLB:Android-Week-View:2.3.0.1'
+    implementation 'com.azeesoft.lib.colorpicker:colorpicker:1.0.8@aar'
 }
