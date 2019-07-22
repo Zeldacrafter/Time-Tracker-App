@@ -124,6 +124,9 @@ public class CategoryListFragment extends Fragment {
             View space2 = new View(getContext());
             space1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
             space2.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
+
+            space1.setBackgroundColor(activity.getColor());
+
             innerLayout.addView(idText);
             innerLayout.addView(space1);
             innerLayout.addView(nameText);

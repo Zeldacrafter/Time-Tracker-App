@@ -8,9 +8,11 @@ import android.database.MatrixCursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.util.Log;
 
 
+import com.uni.time_tracking.General;
 import com.uni.time_tracking.database.tables.ActivityDB;
 import com.uni.time_tracking.database.tables.TimeDB;
 
@@ -86,9 +88,10 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(TimeDB.SQL_DELETE_TABLE);
     }
 
-    public void addEntryActivity(String name){
+    public void addEntryActivity(String name, int color){
         ContentValues values = new ContentValues();
         values.put(ActivityDB.FeedEntry.COLUMN_NAME, name);
+        values.put(ActivityDB.FeedEntry.COLUMN_COLOR, General.colorIntToHex(color));
 
         getWritableDatabase().insert(ActivityDB.FeedEntry.TABLE_NAME, null, values);
     }
@@ -112,7 +115,8 @@ public class DBHelper extends SQLiteOpenHelper {
         String query =
                 "SELECT "
                         + ActivityDB.FeedEntry._ID + ", "
-                        + ActivityDB.FeedEntry.COLUMN_NAME +
+                        + ActivityDB.FeedEntry.COLUMN_NAME + ", "
+                        + ActivityDB.FeedEntry.COLUMN_COLOR +
                         " FROM "
                         + ActivityDB.FeedEntry.TABLE_NAME +
                         " WHERE "
@@ -129,7 +133,8 @@ public class DBHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()){
             int id = Integer.parseInt(cursor.getString(0));
             String name = cursor.getString(1);
-            values[count] = new ActivityDB(id, name, true);
+            int color = Color.parseColor(cursor.getString(2));
+            values[count] = new ActivityDB(id, name, true, color);
             count++;
         }
 

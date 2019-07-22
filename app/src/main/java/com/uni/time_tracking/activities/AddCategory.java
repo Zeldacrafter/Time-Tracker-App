@@ -20,7 +20,10 @@ import static com.uni.time_tracking.General.showToast;
 
 public class AddCategory extends AppCompatActivity {
 
-    //TODO: Color
+    //TODO: Finish Color
+    //TODO: Simpler Color selector with sample colors before complex one
+    //TODO: Save color so that it is the same next time"
+
     //TODO: Icon
 
     public static final String TAG = "AddCategory";
@@ -73,7 +76,7 @@ public class AddCategory extends AppCompatActivity {
                     //TODO: Error message not as toast
                     showToast("Please name the new category", getApplicationContext());
                 } else {
-                    dbHelper.addEntryActivity(nameText.getText().toString());
+                    dbHelper.addEntryActivity(nameText.getText().toString(), currentColor);
                     showToast("Saved new Category!", getApplicationContext());
                     finish();
                 }

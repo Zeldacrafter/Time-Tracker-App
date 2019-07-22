@@ -1,7 +1,6 @@
 package com.uni.time_tracking.activities.MainScreen;
 
 import android.content.ClipData;
-import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.TypedValue;

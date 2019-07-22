@@ -26,4 +26,8 @@ public class General {
         int hours   = (int) ((millis / (1000*60*60)) % 24);
         return hours + ":" + minutesString + "." + secondsString;
     }
+
+    public static String colorIntToHex(int color) {
+        return String.format("#%06X", (0xFFFFFF & color));
+    }
 }
