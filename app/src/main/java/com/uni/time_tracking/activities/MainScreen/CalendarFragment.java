@@ -1,5 +1,6 @@
 package com.uni.time_tracking.activities.MainScreen;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.uni.time_tracking.R;
 import com.uni.time_tracking.database.DBHelper;
+import com.uni.time_tracking.database.tables.ActivityDB;
 import com.uni.time_tracking.database.tables.EntryDB;
 
 import java.util.ArrayList;
@@ -43,20 +45,39 @@ public class CalendarFragment extends BaseCalendarFragment {
         // Populate the week view with some events.
         List<WeekViewEvent> events = new ArrayList<>();
 
+        //TODO: Big speed problem:
+        //  Don't get all Categories, only the one relevant
+        //  Don't search through all entries in dbHelper.getAllEventsInMonth.
+        //      Filter them out in the SQLite query directly?
+        //          -> Save Date as YYYYMMDD integer?
+
         DBHelper dbHelper = DBHelper.getInstance(getContext());
         EntryDB[] dbEvents = dbHelper.getAllEventsInMonth(newYear, newMonth);
+        ActivityDB[] activites = dbHelper.getActiveActivities();
 
         for(EntryDB event : dbEvents) {
-            Calendar startTime = event.getStart().toDateTime().toCalendar(Locale.getDefault());
-            Calendar endTime = event.getEnd().toDateTime().toCalendar(Locale.getDefault());
 
-            WeekViewEvent weekViewEvent = new WeekViewEvent(event.getId() + "", event.getId()+"", startTime, endTime);
-            weekViewEvent.setColor(Color.BLUE);
-            events.add(weekViewEvent);
+            ActivityDB activity = findActivityWithId(activites, event.getId());
+            if(activity != null) {
+                Calendar startTime = event.getStart().toCalendar(Locale.getDefault());
+                Calendar endTime = event.getEnd().toCalendar(Locale.getDefault());
+                WeekViewEvent weekViewEvent = new WeekViewEvent(event.getId() + "", event.getId()+"", startTime, endTime);
+
+                weekViewEvent.setColor(activity.getColor());
+
+                events.add(weekViewEvent);
+            }
         }
 
         return events;
 
+    }
+
+    private ActivityDB findActivityWithId(ActivityDB[] activities, int id) {
+        for(ActivityDB a : activities) {
+            if(a.getId() == id) return a;
+        }
+        return null;
     }
 
     public long getUniqueId() {

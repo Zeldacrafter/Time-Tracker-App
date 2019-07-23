@@ -1,9 +1,16 @@
 package com.uni.time_tracking;
 
+import android.util.Log;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.Hours;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
 
 import java.util.TimeZone;
 
@@ -34,12 +41,25 @@ public class Time {
         return f.parseDateTime(dateTimeString);
     }
 
-    public static DateTime difference(DateTime d1, DateTime d2) {
-        return new DateTime(d1.getMillis() - d2.getMillis(), getTimezone());
+    public static Period difference(DateTime d1, DateTime d2) {
+        return new Period(d2, d1);
     }
 
-    public static DateTime differenceToNow(DateTime dateTime) {
+    public static Period differenceToNow(DateTime dateTime) {
         return difference(getCurrentTime(), dateTime);
+    }
+
+    public static String toString(Period p) {
+        PeriodFormatter minutesAndSeconds = new PeriodFormatterBuilder()
+                .printZeroAlways()
+                .minimumPrintedDigits(2)
+                .appendHours()
+                .appendSeparator(":")
+                .appendMinutes()
+                .appendSeparator(":")
+                .appendSeconds()
+                .toFormatter();
+        return minutesAndSeconds.print(p);
     }
 
     public static String differenceToNowString(DateTime dateTime) {

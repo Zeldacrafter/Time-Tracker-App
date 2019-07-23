@@ -3,6 +3,7 @@ package com.uni.time_tracking.activities.MainScreen;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 
 public class CategoryListFragment extends Fragment {
 
+    private static final String TAG = "CategoryListFragment";
 
     /** Hold one element for each activity-entry. Also see {@link #addCategoriesToList()}. */
     private LinearLayout categoryList;
@@ -164,7 +166,8 @@ public class CategoryListFragment extends Fragment {
     private void updateTime(TextView runningText, int activityID) {
         EntryDB time = DBHelper.getInstance(runningText.getContext()).getActiveTime(activityID);
         if(time != null) {
-            String timeString = Time.toHourString(Time.differenceToNow(time.getStart()));
+
+            String timeString = Time.differenceToNowString(time.getStart());
             runningText.setText(timeString);
         }else {
             runningText.setText("Inactive!");

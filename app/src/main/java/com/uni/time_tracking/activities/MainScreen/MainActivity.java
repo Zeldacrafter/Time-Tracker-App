@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.uni.time_tracking.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.uni.time_tracking.Time;
 import com.uni.time_tracking.activities.AddCategory;
 import com.uni.time_tracking.activities.DevAndroidDatabaseManager;
 import com.uni.time_tracking.database.DBHelper;
