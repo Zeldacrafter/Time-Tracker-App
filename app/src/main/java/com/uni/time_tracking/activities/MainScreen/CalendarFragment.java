@@ -58,7 +58,7 @@ public class CalendarFragment extends BaseCalendarFragment {
         DBHelper dbHelper = DBHelper.getInstance(getContext());
         EntryDB[] dbEvents = dbHelper.getAllEventsInMonth(newYear, newMonth);
         ActivityDB[] activites = dbHelper.getActiveActivities();
-        
+
         for(EntryDB event : dbEvents) {
 
             ActivityDB activity = findActivityWithId(activites, event.getActivityID());
@@ -68,8 +68,6 @@ public class CalendarFragment extends BaseCalendarFragment {
 
                 WeekViewEvent weekViewEvent = new WeekViewEvent(event.getId() + "", activity.getName(), startTime, endTime);
                 weekViewEvent.setColor(activity.getColor());
-
-                Log.d(TAG, General.colorIntToHex(activity.getColor()));
 
                 events.add(weekViewEvent);
             }

@@ -8,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,15 +29,23 @@ public class CategoryListFragment extends Fragment {
 
     private static final String TAG = "CategoryListFragment";
 
-    /** Hold one element for each activity-entry. Also see {@link #addCategoriesToList()}. */
+    /**
+     * Hold one element for each activity-entry. Also see {@link #addCategoriesToList()}.
+     */
     private LinearLayout categoryList;
 
-    /** Holds all TextViews that show how long any activity has been active (if enabled at all).
-     * Every element also holds an integer, indicating what activityID this view corresponds to */
+    /**
+     * Holds all TextViews that show how long any activity has been active (if enabled at all).
+     * Every element also holds an integer, indicating what activityID this view corresponds to
+     */
     private ArrayList<Pair<TextView, Integer>> toRefreshRunningActivities = new ArrayList<>();
-    /** Handle refreshing the text in {@link #toRefreshRunningActivities}.*/
+    /**
+     * Handle refreshing the text in {@link #toRefreshRunningActivities}.
+     */
     private final Handler viewRefreshHandler = new Handler();
-    /** See {@link #viewRefreshHandler}. */
+    /**
+     * See {@link #viewRefreshHandler}.
+     */
     private final Runnable viewRefreshRunnable = new Runnable() {
         //TODO: Can this be done with a lambda somehow?
         @Override
@@ -79,7 +89,7 @@ public class CategoryListFragment extends Fragment {
      * {@link com.uni.time_tracking.database.tables.ActivityDB}: <br>
      * - Showing if/how long its been active <br>
      * - Making it possible to toggle if a category is currently used
-     *   (add {@link EntryDB} entries).
+     * (add {@link EntryDB} entries).
      */
     private void addCategoriesToList() {
 
@@ -88,7 +98,7 @@ public class CategoryListFragment extends Fragment {
 
         //Add all categories to the list.
 
-        LayoutInflater inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View divider = inflater.inflate(R.layout.divider_horizontal, null);
         categoryList.addView(divider);
 
@@ -99,13 +109,42 @@ public class CategoryListFragment extends Fragment {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(0, 20, 0, 20);
 
-        for(ActivityDB activity : activities) {
+        for (ActivityDB activity : activities) {
 
             LinearLayout innerLayout = new LinearLayout(getContext());
             innerLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             innerLayout.setOrientation(LinearLayout.HORIZONTAL);
             innerLayout.setId(activity.getId()); //TODO: is this problematic with potential collisions?
+
             innerLayout.setOnClickListener(view -> CategoryListFragment.activityClicked(view.getContext(), view.getId()));
+            innerLayout.setOnLongClickListener(view -> {
+                //Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(getContext(), innerLayout);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater().inflate(R.menu.category_popup_menu, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(item -> {
+                    Toast.makeText(getContext(), "You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                    switch (item.getItemId()) {
+                        case R.id.menu_edit_item:
+                            //TODO:
+                            break;
+                        case R.id.menu_delete_item:
+                            //TODO:
+                            break;
+                        case R.id.menu_deactivate_item:
+                            //TODO:
+                            break;
+                        default:
+                            Log.e(TAG, "Did not find Popup Menu Item with id " + item.getItemId() + ", name " + item.getTitle());
+                    }
+                    return true;
+                });
+
+                popup.show(); //showing popup menu
+                return false;
+            });
 
             TextView idText = new TextView(getContext());
             TextView nameText = new TextView(getContext());
@@ -144,32 +183,33 @@ public class CategoryListFragment extends Fragment {
 
     /**
      * Toggle whether the activity has an active {@link EntryDB} entry.
-     * @param context Application context.
+     *
+     * @param context    Application context.
      * @param activityID ID of the activity that we want to toggle.
      */
-    private static void activityClicked(Context context, int activityID){
+    private static void activityClicked(Context context, int activityID) {
         DBHelper dbHelper = DBHelper.getInstance(context);
         EntryDB time = dbHelper.getActiveTime(activityID);
-        if(time == null) {
+        if (time == null) {
             // No active Time-Entry. activate now.
             dbHelper.activateActivity(activityID);
-        }else {
+        } else {
             dbHelper.deactivityEntry(time.getId());
         }
     }
 
     /**
      * Updates a TextView to show how long a activity has been active.
+     *
      * @param runningText The TextView to update the text of.
-     * @param activityID The activity that is active/inactive.
+     * @param activityID  The activity that is active/inactive.
      */
     private void updateTime(TextView runningText, int activityID) {
         EntryDB time = DBHelper.getInstance(runningText.getContext()).getActiveTime(activityID);
-        if(time != null) {
-
+        if (time != null) {
             String timeString = Time.differenceToNowString(time.getStart());
             runningText.setText(timeString);
-        }else {
+        } else {
             runningText.setText("Inactive!");
         }
     }
