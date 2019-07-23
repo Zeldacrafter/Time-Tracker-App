@@ -19,6 +19,7 @@ import com.uni.time_tracking.database.tables.EntryDB;
 
 import org.joda.time.LocalDateTime;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -204,7 +205,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * to the current system-time.
      * @param timeID The ID of the {@link EntryDB} entry.
      */
-    public void deactivateTime(int timeID) {
+    public void deactivityEntry(int timeID) {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(EntryDB.FeedEntry.COLUMN_END, Time.getCurrentTimeString());
@@ -215,7 +216,22 @@ public class DBHelper extends SQLiteOpenHelper {
                 new String[] {""+timeID});
     }
 
-    public EntryDB[] getAllEvents() {
+    /**
+     * Returns Array of all EntryDBs that have part of their time interval start-end in
+     * a specified month.
+     * If the Entry does not occupy that month it is ignored.
+     * If the Entry partially occupies that month it is cut in such a way that the start/end
+     * now match the border of the month.
+     *
+     * Example: Month: 6, Year 2019:
+     * Start: 2019-05-04 7:20:40, End: 2019-06-13 12:30:20
+     * will be returned as
+     * Start: 2019-06-00 0:00:00, End 2019-06-13 12:30:20
+     * @param year The year that the wanted month is in.
+     * @param month The month.
+     * @return Array of all wanted elements.
+     */
+    public EntryDB[] getAllEventsInMonth(int year, int month) {
 
         String query = "SELECT " +
                 EntryDB.FeedEntry._ID + ", " +
@@ -226,23 +242,33 @@ public class DBHelper extends SQLiteOpenHelper {
 
         Cursor c = getReadableDatabase().rawQuery(query, null);
 
-        EntryDB[] result = new EntryDB[c.getCount()];
+        ArrayList<EntryDB> result = new ArrayList<>();
 
-        int i = 0;
         while(c.moveToNext()) {
 
             int id = c.getInt(0);
             LocalDateTime start = Time.fromString(c.getString(1));
-            LocalDateTime end = c.isNull(2) ?
-                    Time.getCurrentTime() : Time.fromString(c.getString(2));
+            LocalDateTime end = c.isNull(2) ? Time.getCurrentTime() : Time.fromString(c.getString(2));
             int activity_id = c.getInt(3);
 
-            result[i] = new EntryDB(id, start, end, activity_id);
-            i++;
+            if ((start.getYear() < year || (start.getYear() == year && start.getMonthOfYear() <= month)) &&
+                    (end.getYear() > year || (end.getYear() == year && end.getMonthOfYear() >= month))) {
+                //The current time fits the wanted time interval.
+
+                if(start.getYear() < year || (start.getYear() == year && start.getMonthOfYear() < month)) {
+                    //Start time starts too early. Cut it off.
+                    start = new LocalDateTime(year, month, 0, 0, 0, 0);
+                }
+                if(end.getYear() > year || (end.getYear() == year && end.getMonthOfYear() < month)) {
+                    //End time ends too late. Cut it off.
+                    end = new LocalDateTime(year, month, start.dayOfMonth().getMaximumValue(), 23, 59, 59);
+                }
+                result.add(new EntryDB(id, start, end, activity_id));
+            }
         }
 
         c.close();
-        return result;
+        return result.toArray(new EntryDB[0]);
     }
 
     /**

@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.uni.time_tracking.General;
 import com.uni.time_tracking.Pair;
 import com.uni.time_tracking.R;
 import com.uni.time_tracking.Time;
@@ -153,7 +152,7 @@ public class CategoryListFragment extends Fragment {
             // No active Time-Entry. activate now.
             dbHelper.activateActivity(activityID);
         }else {
-            dbHelper.deactivateTime(time.getId());
+            dbHelper.deactivityEntry(time.getId());
         }
     }
 
