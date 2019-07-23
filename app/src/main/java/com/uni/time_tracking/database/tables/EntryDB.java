@@ -2,18 +2,20 @@ package com.uni.time_tracking.database.tables;
 
 import android.provider.BaseColumns;
 
+import org.joda.time.LocalDateTime;
+
 public class EntryDB {
 
     private int id;
-    private long start;
-    private long end;
+    private LocalDateTime start;
+    private LocalDateTime end;
     private int activityID;
 
     public static final String SQL_CREATE_TABLE =
             "CREATE TABLE " + FeedEntry.TABLE_NAME + " ( " +
                     FeedEntry._ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " +
-                    FeedEntry.COLUMN_START + " INTEGER, " +
-                    FeedEntry.COLUMN_END + " INTEGER, " +
+                    FeedEntry.COLUMN_START + " TEXT, " +
+                    FeedEntry.COLUMN_END + " TEXT, " +
                     FeedEntry.COLUMN_ACTIVITY_ID + " INTEGER, " +
                     "FOREIGN KEY(" + FeedEntry.COLUMN_ACTIVITY_ID + ") REFERENCES " + ActivityDB.FeedEntry.TABLE_NAME + "(" + ActivityDB.FeedEntry._ID + ")" +
                     ")";
@@ -22,7 +24,8 @@ public class EntryDB {
             "DROP TABLE IF EXISTS "
                     + FeedEntry.TABLE_NAME;
 
-    public EntryDB(int id, long start, long end, int activityID) {
+    //TODO: Pass LocalDateTime aswell.
+    public EntryDB(int id, LocalDateTime start, LocalDateTime end, int activityID) {
         this.id = id;
         this.start = start;
         this.end = end;
@@ -33,11 +36,11 @@ public class EntryDB {
         return id;
     }
 
-    public long getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
-    public long getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
 

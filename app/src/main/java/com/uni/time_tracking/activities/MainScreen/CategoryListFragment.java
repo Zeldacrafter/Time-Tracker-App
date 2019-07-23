@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.uni.time_tracking.General;
 import com.uni.time_tracking.Pair;
 import com.uni.time_tracking.R;
+import com.uni.time_tracking.Time;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
 import com.uni.time_tracking.database.tables.EntryDB;
@@ -164,7 +165,7 @@ public class CategoryListFragment extends Fragment {
     private void updateTime(TextView runningText, int activityID) {
         EntryDB time = DBHelper.getInstance(runningText.getContext()).getActiveTime(activityID);
         if(time != null) {
-            String timeString = General.millisToTimeString(System.currentTimeMillis() - time.getStart());
+            String timeString = Time.toHourString(Time.differenceToNow(time.getStart()));
             runningText.setText(timeString);
         }else {
             runningText.setText("Inactive!");

@@ -13,8 +13,11 @@ import android.util.Log;
 
 
 import com.uni.time_tracking.General;
+import com.uni.time_tracking.Time;
 import com.uni.time_tracking.database.tables.ActivityDB;
 import com.uni.time_tracking.database.tables.EntryDB;
+
+import org.joda.time.LocalDateTime;
 
 import java.util.ArrayList;
 
@@ -176,8 +179,8 @@ public class DBHelper extends SQLiteOpenHelper {
         }else {
             c.moveToFirst();
             int id = c.getInt(0);
-            long start = c.getLong(1);
-            long end = -1; //No end yet. TODO: This is ugly
+            LocalDateTime start = Time.fromString(c.getString(1));
+            LocalDateTime end = null; //TODO: Careful!
             c.close();
             return new EntryDB(id, start, end, activityID);
         }
@@ -191,7 +194,7 @@ public class DBHelper extends SQLiteOpenHelper {
         assert(!isActivityActive(activityID));
 
         ContentValues values = new ContentValues();
-        values.put(EntryDB.FeedEntry.COLUMN_START, System.currentTimeMillis());
+        values.put(EntryDB.FeedEntry.COLUMN_START, Time.getCurrentTimeString());
         values.put(EntryDB.FeedEntry.COLUMN_ACTIVITY_ID, activityID);
         getWritableDatabase().insert(EntryDB.FeedEntry.TABLE_NAME, null, values);
     }
@@ -204,7 +207,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void deactivateTime(int timeID) {
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(EntryDB.FeedEntry.COLUMN_END, System.currentTimeMillis());
+        contentValues.put(EntryDB.FeedEntry.COLUMN_END, Time.getCurrentTimeString());
         getWritableDatabase().update(
                 EntryDB.FeedEntry.TABLE_NAME,
                 contentValues,
@@ -229,8 +232,9 @@ public class DBHelper extends SQLiteOpenHelper {
         while(c.moveToNext()) {
 
             int id = c.getInt(0);
-            long start = c.getLong(1);
-            long end = c.isNull(2) ? System.currentTimeMillis() : c.getLong(2);
+            LocalDateTime start = Time.fromString(c.getString(1));
+            LocalDateTime end = c.isNull(2) ?
+                    Time.getCurrentTime() : Time.fromString(c.getString(2));
             int activity_id = c.getInt(3);
 
             result[i] = new EntryDB(id, start, end, activity_id);

@@ -42,9 +42,9 @@ public class CalendarFragment extends BaseCalendarFragment {
 
         for(EntryDB event : dbEvents) {
             Calendar startTime = Calendar.getInstance();
-            startTime.setTimeInMillis(event.getStart());
+            startTime.setTimeInMillis(event.getStart().toDateTime().getMillis());
             Calendar endTime = Calendar.getInstance();
-            endTime.setTimeInMillis(event.getEnd());
+            endTime.setTimeInMillis(event.getEnd().toDateTime().getMillis());
 
             WeekViewEvent weekViewEvent = new WeekViewEvent(event.getId() + "", "", startTime, endTime);
             weekViewEvent.setColor(Color.BLUE);
