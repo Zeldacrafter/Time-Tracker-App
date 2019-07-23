@@ -2,13 +2,14 @@ package com.uni.time_tracking.database.tables;
 
 import android.provider.BaseColumns;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 
 public class EntryDB {
 
     private int id;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private DateTime start;
+    private DateTime end;
     private int activityID;
 
     public static final String SQL_CREATE_TABLE =
@@ -25,7 +26,7 @@ public class EntryDB {
                     + FeedEntry.TABLE_NAME;
 
     //TODO: Pass LocalDateTime aswell.
-    public EntryDB(int id, LocalDateTime start, LocalDateTime end, int activityID) {
+    public EntryDB(int id, DateTime start, DateTime end, int activityID) {
         this.id = id;
         this.start = start;
         this.end = end;
@@ -36,11 +37,11 @@ public class EntryDB {
         return id;
     }
 
-    public LocalDateTime getStart() {
+    public DateTime getStart() {
         return start;
     }
 
-    public LocalDateTime getEnd() {
+    public DateTime getEnd() {
         return end;
     }
 

@@ -1,45 +1,52 @@
 package com.uni.time_tracking;
 
-import org.joda.time.LocalDateTime;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
+import java.util.TimeZone;
 
 public class Time {
 
     private Time() {}
 
-    public static LocalDateTime getCurrentTime() {
-        return new LocalDateTime(System.currentTimeMillis());
+    public static DateTime getCurrentTime() {
+        return new DateTime(System.currentTimeMillis(), getTimezone());
     }
 
     public static String getCurrentTimeString() {
         return toString(getCurrentTime());
     }
 
-    public static String toString(LocalDateTime localDateTime) {
+    public static String toString(DateTime dateTime) {
         DateTimeFormatter f = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-        return localDateTime.toString(f);
+        return dateTime.toString(f);
     }
 
-    public static String toHourString(LocalDateTime localDateTime) {
+    public static String toHourString(DateTime dateTime) {
         DateTimeFormatter f = DateTimeFormat.forPattern("HH:mm:ss");
-        return localDateTime.toString(f);
+        return dateTime.toString(f);
     }
 
-    public static LocalDateTime fromString(String dateTimeString) {
+    public static DateTime fromString(String dateTimeString) {
         DateTimeFormatter f = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-        return f.parseLocalDateTime(dateTimeString);
+        return f.parseDateTime(dateTimeString);
     }
 
-    public static LocalDateTime difference(LocalDateTime d1, LocalDateTime d2) {
-        return new LocalDateTime(d1.toDateTime().getMillis() - d2.toDateTime().getMillis());
+    public static DateTime difference(DateTime d1, DateTime d2) {
+        return new DateTime(d1.getMillis() - d2.getMillis(), getTimezone());
     }
 
-    public static LocalDateTime differenceToNow(LocalDateTime dateTime) {
+    public static DateTime differenceToNow(DateTime dateTime) {
         return difference(getCurrentTime(), dateTime);
     }
 
-    public static String differenceToNowString(LocalDateTime dateTime) {
+    public static String differenceToNowString(DateTime dateTime) {
         return toString(difference(getCurrentTime(), dateTime));
+    }
+
+    public static DateTimeZone getTimezone() {
+        return DateTimeZone.forTimeZone(TimeZone.getDefault());
     }
 }

@@ -17,10 +17,13 @@ import com.uni.time_tracking.Time;
 import com.uni.time_tracking.database.tables.ActivityDB;
 import com.uni.time_tracking.database.tables.EntryDB;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.TimeZone;
 
 /**
  * DBHelper is used for managing the database and its tables.
@@ -180,8 +183,8 @@ public class DBHelper extends SQLiteOpenHelper {
         }else {
             c.moveToFirst();
             int id = c.getInt(0);
-            LocalDateTime start = Time.fromString(c.getString(1));
-            LocalDateTime end = null; //TODO: Careful!
+            DateTime start = Time.fromString(c.getString(1));
+            DateTime end = null; //TODO: Careful!
             c.close();
             return new EntryDB(id, start, end, activityID);
         }
@@ -247,8 +250,8 @@ public class DBHelper extends SQLiteOpenHelper {
         while(c.moveToNext()) {
 
             int id = c.getInt(0);
-            LocalDateTime start = Time.fromString(c.getString(1));
-            LocalDateTime end = c.isNull(2) ? Time.getCurrentTime() : Time.fromString(c.getString(2));
+            DateTime start = Time.fromString(c.getString(1));
+            DateTime end = c.isNull(2) ? Time.getCurrentTime() : Time.fromString(c.getString(2));
             int activity_id = c.getInt(3);
 
             if ((start.getYear() < year || (start.getYear() == year && start.getMonthOfYear() <= month)) &&
@@ -257,11 +260,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
                 if(start.getYear() < year || (start.getYear() == year && start.getMonthOfYear() < month)) {
                     //Start time starts too early. Cut it off.
-                    start = new LocalDateTime(year, month, 0, 0, 0, 0);
+                    start = new DateTime(year, month, 0, 0, 0, 0, Time.getTimezone());
                 }
                 if(end.getYear() > year || (end.getYear() == year && end.getMonthOfYear() < month)) {
                     //End time ends too late. Cut it off.
-                    end = new LocalDateTime(year, month, start.dayOfMonth().getMaximumValue(), 23, 59, 59);
+                    end = new DateTime(year, month, start.dayOfMonth().getMaximumValue(), 23, 59, 59, Time.getTimezone());
                 }
                 result.add(new EntryDB(id, start, end, activity_id));
             }
