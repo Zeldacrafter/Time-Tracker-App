@@ -80,6 +80,7 @@ public class AddCategory extends AppCompatActivity {
                     showToast("Saved new Category!", getApplicationContext());
                     finish();
                 }
+                dbHelper.close();
                 break;
 
             default:

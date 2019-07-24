@@ -22,6 +22,7 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 
 import java.lang.reflect.Array;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
@@ -272,6 +273,19 @@ public class DBHelper extends SQLiteOpenHelper {
 
         c.close();
         return result.toArray(new EntryDB[0]);
+    }
+
+    /**
+     * Removed the activity with the given id and all associated {@link EntryDB} entries.
+     * @param activityId The ID of the activity we want to delete
+     */
+    public void deleteActivity(int activityId) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.delete(EntryDB.FeedEntry.TABLE_NAME, EntryDB.FeedEntry.COLUMN_ACTIVITY_ID + "=" + activityId, null);
+        db.delete(ActivityDB.FeedEntry.TABLE_NAME, ActivityDB.FeedEntry._ID + "=" + activityId, null);
+
+        db.close();
     }
 
     /**

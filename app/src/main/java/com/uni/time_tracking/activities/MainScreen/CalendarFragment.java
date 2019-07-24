@@ -58,6 +58,7 @@ public class CalendarFragment extends BaseCalendarFragment {
         DBHelper dbHelper = DBHelper.getInstance(getContext());
         EntryDB[] dbEvents = dbHelper.getAllEventsInMonth(newYear, newMonth);
         ActivityDB[] activites = dbHelper.getActiveActivities();
+        dbHelper.close();
 
         for(EntryDB event : dbEvents) {
 

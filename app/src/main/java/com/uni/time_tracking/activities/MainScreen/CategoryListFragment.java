@@ -1,6 +1,7 @@
 package com.uni.time_tracking.activities.MainScreen;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -10,11 +11,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.uni.time_tracking.Pair;
 import com.uni.time_tracking.R;
@@ -91,7 +92,7 @@ public class CategoryListFragment extends Fragment {
      * - Making it possible to toggle if a category is currently used
      * (add {@link EntryDB} entries).
      */
-    private void addCategoriesToList() {
+    public void addCategoriesToList() {
 
         //TODO: Only add new items. Don't re-add every item
         categoryList.removeAllViews();
@@ -105,6 +106,9 @@ public class CategoryListFragment extends Fragment {
         //TODO: Maybe this should be a table-layout.
         DBHelper dbHelper = DBHelper.getInstance(getContext());
         ActivityDB[] activities = dbHelper.getActiveActivities();
+        dbHelper.close();
+
+        Log.d(TAG, activities.length + "");
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(0, 20, 0, 20);
@@ -125,17 +129,29 @@ public class CategoryListFragment extends Fragment {
 
                 //registering popup with OnMenuItemClickListener
                 popup.setOnMenuItemClickListener(item -> {
-                    Toast.makeText(getContext(), "You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
                     switch (item.getItemId()) {
                         case R.id.menu_edit_item:
                             //TODO:
                             break;
+
                         case R.id.menu_delete_item:
-                            //TODO:
+
+                            Bundle bundle = new Bundle();
+                            bundle.putString(DeleteActivityDialogFragment.BUNDLE_ACTIVITY_NAME, activity.getName());
+                            bundle.putInt(DeleteActivityDialogFragment.BUNDLE_ACTIVITY_ID, activity.getId());
+
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            DeleteActivityDialogFragment dialog = new DeleteActivityDialogFragment();
+                            dialog.setArguments(bundle);
+                            dialog.setTargetFragment(this, 0);
+                            dialog.show(fragmentManager, TAG);
+
                             break;
+
                         case R.id.menu_deactivate_item:
                             //TODO:
                             break;
+
                         default:
                             Log.e(TAG, "Did not find Popup Menu Item with id " + item.getItemId() + ", name " + item.getTitle());
                     }
@@ -196,6 +212,7 @@ public class CategoryListFragment extends Fragment {
         } else {
             dbHelper.deactivityEntry(time.getId());
         }
+        dbHelper.close();
     }
 
     /**
@@ -205,7 +222,10 @@ public class CategoryListFragment extends Fragment {
      * @param activityID  The activity that is active/inactive.
      */
     private void updateTime(TextView runningText, int activityID) {
-        EntryDB time = DBHelper.getInstance(runningText.getContext()).getActiveTime(activityID);
+        DBHelper dbHelper = DBHelper.getInstance(runningText.getContext());
+        EntryDB time = dbHelper.getActiveTime(activityID);
+        dbHelper.close();
+
         if (time != null) {
             String timeString = Time.differenceToNowString(time.getStart());
             runningText.setText(timeString);
