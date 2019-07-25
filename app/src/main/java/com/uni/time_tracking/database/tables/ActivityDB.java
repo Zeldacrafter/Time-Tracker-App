@@ -43,12 +43,24 @@ public class ActivityDB {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public boolean isActive() {
         return active;
     }
 
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public int getColor() {
         return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 
     public static final class FeedEntry implements BaseColumns {

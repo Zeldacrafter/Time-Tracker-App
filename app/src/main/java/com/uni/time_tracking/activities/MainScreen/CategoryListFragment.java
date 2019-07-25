@@ -1,13 +1,15 @@
 package com.uni.time_tracking.activities.MainScreen;
 
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -20,6 +22,7 @@ import androidx.fragment.app.FragmentManager;
 import com.uni.time_tracking.Pair;
 import com.uni.time_tracking.R;
 import com.uni.time_tracking.Time;
+import com.uni.time_tracking.activities.EditCategory;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
 import com.uni.time_tracking.database.tables.EntryDB;
@@ -108,8 +111,6 @@ public class CategoryListFragment extends Fragment {
         ActivityDB[] activities = dbHelper.getAcitivities();
         dbHelper.close();
 
-        Log.d(TAG, activities.length + "");
-
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(0, 20, 0, 20);
 
@@ -126,12 +127,13 @@ public class CategoryListFragment extends Fragment {
                 PopupMenu popup = new PopupMenu(getContext(), innerLayout);
                 //Inflating the Popup using xml file
                 popup.getMenuInflater().inflate(R.menu.category_popup_menu, popup.getMenu());
-
                 //registering popup with OnMenuItemClickListener
                 popup.setOnMenuItemClickListener(item -> {
                     switch (item.getItemId()) {
                         case R.id.menu_edit_item:
-                            //TODO:
+                            Intent intent = new Intent(getContext(), EditCategory.class);
+                            intent.putExtra(EditCategory.BUNDLE_ACTIVITY_ID, activity.getId());
+                            startActivity(intent);
                             break;
 
                         case R.id.menu_delete_item:
@@ -148,7 +150,7 @@ public class CategoryListFragment extends Fragment {
 
                             break;
 
-                        case R.id.menu_deactivate_item:
+                        case R.id.menu_toggle_item_activation:
                             DBHelper dbHelper1 = DBHelper.getInstance(getContext());
                             dbHelper1.toggleActivityActive(activity.getId());
                             dbHelper1.close();

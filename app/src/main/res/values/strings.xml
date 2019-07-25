@@ -23,4 +23,11 @@
     <string name="calendar_drag_me">Drag Me</string>
     <string name="calendar_untitled_event">Untitled event</string>
 
+    <!-- Category Popup Menu -->
+    <string name="popup_menu_edit">Edit Activity</string>
+    <string name="popup_menu_delete">Delete Activity</string>
+    <string name="popup_menu_toggle_activation">Toggle Activity activation</string>
+    <string name="popup_menu_deactivate">Deactivate Activity</string>
+    <string name="popup_menu_activate">Activate Activity</string>
+
 </resources>

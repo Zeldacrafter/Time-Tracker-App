@@ -140,6 +140,20 @@ public class DBHelper extends SQLiteOpenHelper {
         return values;
     }
 
+    public void editActivity(int id, ActivityDB activity) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        String query = "UPDATE " + ActivityDB.FeedEntry.TABLE_NAME + " SET " +
+                ActivityDB.FeedEntry.COLUMN_NAME + " = \"" + activity.getName() + "\", " +
+                ActivityDB.FeedEntry.COLUMN_COLOR + " = \"" + General.colorIntToHex(activity.getColor()) + "\", " +
+                ActivityDB.FeedEntry.COLUMN_ACTIVE + " = " + (activity.isActive()  ? 1 : 0) +
+                " WHERE " + ActivityDB.FeedEntry._ID + " = ?";
+        db.execSQL(query, new String[] {id+""});
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+    }
+
     /**
      * Returns an array of all {@link ActivityDB} entries
      * where {@link ActivityDB.FeedEntry#COLUMN_ACTIVE} is set to false.
@@ -177,6 +191,26 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return values;
+    }
+
+    public ActivityDB getActivity(int acitivityID) {
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        String query = "SELECT " +
+                ActivityDB.FeedEntry.COLUMN_NAME + ", " +
+                ActivityDB.FeedEntry.COLUMN_ACTIVE + ", " +
+                ActivityDB.FeedEntry.COLUMN_COLOR  +
+                " FROM " + ActivityDB.FeedEntry.TABLE_NAME +
+                " WHERE " + ActivityDB.FeedEntry._ID + " = " + acitivityID;
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        ActivityDB result = new ActivityDB(acitivityID, c.getString(0), c.getInt(1) == 1, Color.parseColor(c.getString(2)));
+
+        c.close();
+        db.close();
+
+        return result;
     }
 
     /**
@@ -368,13 +402,13 @@ public class DBHelper extends SQLiteOpenHelper {
             }
             return alc;
         } catch (SQLException sqlEx) {
-            Log.d("printing exception", sqlEx.getMessage());
+            Log.i("printing exception", sqlEx.getMessage());
             //if any exceptions are triggered save the error message to cursor an return the arraylist
             Cursor2.addRow(new Object[]{"" + sqlEx.getMessage()});
             alc.set(1, Cursor2);
             return alc;
         } catch (Exception ex) {
-            Log.d("printing exception", ex.getMessage());
+            Log.i("printing exception", ex.getMessage());
 
             //if any exceptions are triggered save the error message to cursor an return the arraylist
             Cursor2.addRow(new Object[]{"" + ex.getMessage()});

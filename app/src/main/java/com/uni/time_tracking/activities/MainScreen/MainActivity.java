@@ -5,11 +5,8 @@ import android.os.Bundle;
 
 import com.uni.time_tracking.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.uni.time_tracking.Time;
 import com.uni.time_tracking.activities.AddCategory;
 import com.uni.time_tracking.activities.DevAndroidDatabaseManager;
-import com.uni.time_tracking.database.DBHelper;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -70,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             case (R.id.menu_add_category):
                 Intent addCategory = new Intent(this, AddCategory.class);
                 startActivity(addCategory);
-                 break;
+                break;
             default:
                 Log.e(TAG, "Did not find menu item");
         }
