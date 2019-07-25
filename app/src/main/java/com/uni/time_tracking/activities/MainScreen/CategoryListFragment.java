@@ -105,7 +105,7 @@ public class CategoryListFragment extends Fragment {
 
         //TODO: Maybe this should be a table-layout.
         DBHelper dbHelper = DBHelper.getInstance(getContext());
-        ActivityDB[] activities = dbHelper.getActiveActivities();
+        ActivityDB[] activities = dbHelper.getAcitivities();
         dbHelper.close();
 
         Log.d(TAG, activities.length + "");
@@ -149,7 +149,10 @@ public class CategoryListFragment extends Fragment {
                             break;
 
                         case R.id.menu_deactivate_item:
-                            //TODO:
+                            DBHelper dbHelper1 = DBHelper.getInstance(getContext());
+                            dbHelper1.toggleActivityActive(activity.getId());
+                            dbHelper1.close();
+                            addCategoriesToList();
                             break;
 
                         default:
@@ -189,6 +192,11 @@ public class CategoryListFragment extends Fragment {
             innerLayout.addView(nameText);
             innerLayout.addView(space2);
             innerLayout.addView(runningText);
+
+            if(!activity.isActive()) {
+                // Make view semi transperent.
+                innerLayout.setAlpha(0.5f);
+            }
 
             categoryList.addView(innerLayout);
 

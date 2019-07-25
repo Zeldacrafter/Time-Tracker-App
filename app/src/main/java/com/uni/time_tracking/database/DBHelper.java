@@ -18,13 +18,8 @@ import com.uni.time_tracking.database.tables.ActivityDB;
 import com.uni.time_tracking.database.tables.EntryDB;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDateTime;
 
-import java.lang.reflect.Array;
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
-import java.util.TimeZone;
 
 /**
  * DBHelper is used for managing the database and its tables.
@@ -110,6 +105,39 @@ public class DBHelper extends SQLiteOpenHelper {
     public void resetDatabase() {
         deleteEntries(getWritableDatabase());
         createTables(getWritableDatabase());
+    }
+
+    public ActivityDB[] getAcitivities() {
+        //Creating the 'query'-String
+        String query =
+                "SELECT "
+                        + ActivityDB.FeedEntry._ID + ", "
+                        + ActivityDB.FeedEntry.COLUMN_NAME + ", "
+                        + ActivityDB.FeedEntry.COLUMN_COLOR + ", "
+                        + ActivityDB.FeedEntry.COLUMN_ACTIVE +
+                        " FROM "
+                        + ActivityDB.FeedEntry.TABLE_NAME;
+
+        //Getting the result-cursor
+        Cursor cursor = getWritableDatabase().rawQuery(query, null);
+
+        //Putting the results in a 2-dimensional array
+        //where the first dimension is the entryNr
+        //and the second dimension a list of the wanted columns
+        ActivityDB[] values = new ActivityDB[cursor.getCount()];
+        int count = 0;
+        while (cursor.moveToNext()){
+            int id = Integer.parseInt(cursor.getString(0));
+            String name = cursor.getString(1);
+            int color = Color.parseColor(cursor.getString(2));
+            boolean active = cursor.getInt(3) == 1;
+            values[count] = new ActivityDB(id, name, active, color);
+            count++;
+        }
+
+        cursor.close();
+
+        return values;
     }
 
     /**
@@ -285,6 +313,21 @@ public class DBHelper extends SQLiteOpenHelper {
         db.delete(EntryDB.FeedEntry.TABLE_NAME, EntryDB.FeedEntry.COLUMN_ACTIVITY_ID + "=" + activityId, null);
         db.delete(ActivityDB.FeedEntry.TABLE_NAME, ActivityDB.FeedEntry._ID + "=" + activityId, null);
 
+        db.close();
+    }
+
+    public void toggleActivityActive(int activityID) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        String query = "UPDATE " + ActivityDB.FeedEntry.TABLE_NAME +
+                " SET " + ActivityDB.FeedEntry.COLUMN_ACTIVE + " = CASE " + ActivityDB.FeedEntry.COLUMN_ACTIVE +
+                " WHEN 1 THEN 0" +
+                " ELSE 1" +
+                " END" +
+                " WHERE " + ActivityDB.FeedEntry._ID + " = " + activityID;
+        db.execSQL(query);
+        db.setTransactionSuccessful();
+        db.endTransaction();
         db.close();
     }
 
