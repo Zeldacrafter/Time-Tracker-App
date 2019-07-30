@@ -1,11 +1,7 @@
 package com.uni.time_tracking.activities.MainScreen;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -14,8 +10,8 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
-import com.uni.time_tracking.General;
 import com.uni.time_tracking.R;
+import com.uni.time_tracking.Time;
 import com.uni.time_tracking.activities.AddTime;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
@@ -92,8 +88,11 @@ public class CalendarFragment extends BaseCalendarFragment {
 
     @Override
     public void onAddEventClicked(@NotNull Calendar calendar, @NotNull Calendar calendar1) {
-        General.showToast(calendar.toString(), getContext());
         Intent addTimeEntry = new Intent(getContext(), AddTime.class);
+
+        addTimeEntry.putExtra(AddTime.BUNDLE_START_TIME, Time.toLong(Time.fromCalendar(calendar)));
+        addTimeEntry.putExtra(AddTime.BUNDLE_END_TIME, Time.toLong(Time.fromCalendar(calendar1)));
+
         startActivity(addTimeEntry);
     }
 }

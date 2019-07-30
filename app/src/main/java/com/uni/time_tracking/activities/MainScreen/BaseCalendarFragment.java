@@ -1,7 +1,6 @@
 package com.uni.time_tracking.activities.MainScreen;
 
 import android.content.ClipData;
-import android.content.Intent;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -24,7 +23,6 @@ import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.alamkanak.weekview.WeekViewUtil;
 import com.uni.time_tracking.R;
-import com.uni.time_tracking.activities.AddTime;
 
 import org.jetbrains.annotations.NotNull;
 

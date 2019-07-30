@@ -38,4 +38,6 @@ dependencies {
     implementation 'com.azeesoft.lib.colorpicker:colorpicker:1.0.8@aar'
     implementation 'net.danlew:android.joda:2.10.2'
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
+    //Needed for: https://github.com/prolificinteractive/material-calendarview/issues/947#issuecomment-485263840
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
 }

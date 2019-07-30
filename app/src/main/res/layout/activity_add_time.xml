@@ -56,15 +56,37 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:text="@string/add_time_date" />
+                android:text="@string/add_time_start_date" />
 
             <Button
-                android:id="@+id/add_time_select_date"
+                android:id="@+id/add_time_select_start_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Button"
-                android:onClick="selectDateClicked" />
+                android:onClick="selectStartDateClicked" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:text="@string/add_time_end_date" />
+
+            <Button
+                android:id="@+id/add_time_select_end_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Button"
+                android:onClick="selectEndDateClicked" />
 
         </LinearLayout>
 
