@@ -3,7 +3,6 @@ package com.uni.time_tracking.database.tables;
 import android.provider.BaseColumns;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
 
 public class EntryDB {
 
@@ -15,8 +14,8 @@ public class EntryDB {
     public static final String SQL_CREATE_TABLE =
             "CREATE TABLE " + FeedEntry.TABLE_NAME + " ( " +
                     FeedEntry._ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " +
-                    FeedEntry.COLUMN_START + " TEXT, " +
-                    FeedEntry.COLUMN_END + " TEXT, " +
+                    FeedEntry.COLUMN_START + " INTEGER, " +
+                    FeedEntry.COLUMN_END + " INTEGER, " +
                     FeedEntry.COLUMN_ACTIVITY_ID + " INTEGER, " +
                     "FOREIGN KEY(" + FeedEntry.COLUMN_ACTIVITY_ID + ") REFERENCES " + ActivityDB.FeedEntry.TABLE_NAME + "(" + ActivityDB.FeedEntry._ID + ")" +
                     ")";

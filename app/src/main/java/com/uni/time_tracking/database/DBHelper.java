@@ -19,7 +19,10 @@ import com.uni.time_tracking.database.tables.EntryDB;
 
 import org.joda.time.DateTime;
 
+import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * DBHelper is used for managing the database and its tables.
@@ -246,7 +249,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }else {
             c.moveToFirst();
             int id = c.getInt(0);
-            DateTime start = Time.fromString(c.getString(1));
+            DateTime start = Time.fromLong(c.getLong(1));
             DateTime end = null; //TODO: Careful!
             c.close();
             return new EntryDB(id, start, end, activityID);
@@ -261,7 +264,7 @@ public class DBHelper extends SQLiteOpenHelper {
         assert(!isActivityActive(activityID));
 
         ContentValues values = new ContentValues();
-        values.put(EntryDB.FeedEntry.COLUMN_START, Time.getCurrentTimeString());
+        values.put(EntryDB.FeedEntry.COLUMN_START, Time.toLong(Time.getCurrentTime()));
         values.put(EntryDB.FeedEntry.COLUMN_ACTIVITY_ID, activityID);
         getWritableDatabase().insert(EntryDB.FeedEntry.TABLE_NAME, null, values);
     }
@@ -274,7 +277,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void deactivityEntry(int timeID) {
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(EntryDB.FeedEntry.COLUMN_END, Time.getCurrentTimeString());
+        contentValues.put(EntryDB.FeedEntry.COLUMN_END, Time.toLong(Time.getCurrentTime()));
         getWritableDatabase().update(
                 EntryDB.FeedEntry.TABLE_NAME,
                 contentValues,
@@ -313,23 +316,34 @@ public class DBHelper extends SQLiteOpenHelper {
         while(c.moveToNext()) {
 
             int id = c.getInt(0);
-            DateTime start = Time.fromString(c.getString(1));
-            DateTime end = c.isNull(2) ? Time.getCurrentTime() : Time.fromString(c.getString(2));
+            long start = c.getLong(1);
+            long end = c.isNull(2) ? Time.toLong(Time.getCurrentTime()) : c.getLong(2);
             int activity_id = c.getInt(3);
 
-            if ((start.getYear() < year || (start.getYear() == year && start.getMonthOfYear() <= month)) &&
-                    (end.getYear() > year || (end.getYear() == year && end.getMonthOfYear() >= month))) {
+            long startYearMonth = start/100000000;
+            long endYearMonth = end/100000000;
+
+            long wantedYearMonth = year*100 + month;
+
+            Log.d(TAG, "start: " + startYearMonth + ", end: " + endYearMonth + ", wanted: " + wantedYearMonth);
+
+            if(startYearMonth <= wantedYearMonth && endYearMonth >= wantedYearMonth) {
                 //The current time fits the wanted time interval.
 
-                if(start.getYear() < year || (start.getYear() == year && start.getMonthOfYear() < month)) {
-                    //Start time starts too early. Cut it off.
-                    start = new DateTime(year, month, 0, 0, 0, 0, Time.getTimezone());
+                if(startYearMonth < wantedYearMonth) {
+                    // Start time starts too early.
+                    // Set to wanted month, first day, 0 hours/mins/secs.
+                    start = wantedYearMonth*100000000 + 1000000; //01 00:00:00
                 }
-                if(end.getYear() > year || (end.getYear() == year && end.getMonthOfYear() < month)) {
-                    //End time ends too late. Cut it off.
-                    end = new DateTime(year, month, start.dayOfMonth().getMaximumValue(), 23, 59, 59, Time.getTimezone());
+
+                if(endYearMonth > wantedYearMonth) {
+                    // End time ends too late.
+                    // Set to wanted month, last day, 23 hours, 59 mins/secs.
+                    long maxDaysInMonth = (new GregorianCalendar(year, month, 1)).getActualMaximum(Calendar.DAY_OF_MONTH);
+                    end = wantedYearMonth*100000000 + maxDaysInMonth*1000000 + 235959; //eg 31 23:59:59
                 }
-                result.add(new EntryDB(id, start, end, activity_id));
+
+                result.add(new EntryDB(id, Time.fromLong(start), Time.fromLong(end), activity_id));
             }
         }
 
