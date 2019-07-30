@@ -1,21 +1,22 @@
 package com.uni.time_tracking.activities.MainScreen;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -26,6 +27,8 @@ import com.uni.time_tracking.activities.EditCategory;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
 import com.uni.time_tracking.database.tables.EntryDB;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -241,6 +244,39 @@ public class CategoryListFragment extends Fragment {
             runningText.setText(timeString);
         } else {
             runningText.setText("Inactive!");
+        }
+    }
+
+    private static class DeleteActivityDialogFragment extends DialogFragment {
+
+        private static final String BUNDLE_ACTIVITY_NAME = "Activity_Name";
+        private static final String BUNDLE_ACTIVITY_ID = "Activity_ID";
+
+        private String activityName;
+        private int activityID;
+
+        @NotNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            activityName = getArguments().getString(BUNDLE_ACTIVITY_NAME);
+            activityID = getArguments().getInt(BUNDLE_ACTIVITY_ID);
+
+            assert(activityName != null && activityID != 0) : "No argument passed";
+
+            // Use the Builder class for convenient dialog construction
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Delete Category \"" + activityName + "\"?\n" +
+                    "This will also delete all entries of that Category.")
+                    .setPositiveButton("Delete", (dialog, id) -> {
+                        DBHelper dbHelper = new DBHelper(getContext());
+                        dbHelper.deleteActivity(activityID);
+                        dbHelper.close();
+                        ((CategoryListFragment)getTargetFragment()).addCategoriesToList();
+                    })
+                    .setNegativeButton("Cancel", (dialog, id) -> {});
+            // Create the AlertDialog object and return it
+            return builder.create();
         }
     }
 }
