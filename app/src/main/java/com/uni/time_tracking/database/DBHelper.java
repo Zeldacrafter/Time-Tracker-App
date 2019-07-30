@@ -325,8 +325,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
             long wantedYearMonth = year*100 + month;
 
-            Log.d(TAG, "start: " + startYearMonth + ", end: " + endYearMonth + ", wanted: " + wantedYearMonth);
-
             if(startYearMonth <= wantedYearMonth && endYearMonth >= wantedYearMonth) {
                 //The current time fits the wanted time interval.
 

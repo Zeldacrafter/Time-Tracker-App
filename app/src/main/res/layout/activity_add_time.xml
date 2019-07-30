@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/add_time_layout"
         android:layout_width="393dp"
         android:layout_height="705dp"
         android:layout_marginStart="8dp"
@@ -42,6 +43,28 @@
                 android:id="@+id/add_time_category_spinner"
                 android:layout_width="276dp"
                 android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:text="@string/add_time_date" />
+
+            <Button
+                android:id="@+id/add_time_select_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Button"
+                android:onClick="selectDateClicked" />
 
         </LinearLayout>
 

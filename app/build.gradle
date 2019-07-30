@@ -37,4 +37,5 @@ dependencies {
     implementation 'com.github.AndroidDeveloperLB:Android-Week-View:2.3.0.1'
     implementation 'com.azeesoft.lib.colorpicker:colorpicker:1.0.8@aar'
     implementation 'net.danlew:android.joda:2.10.2'
+    implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
 }

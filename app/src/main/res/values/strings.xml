@@ -18,6 +18,7 @@
     <!-- Add Time-Entry -->
     <string name="add_time_title"><b>Add new Time-Entry:</b></string>
     <string name="add_time_category">Category:</string>
+    <string name="add_time_date">Date:</string>
 
     <!-- CalendarView -->
     <string name="calendar_action_today">Today</string>
