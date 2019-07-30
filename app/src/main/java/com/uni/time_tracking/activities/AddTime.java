@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,6 +30,8 @@ import com.uni.time_tracking.database.tables.ActivityDB;
 
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
+
+import static com.uni.time_tracking.General.showToast;
 
 public class AddTime extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -82,6 +86,40 @@ public class AddTime extends AppCompatActivity implements AdapterView.OnItemSele
         categorySpinner.setOnItemSelectedListener(this);
         categorySpinner.setAdapter(adapter);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //Menu bar at top
+        getMenuInflater().inflate(R.menu.top_menu_add_category_or_time, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case (R.id.menu_add_category_or_time_done):
+                //TODO: Highlight missing box (Wiggle?)
+                //TODO: Error message not as toast
+
+                if (Time.toLong(start) >= Time.toLong(end)) {
+                    showToast("The start must come before the end.", getApplicationContext());
+                } else {
+
+                    DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
+                    dbHelper.addEntryTime(start, end, activity.getId());
+                    dbHelper.close();
+
+                    showToast("Saved new Category!", getApplicationContext());
+                    finish();
+                }
+                break;
+
+            default:
+                Log.e(TAG, "Did not find menu item");
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -269,7 +269,7 @@ public class CategoryListFragment extends Fragment {
             builder.setMessage("Delete Category \"" + activityName + "\"?\n" +
                     "This will also delete all entries of that Category.")
                     .setPositiveButton("Delete", (dialog, id) -> {
-                        DBHelper dbHelper = new DBHelper(getContext());
+                        DBHelper dbHelper = DBHelper.getInstance(getContext());
                         dbHelper.deleteActivity(activityID);
                         dbHelper.close();
                         ((CategoryListFragment)getTargetFragment()).addCategoriesToList();

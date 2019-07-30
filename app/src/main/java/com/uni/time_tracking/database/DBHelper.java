@@ -19,7 +19,6 @@ import com.uni.time_tracking.database.tables.EntryDB;
 
 import org.joda.time.DateTime;
 
-import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -49,7 +48,7 @@ public class DBHelper extends SQLiteOpenHelper {
      *
      * @param context Application Context
      */
-    public DBHelper(Context context) {
+    private DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -100,6 +99,15 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(ActivityDB.FeedEntry.COLUMN_COLOR, General.colorIntToHex(color));
 
         getWritableDatabase().insert(ActivityDB.FeedEntry.TABLE_NAME, null, values);
+    }
+
+    public void addEntryTime(DateTime start, DateTime end, int activityID){
+        ContentValues values = new ContentValues();
+        values.put(EntryDB.FeedEntry.COLUMN_START, Time.toLong(start));
+        values.put(EntryDB.FeedEntry.COLUMN_END, Time.toLong(end));
+        values.put(EntryDB.FeedEntry.COLUMN_ACTIVITY_ID, activityID);
+
+        getWritableDatabase().insert(EntryDB.FeedEntry.TABLE_NAME, null, values);
     }
 
     /**
