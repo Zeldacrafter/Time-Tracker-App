@@ -53,8 +53,14 @@ public class Time {
     }
 
     public static String toDateString(DateTime dateTime) {
-        //Date format?
+        //TODO: Date format
         DateTimeFormatter f = DateTimeFormat.forPattern("dd.MM.yyyy");
+        return dateTime.toString(f);
+    }
+
+    public static String toTimeString(DateTime dateTime) {
+        //Date format?
+        DateTimeFormatter f = DateTimeFormat.forPattern("HH:mm");
         return dateTime.toString(f);
     }
 
