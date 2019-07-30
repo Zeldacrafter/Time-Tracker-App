@@ -15,6 +15,10 @@
     <string name="add_category_name_hint">Name</string>
     <string name="add_category_color">Color</string>
 
+    <!-- Add Time-Entry -->
+    <string name="add_time_title"><b>Add new Time-Entry:</b></string>
+    <string name="add_time_category">Category:</string>
+
     <!-- CalendarView -->
     <string name="calendar_action_today">Today</string>
     <string name="calendar_action_day_view">Day view</string>

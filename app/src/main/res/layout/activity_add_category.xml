@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:text="@string/add_category_name" />
+                android:text="@string/add_time_category" />
 
             <EditText
                 android:id="@+id/add_category_name_text"
