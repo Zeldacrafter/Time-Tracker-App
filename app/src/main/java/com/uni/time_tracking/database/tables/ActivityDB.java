@@ -63,6 +63,11 @@ public class ActivityDB {
         this.color = color;
     }
 
+    @Override
+    public String toString() {
+        return getName();
+    }
+
     public static final class FeedEntry implements BaseColumns {
         //Table name
         public static final String TABLE_NAME = "Activity";

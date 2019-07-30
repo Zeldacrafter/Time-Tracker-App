@@ -3,8 +3,11 @@ package com.uni.time_tracking.activities;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -20,11 +23,13 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.uni.time_tracking.R;
 import com.uni.time_tracking.Time;
+import com.uni.time_tracking.database.DBHelper;
+import com.uni.time_tracking.database.tables.ActivityDB;
 
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
 
-public class AddTime extends AppCompatActivity {
+public class AddTime extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     public static final String TAG = "AddTime";
     public static final String BUNDLE_START_TIME = "Start_Time";
@@ -38,6 +43,7 @@ public class AddTime extends AppCompatActivity {
 
     DateTime start;
     DateTime end;
+    ActivityDB activity;
 
     LinearLayout layout;
     Spinner categorySpinner;
@@ -66,7 +72,25 @@ public class AddTime extends AppCompatActivity {
         startDate.setText(Time.toDateString(start));
         endTime.setText(Time.toTimeString(end));
         endDate.setText(Time.toDateString(end));
+
+        DBHelper dbHelper = DBHelper.getInstance(this);
+        ActivityDB[] activities = dbHelper.getActiveActivities();
+        dbHelper.close();
+
+        ArrayAdapter<ActivityDB> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, activities);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setOnItemSelectedListener(this);
+        categorySpinner.setAdapter(adapter);
+
     }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        activity = (ActivityDB)parent.getItemAtPosition(pos);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) { /* Do nothing. */ }
 
     public void selectStartTimeClicked(View v) {
         Bundle bundle = new Bundle();
@@ -135,7 +159,6 @@ public class AddTime extends AppCompatActivity {
         end = new DateTime(year, month, day, start.getHourOfDay(), start.getMinuteOfHour(), start.getSecondOfMinute());
         endDate.setText(Time.toDateString(end));
     }
-
 
 
     private static class SelectDateDialogFragment extends DialogFragment {
