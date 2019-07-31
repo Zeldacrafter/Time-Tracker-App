@@ -12,7 +12,7 @@ import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.uni.time_tracking.R;
 import com.uni.time_tracking.Time;
-import com.uni.time_tracking.activities.AddTime;
+import com.uni.time_tracking.activities.Time.AddTime;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
 import com.uni.time_tracking.database.tables.TimeDB;

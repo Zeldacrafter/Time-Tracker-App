@@ -1,4 +1,4 @@
-package com.uni.time_tracking.activities;
+package com.uni.time_tracking.activities.Time;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

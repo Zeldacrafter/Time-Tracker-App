@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.AddCategory"></activity>
+        <activity android:name=".activities.Category.AddCategory"></activity>
         <activity
             android:name=".activities.MainScreen.MainActivity"
             android:label="@string/app_name">
@@ -24,11 +24,11 @@
             android:parentActivityName=".activities.MainScreen.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.EditCategory"
+            android:name=".activities.Category.EditCategory"
             android:parentActivityName=".activities.MainScreen.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.AddTime"
+            android:name=".activities.Time.AddTime"
             android:parentActivityName=".activities.MainScreen.MainActivity"
             android:screenOrientation="portrait" />
     </application>

@@ -1,4 +1,4 @@
-package com.uni.time_tracking.activities;
+package com.uni.time_tracking.activities.Category;
 
 import android.graphics.Color;
 import android.os.Bundle;

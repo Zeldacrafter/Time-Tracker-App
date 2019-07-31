@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.uni.time_tracking.activities.AddCategory">
+    tools:context="com.uni.time_tracking.activities.Category.AddCategory">
 
     <LinearLayout
         android:layout_width="393dp"
