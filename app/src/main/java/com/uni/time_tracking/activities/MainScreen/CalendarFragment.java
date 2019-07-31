@@ -15,7 +15,7 @@ import com.uni.time_tracking.Time;
 import com.uni.time_tracking.activities.AddTime;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
-import com.uni.time_tracking.database.tables.EntryDB;
+import com.uni.time_tracking.database.tables.TimeDB;
 
 
 import org.jetbrains.annotations.NotNull;
@@ -53,11 +53,11 @@ public class CalendarFragment extends BaseCalendarFragment {
         //          -> Save Date as YYYYMMDD integer?
 
         DBHelper dbHelper = DBHelper.getInstance(getContext());
-        EntryDB[] dbEvents = dbHelper.getAllEventsInMonth(newYear, newMonth);
+        TimeDB[] dbEvents = dbHelper.getAllEventsInMonth(newYear, newMonth);
         ActivityDB[] activites = dbHelper.getActiveActivities();
         dbHelper.close();
 
-        for(EntryDB event : dbEvents) {
+        for(TimeDB event : dbEvents) {
 
             ActivityDB activity = findActivityWithId(activites, event.getActivityID());
             if(activity != null) {

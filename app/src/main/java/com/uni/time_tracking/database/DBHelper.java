@@ -15,7 +15,7 @@ import android.util.Log;
 import com.uni.time_tracking.General;
 import com.uni.time_tracking.Time;
 import com.uni.time_tracking.database.tables.ActivityDB;
-import com.uni.time_tracking.database.tables.EntryDB;
+import com.uni.time_tracking.database.tables.TimeDB;
 
 import org.joda.time.DateTime;
 
@@ -85,12 +85,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static void createTables(SQLiteDatabase db){
         db.execSQL(ActivityDB.SQL_CREATE_TABLE);
-        db.execSQL(EntryDB.SQL_CREATE_TABLE);
+        db.execSQL(TimeDB.SQL_CREATE_TABLE);
     }
 
     private static void deleteEntries(SQLiteDatabase db){
         db.execSQL(ActivityDB.SQL_DELETE_TABLE);
-        db.execSQL(EntryDB.SQL_DELETE_TABLE);
+        db.execSQL(TimeDB.SQL_DELETE_TABLE);
     }
 
     public void addEntryActivity(String name, int color){
@@ -103,11 +103,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void addEntryTime(DateTime start, DateTime end, int activityID){
         ContentValues values = new ContentValues();
-        values.put(EntryDB.FeedEntry.COLUMN_START, Time.toLong(start));
-        values.put(EntryDB.FeedEntry.COLUMN_END, Time.toLong(end));
-        values.put(EntryDB.FeedEntry.COLUMN_ACTIVITY_ID, activityID);
+        values.put(TimeDB.FeedEntry.COLUMN_START, Time.toLong(start));
+        values.put(TimeDB.FeedEntry.COLUMN_END, Time.toLong(end));
+        values.put(TimeDB.FeedEntry.COLUMN_ACTIVITY_ID, activityID);
 
-        getWritableDatabase().insert(EntryDB.FeedEntry.TABLE_NAME, null, values);
+        getWritableDatabase().insert(TimeDB.FeedEntry.TABLE_NAME, null, values);
     }
 
     /**
@@ -225,8 +225,8 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Returns whether there is a active {@link EntryDB} database entry
-     * ({@link EntryDB.FeedEntry#COLUMN_END} = null) for a specified activity.
+     * Returns whether there is a active {@link TimeDB} database entry
+     * ({@link TimeDB.FeedEntry#COLUMN_END} = null) for a specified activity.
      * @param activityID The ID of the activity.
      * @return {@code true} if such an entry exists, {@code false} otherwise.
      */
@@ -235,18 +235,18 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Returns {@link EntryDB} database entry that is currently active
-     * ({@link EntryDB.FeedEntry#COLUMN_END} = null) for a specified activity.
+     * Returns {@link TimeDB} database entry that is currently active
+     * ({@link TimeDB.FeedEntry#COLUMN_END} = null) for a specified activity.
      * @param activityID The ID of the activity.
-     * @return {@link EntryDB} object corresponding to the entry. {@code null} if no such entry exists.
+     * @return {@link TimeDB} object corresponding to the entry. {@code null} if no such entry exists.
      */
-    public EntryDB getActiveTime(int activityID) {
-        String query = "SELECT " + EntryDB.FeedEntry._ID + ", " +
-                EntryDB.FeedEntry.COLUMN_START + ", " +
-                EntryDB.FeedEntry.COLUMN_END +
-                " FROM " + EntryDB.FeedEntry.TABLE_NAME +
-                " WHERE " + EntryDB.FeedEntry.COLUMN_ACTIVITY_ID + " = ?" +
-                " AND " + EntryDB.FeedEntry.COLUMN_END + " IS NULL";
+    public TimeDB getActiveTime(int activityID) {
+        String query = "SELECT " + TimeDB.FeedEntry._ID + ", " +
+                TimeDB.FeedEntry.COLUMN_START + ", " +
+                TimeDB.FeedEntry.COLUMN_END +
+                " FROM " + TimeDB.FeedEntry.TABLE_NAME +
+                " WHERE " + TimeDB.FeedEntry.COLUMN_ACTIVITY_ID + " = ?" +
+                " AND " + TimeDB.FeedEntry.COLUMN_END + " IS NULL";
         Cursor c = getReadableDatabase().rawQuery(query, new String[]{""+activityID});
 
         assert(c.getCount() < 2) : "More than one instance of the activity active."; //FIXME
@@ -260,36 +260,36 @@ public class DBHelper extends SQLiteOpenHelper {
             DateTime start = Time.fromLong(c.getLong(1));
             DateTime end = null; //TODO: Careful!
             c.close();
-            return new EntryDB(id, start, end, activityID);
+            return new TimeDB(id, start, end, activityID);
         }
     }
 
     /**
-     * Adds a new active {@link EntryDB} entry for an activity starting at the current system-time.
+     * Adds a new active {@link TimeDB} entry for an activity starting at the current system-time.
      * @param activityID The ID of the activity.
      */
     public void activateActivity(int activityID) {
         assert(!isActivityActive(activityID));
 
         ContentValues values = new ContentValues();
-        values.put(EntryDB.FeedEntry.COLUMN_START, Time.toLong(Time.getCurrentTime()));
-        values.put(EntryDB.FeedEntry.COLUMN_ACTIVITY_ID, activityID);
-        getWritableDatabase().insert(EntryDB.FeedEntry.TABLE_NAME, null, values);
+        values.put(TimeDB.FeedEntry.COLUMN_START, Time.toLong(Time.getCurrentTime()));
+        values.put(TimeDB.FeedEntry.COLUMN_ACTIVITY_ID, activityID);
+        getWritableDatabase().insert(TimeDB.FeedEntry.TABLE_NAME, null, values);
     }
 
     /**
-     * Deactivating a {@link EntryDB} entry by setting {@link EntryDB.FeedEntry#COLUMN_END}
+     * Deactivating a {@link TimeDB} entry by setting {@link TimeDB.FeedEntry#COLUMN_END}
      * to the current system-time.
-     * @param timeID The ID of the {@link EntryDB} entry.
+     * @param timeID The ID of the {@link TimeDB} entry.
      */
     public void deactivityEntry(int timeID) {
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(EntryDB.FeedEntry.COLUMN_END, Time.toLong(Time.getCurrentTime()));
+        contentValues.put(TimeDB.FeedEntry.COLUMN_END, Time.toLong(Time.getCurrentTime()));
         getWritableDatabase().update(
-                EntryDB.FeedEntry.TABLE_NAME,
+                TimeDB.FeedEntry.TABLE_NAME,
                 contentValues,
-                EntryDB.FeedEntry._ID + " = ?",
+                TimeDB.FeedEntry._ID + " = ?",
                 new String[] {""+timeID});
     }
 
@@ -308,18 +308,18 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param month The month.
      * @return Array of all wanted elements.
      */
-    public EntryDB[] getAllEventsInMonth(int year, int month) {
+    public TimeDB[] getAllEventsInMonth(int year, int month) {
 
         String query = "SELECT " +
-                EntryDB.FeedEntry._ID + ", " +
-                EntryDB.FeedEntry.COLUMN_START + ", " +
-                EntryDB.FeedEntry.COLUMN_END + ", " +
-                EntryDB.FeedEntry.COLUMN_ACTIVITY_ID  +
-                " FROM " + EntryDB.FeedEntry.TABLE_NAME;
+                TimeDB.FeedEntry._ID + ", " +
+                TimeDB.FeedEntry.COLUMN_START + ", " +
+                TimeDB.FeedEntry.COLUMN_END + ", " +
+                TimeDB.FeedEntry.COLUMN_ACTIVITY_ID  +
+                " FROM " + TimeDB.FeedEntry.TABLE_NAME;
 
         Cursor c = getReadableDatabase().rawQuery(query, null);
 
-        ArrayList<EntryDB> result = new ArrayList<>();
+        ArrayList<TimeDB> result = new ArrayList<>();
 
         while(c.moveToNext()) {
 
@@ -349,22 +349,22 @@ public class DBHelper extends SQLiteOpenHelper {
                     end = wantedYearMonth*100000000 + maxDaysInMonth*1000000 + 235959; //eg 31 23:59:59
                 }
 
-                result.add(new EntryDB(id, Time.fromLong(start), Time.fromLong(end), activity_id));
+                result.add(new TimeDB(id, Time.fromLong(start), Time.fromLong(end), activity_id));
             }
         }
 
         c.close();
-        return result.toArray(new EntryDB[0]);
+        return result.toArray(new TimeDB[0]);
     }
 
     /**
-     * Removed the activity with the given id and all associated {@link EntryDB} entries.
+     * Removed the activity with the given id and all associated {@link TimeDB} entries.
      * @param activityId The ID of the activity we want to delete
      */
     public void deleteActivity(int activityId) {
         SQLiteDatabase db = getWritableDatabase();
 
-        db.delete(EntryDB.FeedEntry.TABLE_NAME, EntryDB.FeedEntry.COLUMN_ACTIVITY_ID + "=" + activityId, null);
+        db.delete(TimeDB.FeedEntry.TABLE_NAME, TimeDB.FeedEntry.COLUMN_ACTIVITY_ID + "=" + activityId, null);
         db.delete(ActivityDB.FeedEntry.TABLE_NAME, ActivityDB.FeedEntry._ID + "=" + activityId, null);
 
         db.close();

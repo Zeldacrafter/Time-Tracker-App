@@ -26,7 +26,7 @@ import com.uni.time_tracking.Time;
 import com.uni.time_tracking.activities.EditCategory;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
-import com.uni.time_tracking.database.tables.EntryDB;
+import com.uni.time_tracking.database.tables.TimeDB;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -96,7 +96,7 @@ public class CategoryListFragment extends Fragment {
      * {@link com.uni.time_tracking.database.tables.ActivityDB}: <br>
      * - Showing if/how long its been active <br>
      * - Making it possible to toggle if a category is currently used
-     * (add {@link EntryDB} entries).
+     * (add {@link TimeDB} entries).
      */
     public void addCategoriesToList() {
 
@@ -211,14 +211,14 @@ public class CategoryListFragment extends Fragment {
     }
 
     /**
-     * Toggle whether the activity has an active {@link EntryDB} entry.
+     * Toggle whether the activity has an active {@link TimeDB} entry.
      *
      * @param context    Application context.
      * @param activityID ID of the activity that we want to toggle.
      */
     private static void activityClicked(Context context, int activityID) {
         DBHelper dbHelper = DBHelper.getInstance(context);
-        EntryDB time = dbHelper.getActiveTime(activityID);
+        TimeDB time = dbHelper.getActiveTime(activityID);
         if (time == null) {
             // No active Time-Entry. activate now.
             dbHelper.activateActivity(activityID);
@@ -236,7 +236,7 @@ public class CategoryListFragment extends Fragment {
      */
     private void updateTime(TextView runningText, int activityID) {
         DBHelper dbHelper = DBHelper.getInstance(runningText.getContext());
-        EntryDB time = dbHelper.getActiveTime(activityID);
+        TimeDB time = dbHelper.getActiveTime(activityID);
         dbHelper.close();
 
         if (time != null) {

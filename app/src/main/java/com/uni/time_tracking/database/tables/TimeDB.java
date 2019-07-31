@@ -4,7 +4,7 @@ import android.provider.BaseColumns;
 
 import org.joda.time.DateTime;
 
-public class EntryDB {
+public class TimeDB {
 
     private int id;
     private DateTime start;
@@ -25,7 +25,7 @@ public class EntryDB {
                     + FeedEntry.TABLE_NAME;
 
     //TODO: Pass LocalDateTime aswell.
-    public EntryDB(int id, DateTime start, DateTime end, int activityID) {
+    public TimeDB(int id, DateTime start, DateTime end, int activityID) {
         this.id = id;
         this.start = start;
         this.end = end;
@@ -51,7 +51,7 @@ public class EntryDB {
 
     public static final class FeedEntry implements BaseColumns {
         //Table name
-        public static final String TABLE_NAME = "Entry";
+        public static final String TABLE_NAME = "Time";
 
         //Table columns
         public static final String COLUMN_START = "Start";
