@@ -1,69 +1,29 @@
 package com.uni.time_tracking.activities.Category;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
-import com.azeesoft.lib.colorpicker.ColorPickerDialog;
 import com.uni.time_tracking.R;
 import com.uni.time_tracking.database.DBHelper;
 
 import static com.uni.time_tracking.General.showToast;
 
-public class AddCategory extends AppCompatActivity {
-
-    //TODO: Finish Color
-    //TODO: Simpler Color selector with sample colors before complex one
-    //TODO: Save color so that it is the same next time"
-
-    //TODO: Icon
+public class AddCategory extends CategoryModifier {
 
     public static final String TAG = "AddCategory";
-
-    private EditText nameText;
-    private ColorPickerDialog colorPickerDialog;
-    private Button colorPicker;
-
-    private int currentColor = Color.RED;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_category);
 
-        nameText = findViewById(R.id.add_category_name_text);
-
-        colorPicker = findViewById(R.id.color_picker_button);
+        currentColor = Color.RED;
         colorPicker.setBackgroundColor(currentColor);
-
-
-        //Light theme variant:
-        //  ColorPickerDialog colorPickerDialog= ColorPickerDialog.createColorPickerDialog(this);
-        colorPickerDialog = ColorPickerDialog.createColorPickerDialog(this, ColorPickerDialog.DARK_THEME);
-        colorPickerDialog.hideOpacityBar();
-        colorPickerDialog.setOnColorPickedListener((color, hexVal) -> {
-            currentColor = color;
-            colorPicker.setBackgroundColor(color);
-        });
-        colorPickerDialog.setHexaDecimalTextColor(Color.parseColor("#FFFFFF"));
         colorPickerDialog.setInitialColor(currentColor);
         colorPickerDialog.setLastColor(currentColor);
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //Menu bar at top
-        getMenuInflater().inflate(R.menu.top_menu_add_category_or_time, menu);
-        return true;
     }
 
     @Override
@@ -78,6 +38,7 @@ public class AddCategory extends AppCompatActivity {
                     DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
                     dbHelper.addEntryActivity(nameText.getText().toString(), currentColor);
                     dbHelper.close();
+
                     showToast("Saved new Category!", getApplicationContext());
                     finish();
                 }
@@ -85,12 +46,9 @@ public class AddCategory extends AppCompatActivity {
 
             default:
                 Log.e(TAG, "Did not find menu item");
+                break;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void colorPickerClicked(View v) {
-        colorPickerDialog.show();
     }
 }
