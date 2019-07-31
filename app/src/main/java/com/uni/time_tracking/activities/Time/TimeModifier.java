@@ -31,18 +31,22 @@ import org.joda.time.DateTime;
 
 public abstract class TimeModifier extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
+    private static final String BUNDLE_MODE = "Bundle_Mode";
+
     public static final String BUNDLE_START_TIME = "Start_Time";
     public static final String BUNDLE_END_TIME = "End_Time";
-    public static final String BUNDLE_MODE = "Bundle_Mode";
 
     protected enum Mode {
         START,
         END
     }
 
+    //TODO: Save TimeDB instance instead of seperate values.
+
     protected DateTime start;
     protected DateTime end;
     protected ActivityDB activity;
+    protected ActivityDB[] spinnerItems;
 
     protected LinearLayout layout;
     protected Spinner categorySpinner;
@@ -73,10 +77,10 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
         endDate.setText(Time.toDateString(end));
 
         DBHelper dbHelper = DBHelper.getInstance(this);
-        ActivityDB[] activities = dbHelper.getActiveActivities();
+        spinnerItems = dbHelper.getActiveActivities();
         dbHelper.close();
 
-        ArrayAdapter<ActivityDB> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, activities);
+        ArrayAdapter<ActivityDB> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerItems);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setOnItemSelectedListener(this);
         categorySpinner.setAdapter(adapter);
@@ -172,7 +176,7 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-            AddTime caller = (AddTime)getActivity();
+            TimeModifier caller = (TimeModifier)getActivity();
 
             Mode mode = Mode.valueOf(getArguments().getString(BUNDLE_MODE));
             DateTime startTime = Time.fromLong(getArguments().getLong(BUNDLE_START_TIME));
@@ -217,7 +221,7 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-            AddTime caller =  (AddTime)getActivity();
+            TimeModifier caller = (TimeModifier)getActivity();
 
             Mode mode = Mode.valueOf(getArguments().getString(BUNDLE_MODE));
             DateTime startTime = Time.fromLong(getArguments().getLong(BUNDLE_START_TIME));

@@ -221,9 +221,9 @@ public class CategoryListFragment extends Fragment {
         TimeDB time = dbHelper.getActiveTime(activityID);
         if (time == null) {
             // No active Time-Entry. activate now.
-            dbHelper.activateActivity(activityID);
+            dbHelper.activateTimeActivity(activityID);
         } else {
-            dbHelper.deactivityEntry(time.getId());
+            dbHelper.deactivityTimeEntry(time.getId());
         }
         dbHelper.close();
     }

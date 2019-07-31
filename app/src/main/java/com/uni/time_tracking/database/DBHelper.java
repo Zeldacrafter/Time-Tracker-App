@@ -19,6 +19,7 @@ import com.uni.time_tracking.database.tables.TimeDB;
 
 import org.joda.time.DateTime;
 
+import java.sql.SQLInput;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -268,7 +269,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * Adds a new active {@link TimeDB} entry for an activity starting at the current system-time.
      * @param activityID The ID of the activity.
      */
-    public void activateActivity(int activityID) {
+    public void activateTimeActivity(int activityID) {
         assert(!isActivityActive(activityID));
 
         ContentValues values = new ContentValues();
@@ -277,12 +278,47 @@ public class DBHelper extends SQLiteOpenHelper {
         getWritableDatabase().insert(TimeDB.FeedEntry.TABLE_NAME, null, values);
     }
 
+    public void editEntryTime(int id, DateTime start, DateTime end, int activityID) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TimeDB.FeedEntry.COLUMN_START, Time.toLong(start));
+        contentValues.put(TimeDB.FeedEntry.COLUMN_END, Time.toLong(end));
+        contentValues.put(TimeDB.FeedEntry.COLUMN_ACTIVITY_ID, activityID);
+        getWritableDatabase().update(
+                TimeDB.FeedEntry.TABLE_NAME,
+                contentValues,
+                TimeDB.FeedEntry._ID + " = ?",
+                new String[] {""+id});
+    }
+
+    public TimeDB getTimeEntry(int id) {
+
+        String query = "SELECT " + TimeDB.FeedEntry.COLUMN_START + ", " +
+                TimeDB.FeedEntry.COLUMN_END + ", " +
+                TimeDB.FeedEntry.COLUMN_ACTIVITY_ID +
+                " FROM " + TimeDB.FeedEntry.TABLE_NAME +
+                " WHERE " + TimeDB.FeedEntry._ID + " = " + id;
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        TimeDB result = new TimeDB(id,
+                Time.fromLong(c.getLong(0)),
+                Time.fromLong(c.getLong(1)),
+                c.getInt(2));
+
+        c.close();
+        db.close();
+
+        return result;
+    }
+
     /**
      * Deactivating a {@link TimeDB} entry by setting {@link TimeDB.FeedEntry#COLUMN_END}
      * to the current system-time.
      * @param timeID The ID of the {@link TimeDB} entry.
      */
-    public void deactivityEntry(int timeID) {
+    public void deactivityTimeEntry(int timeID) {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(TimeDB.FeedEntry.COLUMN_END, Time.toLong(Time.getCurrentTime()));

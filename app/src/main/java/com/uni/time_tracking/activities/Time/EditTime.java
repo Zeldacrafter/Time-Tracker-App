@@ -9,16 +9,37 @@ import androidx.annotation.NonNull;
 import com.uni.time_tracking.R;
 import com.uni.time_tracking.Time;
 import com.uni.time_tracking.database.DBHelper;
+import com.uni.time_tracking.database.tables.TimeDB;
 
 import static com.uni.time_tracking.General.showToast;
 
-public class AddTime extends TimeModifier {
+public class EditTime extends TimeModifier {
 
-    public static final String TAG = "AddTime";
+    public static final String TAG = "EditTime";
+
+    public static final String BUNDLE_TIME_ID = "Time_ID";
+    public static final String BUNDLE_ACTIVITY_ID = "Activity_Name";
+
+    private int idToEdit;
+    private int activityID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle extras = getIntent().getExtras();
+        idToEdit = extras.getInt(BUNDLE_TIME_ID, TimeDB.NO_ID_VALUE);
+        activityID = extras.getInt(BUNDLE_ACTIVITY_ID);
+
+        //FIXME: check -1
+        categorySpinner.setSelection(getIndexOfSpinnerItemWithName(activityID));
+    }
+
+    private int getIndexOfSpinnerItemWithName(int id) {
+        for(int i = 0; i < spinnerItems.length; i++) {
+            if(spinnerItems[i].getId() == id) return i;
+        }
+        return -1;
     }
 
     @Override
@@ -32,12 +53,11 @@ public class AddTime extends TimeModifier {
                 if (Time.toLong(start) >= Time.toLong(end)) {
                     showToast("The start must come before the end.", getApplicationContext());
                 } else {
-
                     DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
-                    dbHelper.addEntryTime(start, end, activity.getId());
+                    dbHelper.editEntryTime(idToEdit, start, end, activity.getId());
                     dbHelper.close();
 
-                    showToast("Saved new Time-Entry!", getApplicationContext());
+                    showToast("Edited Time-Entry!", getApplicationContext());
                     finish();
                 }
                 break;
@@ -47,5 +67,4 @@ public class AddTime extends TimeModifier {
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

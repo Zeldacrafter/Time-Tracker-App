@@ -6,6 +6,9 @@ import org.joda.time.DateTime;
 
 public class TimeDB {
 
+    /** If any TimeDB instance holds this value it is not existent in the database. */
+    public static final int NO_ID_VALUE = -1;
+
     private int id;
     private DateTime start;
     private DateTime end;
