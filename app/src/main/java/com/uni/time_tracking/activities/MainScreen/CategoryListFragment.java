@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentManager;
 import com.uni.time_tracking.Pair;
 import com.uni.time_tracking.R;
 import com.uni.time_tracking.Time;
+import com.uni.time_tracking.Utils;
 import com.uni.time_tracking.activities.category.EditCategory;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
@@ -31,6 +32,8 @@ import com.uni.time_tracking.database.tables.TimeDB;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+
+import static com.uni.time_tracking.Utils._assert;
 
 public class CategoryListFragment extends Fragment {
 
@@ -259,12 +262,13 @@ public class CategoryListFragment extends Fragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+            _assert(getArguments() != null, "No arguments passed!");
             activityName = getArguments().getString(BUNDLE_ACTIVITY_NAME);
             activityID = getArguments().getInt(BUNDLE_ACTIVITY_ID);
+            _assert(activityName != null, "No value (or null) was passed for BUNDLE_ACTIVITY_NAME!");
+            _assert(activityID > 0, "Passed value for BUNDLE_ACTIVITY_ID is " + activityID + ". Was one passed at all?");
 
-            assert(activityName != null && activityID != 0) : "No argument passed";
-
-            // Use the Builder class for convenient dialog construction
+            //TODO: Strings as resource.
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage("Delete Category \"" + activityName + "\"?\n" +
                     "This will also delete all entries of that Category.")
@@ -272,6 +276,8 @@ public class CategoryListFragment extends Fragment {
                         DBHelper dbHelper = DBHelper.getInstance(getContext());
                         dbHelper.deleteActivity(activityID);
                         dbHelper.close();
+
+                        _assert(getTargetFragment() instanceof CategoryListFragment, "");
                         ((CategoryListFragment)getTargetFragment()).addCategoriesToList();
                     })
                     .setNegativeButton("Cancel", (dialog, id) -> {});

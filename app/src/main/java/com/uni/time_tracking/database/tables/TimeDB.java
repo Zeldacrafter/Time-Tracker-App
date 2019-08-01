@@ -6,7 +6,9 @@ import org.joda.time.DateTime;
 
 public class TimeDB {
 
-    /** If any TimeDB instance holds this value it is not existent in the database. */
+    /** If any TimeDB instance holds this value it is not existent in the database.
+     * We must be careful not to use any entries that are not in the database for actual queries.
+     */
     public static final int NO_ID_VALUE = -1;
 
     private int id;
@@ -27,7 +29,6 @@ public class TimeDB {
             "DROP TABLE IF EXISTS "
                     + FeedEntry.TABLE_NAME;
 
-    //TODO: Pass LocalDateTime aswell.
     public TimeDB(int id, DateTime start, DateTime end, int activityID) {
         this.id = id;
         this.start = start;

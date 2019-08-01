@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import com.alamkanak.weekview.DateTimeInterpreter;
@@ -23,6 +24,7 @@ import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.alamkanak.weekview.WeekViewUtil;
 import com.uni.time_tracking.R;
+import com.uni.time_tracking.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -33,6 +35,8 @@ import java.util.List;
 import java.util.Locale;
 
 import java.text.DateFormat;
+
+import static com.uni.time_tracking.Utils._assert;
 
 abstract class BaseCalendarFragment extends Fragment implements
             WeekView.EventClickListener, MonthLoader.MonthChangeListener,
@@ -47,8 +51,8 @@ abstract class BaseCalendarFragment extends Fragment implements
     private DateFormat shortDateFormat;
     private DateFormat timeFormat;
 
-    WeekView weekView;
-    TextView draggableView;
+    protected WeekView weekView;
+    private TextView draggableView;
 
     @Nullable
     @Override
@@ -61,31 +65,26 @@ abstract class BaseCalendarFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
 
         weekView = view.findViewById(R.id.fragment_week_view);
-        draggableView = getView().findViewById(R.id.fragment_draggable_view);
+        draggableView = view.findViewById(R.id.fragment_draggable_view);
 
+        _assert(getActivity() != null,
+                "Fragment is not yet associated with any activity." +
+                        "Is the fragment not yet attached for detached too soon?");
 
-        shortDateFormat = WeekViewUtil.getWeekdayWithNumericDayAndMonthFormat(getContext(), true);
+        weekView.setTypeface(ResourcesCompat.getFont(getActivity().getApplicationContext(), R.font.lato));
+        shortDateFormat = WeekViewUtil.getWeekdayWithNumericDayAndMonthFormat(getActivity().getApplicationContext(), true);
         timeFormat = android.text.format.DateFormat.getTimeFormat(getContext());
         if (timeFormat == null) {
             timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
         }
 
         draggableView.setOnLongClickListener(new DragTapListener());
-
-        // Show a toast message about the touched event.
         weekView.setEventClickListener(this);
-        // The week view has infinite scrolling horizontally. We have to provide the events of a
-        // month every time the month changes on the week view.
         weekView.setMonthChangeListener(this);
-        // Set long press listener for events.
         weekView.setEventLongPressListener(this);
-        // Set long press listener for empty view
         weekView.setEmptyViewLongPressListener(this);
-        // Set EmptyView Click Listener
         weekView.setEmptyViewClickListener(this);
-        // Set AddEvent Click Listener
         weekView.setAddEventClickListener(this);
-        // Set Drag and Drop Listener
         weekView.setDropListener(this);
 
         // Set minDate
@@ -295,14 +294,10 @@ abstract class BaseCalendarFragment extends Fragment implements
     }
 
     @Override
-    public void onEmptyViewLongPress(@NotNull Calendar time) {
-        Toast.makeText(getContext(), "Empty view long pressed: " + getEventTitle(time), Toast.LENGTH_SHORT).show();
-    }
+    public void onEmptyViewLongPress(@NotNull Calendar time) {/* Do nothing */}
 
     @Override
-    public void onEmptyViewClicked(@NotNull Calendar date) {
-        Toast.makeText(getContext(), "Empty view" + " clicked: " + getEventTitle(date), Toast.LENGTH_SHORT).show();
-    }
+    public void onEmptyViewClicked(@NotNull Calendar date) {/* Do nothing. */}
 
     @org.jetbrains.annotations.Nullable
     @Override

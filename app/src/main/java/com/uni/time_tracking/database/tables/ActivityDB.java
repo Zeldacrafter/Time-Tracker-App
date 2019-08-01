@@ -1,6 +1,5 @@
 package com.uni.time_tracking.database.tables;
 
-import android.graphics.Color;
 import android.provider.BaseColumns;
 
 
@@ -43,6 +42,10 @@ public class ActivityDB {
         return name;
     }
 
+    /**
+     * NOTE: This does not alter the database in any way.
+     * @param name new name.
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -51,6 +54,10 @@ public class ActivityDB {
         return active;
     }
 
+    /**
+     * NOTE: This does not alter the database in any way.
+     * @param active new value.
+     */
     public void setActive(boolean active) {
         this.active = active;
     }

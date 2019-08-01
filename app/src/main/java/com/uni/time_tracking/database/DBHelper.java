@@ -11,9 +11,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.util.Log;
 
-
-import androidx.annotation.NonNull;
-
 import com.uni.time_tracking.Utils;
 import com.uni.time_tracking.Time;
 import com.uni.time_tracking.database.tables.ActivityDB;
@@ -25,6 +22,8 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import static com.uni.time_tracking.Utils._assert;
 
 /**
  * DBHelper is used for managing the database and its tables.
@@ -138,6 +137,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.query(
                 ActivityDB.FeedEntry.TABLE_NAME,
                 new String[]{
+                        ActivityDB.FeedEntry._ID,
                         ActivityDB.FeedEntry.COLUMN_NAME,
                         ActivityDB.FeedEntry.COLUMN_COLOR,
                         ActivityDB.FeedEntry.COLUMN_ACTIVE},
@@ -167,7 +167,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param activity {@link ActivityDB} instance that holds all values to set.
      */
     public void editActivity(int id, ActivityDB activity) {
-        Utils._assert(id > 0, id+"");
+        _assert(id > 0, id+"");
 
         SQLiteDatabase db = getWritableDatabase();
 
@@ -231,7 +231,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @return Wanted {@link ActivityDB} instance.
      */
     public ActivityDB getActivity(int activityID) {
-        Utils._assert(activityID > 0, activityID+"");
+        _assert(activityID > 0, activityID+"");
 
         SQLiteDatabase db = getReadableDatabase();
 
@@ -258,7 +258,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @return {@code true} if such an entry exists, {@code false} otherwise.
      */
     public boolean isActivityActive(int activityID) {
-        Utils._assert(activityID > 0, activityID+"");
+        _assert(activityID > 0, activityID+"");
         return getActiveTime(activityID) != null;
     }
 
@@ -269,7 +269,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @return {@link TimeDB} object corresponding to the entry. {@code null} if no such entry exists.
      */
     public TimeDB getActiveTime(int activityID) {
-        Utils._assert(activityID > 0, activityID+"");
+        _assert(activityID > 0, activityID+"");
 
         SQLiteDatabase db = getReadableDatabase();
 
@@ -281,7 +281,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     TimeDB.FeedEntry.COLUMN_ACTIVITY_ID + " = ? AND " + TimeDB.FeedEntry.COLUMN_END + " IS NULL",
                     new String[]{""+activityID}, null, null, null);
 
-        Utils._assert(c.getCount() < 2, "More than one instance of the activity active.");
+        _assert(c.getCount() < 2, "More than one instance of the activity active.");
 
         if(c.getCount() == 0) {
             c.close();
@@ -303,8 +303,8 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param activityID The ID of the activity.
      */
     public void activateTimeActivity(int activityID) {
-        Utils._assert(activityID > 0, activityID+"");
-        Utils._assert(!isActivityActive(activityID), "This activity is already active.");
+        _assert(activityID > 0, activityID+"");
+        _assert(!isActivityActive(activityID), "This activity is already active.");
 
         ContentValues values = new ContentValues();
         values.put(TimeDB.FeedEntry.COLUMN_START, Time.toLong(Time.getCurrentTime()));
@@ -313,8 +313,8 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void editEntryTime(int id, DateTime start, DateTime end, int activityID) {
-        Utils._assert(id > 0, id+"");
-        Utils._assert(activityID > 0, activityID+"");
+        _assert(id > 0, id+"");
+        _assert(activityID > 0, activityID+"");
 
         SQLiteDatabase db = getWritableDatabase();
 
@@ -336,7 +336,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @return Wanted database entry as {@link TimeDB} instance.
      */
     public TimeDB getTimeEntry(int id) {
-        Utils._assert(id > 0, id+"");
+        _assert(id > 0, id+"");
 
         SQLiteDatabase db = getReadableDatabase();
 
@@ -366,7 +366,7 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     public void deactivateTimeEntry(int timeID) {
 
-        Utils._assert(timeID > 0, timeID+"");
+        _assert(timeID > 0, timeID+"");
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(TimeDB.FeedEntry.COLUMN_END, Time.toLong(Time.getCurrentTime()));
@@ -379,7 +379,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     /**
      * Returns Array of all EntryDBs that have part of their time interval start-end in
-     * a specified month.
+     * a specified month where the associated ActivityDB entry is active.
      * If the Entry does not occupy that month it is ignored.
      * If the Entry partially occupies that month it is cut in such a way that the start/end
      * now match the border of the month.
@@ -392,20 +392,25 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param month The month.
      * @return Array of all wanted elements.
      */
-    public TimeDB[] getAllEventsInMonth(int year, int month) {
+    public TimeDB[] getAllActiveEventsInMonth(int year, int month) {
+
+        SQLiteDatabase db = getReadableDatabase();
 
         String query = "SELECT " +
-                TimeDB.FeedEntry._ID + ", " +
+                TimeDB.FeedEntry.TABLE_NAME + "." + TimeDB.FeedEntry._ID + ", " +
                 TimeDB.FeedEntry.COLUMN_START + ", " +
                 TimeDB.FeedEntry.COLUMN_END + ", " +
                 TimeDB.FeedEntry.COLUMN_ACTIVITY_ID  +
                 " FROM " + TimeDB.FeedEntry.TABLE_NAME +
-                " WHERE " + TimeDB.FeedEntry.COLUMN_START +
-                    " <= " + year + (month < 10 ? "0" : "") + month + "99999999" +
-                " AND " + TimeDB.FeedEntry.COLUMN_END +
-                    " >= " + year + (month < 10 ? "0" : "") + month + "00000000";
+                " INNER JOIN " + ActivityDB.FeedEntry.TABLE_NAME +
+                    " ON " + TimeDB.FeedEntry.COLUMN_ACTIVITY_ID + " = " + ActivityDB.FeedEntry.TABLE_NAME + "." + ActivityDB.FeedEntry._ID +
+                " WHERE " + TimeDB.FeedEntry.TABLE_NAME + "." + TimeDB.FeedEntry.COLUMN_START +
+                        " <= " + year + (month < 10 ? "0" : "") + month + "99999999" +
+                    " AND " + TimeDB.FeedEntry.TABLE_NAME + "." + TimeDB.FeedEntry.COLUMN_END +
+                        " >= " + year + (month < 10 ? "0" : "") + month + "00000000" +
+                    " AND " + ActivityDB.FeedEntry.COLUMN_ACTIVE + " = 1";
 
-        Cursor c = getReadableDatabase().rawQuery(query, null);
+        Cursor c = db.rawQuery(query, null);
 
         ArrayList<TimeDB> result = new ArrayList<>();
 
@@ -436,6 +441,7 @@ public class DBHelper extends SQLiteOpenHelper {
             result.add(new TimeDB(id, Time.fromLong(start), Time.fromLong(end), activity_id));
         }
 
+        db.close();
         c.close();
         return result.toArray(new TimeDB[0]);
     }
@@ -445,7 +451,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param activityID The ID of the activity we want to delete.
      */
     public void deleteActivity(int activityID) {
-        Utils._assert(activityID > 0, activityID+"");
+        _assert(activityID > 0, activityID+"");
 
         SQLiteDatabase db = getWritableDatabase();
 
@@ -460,7 +466,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param activityID The ID of the activity.
      */
     public void toggleActivityActive(int activityID) {
-        Utils._assert(activityID > 0, activityID+"");
+        _assert(activityID > 0, activityID+"");
 
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
