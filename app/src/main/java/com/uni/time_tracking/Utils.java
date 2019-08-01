@@ -23,6 +23,15 @@ public class Utils {
     }
 
     /**
+     * Replaces java-asserts because they don't work on android.
+     * Throws AssertionError in case the condition does not hold true.
+     * @param condition Condition that must hold true.
+     */
+    public static void _assert(boolean condition) {
+        _assert(condition);
+    }
+
+    /**
      * Show a toast with duration {@link Toast#LENGTH_SHORT}.
      * @param message Toast message.
      * @param context Context.

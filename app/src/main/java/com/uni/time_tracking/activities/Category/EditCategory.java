@@ -10,6 +10,7 @@ import com.uni.time_tracking.R;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
 
+import static com.uni.time_tracking.Utils._assert;
 import static com.uni.time_tracking.Utils.showToast;
 
 public class EditCategory extends CategoryModifier {
@@ -24,6 +25,7 @@ public class EditCategory extends CategoryModifier {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        _assert(getIntent().getExtras() != null, "");
         DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
         int activityID = getIntent().getExtras().getInt(BUNDLE_ACTIVITY_ID);
         activityToEdit = dbHelper.getActivity(activityID);

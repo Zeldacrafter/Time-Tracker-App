@@ -25,6 +25,7 @@ import com.uni.time_tracking.R;
 import com.uni.time_tracking.Time;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
+import com.uni.time_tracking.database.tables.TimeDB;
 
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
@@ -33,6 +34,8 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
 
     private static final String BUNDLE_MODE = "Bundle_Mode";
 
+    public static final String BUNDLE_ID = "Time_ID";
+    public static final String BUNDLE_ACTIVITY_ID = "Activity_ID";
     public static final String BUNDLE_START_TIME = "Start_Time";
     public static final String BUNDLE_END_TIME = "End_Time";
 
@@ -43,8 +46,8 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
 
     //TODO: Save TimeDB instance instead of seperate values.
 
-    protected DateTime start;
-    protected DateTime end;
+    /** Time entry to modify/add. All its values are initially passed from the calling activity. */
+    protected TimeDB timeEntry;
     protected ActivityDB activity;
     protected ActivityDB[] spinnerItems;
 
@@ -68,13 +71,16 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
         endDate = findViewById(R.id.add_time_select_end_date);
 
         Bundle extras = getIntent().getExtras();
-        start = Time.fromLong(extras.getLong(BUNDLE_START_TIME));
-        end = Time.fromLong(extras.getLong(BUNDLE_END_TIME));
+        int timeID = extras.getInt(BUNDLE_ID, TimeDB.NO_ID_VALUE);
+        DateTime start = Time.fromLong(extras.getLong(BUNDLE_START_TIME));
+        DateTime end = Time.fromLong(extras.getLong(BUNDLE_END_TIME));
+        int timeActivityID = extras.getInt(BUNDLE_ACTIVITY_ID, TimeDB.NO_ID_VALUE);
+        timeEntry = new TimeDB(timeID, start, end, timeActivityID);
 
-        startTime.setText(Time.toTimeString(start));
-        startDate.setText(Time.toDateString(start));
-        endTime.setText(Time.toTimeString(end));
-        endDate.setText(Time.toDateString(end));
+        startTime.setText(Time.toTimeString(timeEntry.getStart()));
+        startDate.setText(Time.toDateString(timeEntry.getStart()));
+        endTime.setText(Time.toTimeString(timeEntry.getEnd()));
+        endDate.setText(Time.toDateString(timeEntry.getEnd()));
 
         DBHelper dbHelper = DBHelper.getInstance(this);
         spinnerItems = dbHelper.getActiveActivities();
@@ -104,8 +110,8 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
 
     public void selectStartTimeClicked(View v) {
         Bundle bundle = new Bundle();
-        bundle.putLong(BUNDLE_START_TIME, Time.toLong(start));
-        bundle.putLong(BUNDLE_END_TIME, Time.toLong(end));
+        bundle.putLong(BUNDLE_START_TIME, Time.toLong(timeEntry.getStart()));
+        bundle.putLong(BUNDLE_END_TIME, Time.toLong(timeEntry.getEnd()));
         bundle.putString(BUNDLE_MODE, Mode.START.toString());
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -116,8 +122,8 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
 
     public void selectStartDateClicked(View v) {
         Bundle bundle = new Bundle();
-        bundle.putLong(BUNDLE_START_TIME, Time.toLong(start));
-        bundle.putLong(BUNDLE_END_TIME, Time.toLong(end));
+        bundle.putLong(BUNDLE_START_TIME, Time.toLong(timeEntry.getStart()));
+        bundle.putLong(BUNDLE_END_TIME, Time.toLong(timeEntry.getEnd()));
         bundle.putString(BUNDLE_MODE, Mode.START.toString());
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -128,8 +134,8 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
 
     public void selectEndTimeClicked(View v) {
         Bundle bundle = new Bundle();
-        bundle.putLong(BUNDLE_START_TIME, Time.toLong(start));
-        bundle.putLong(BUNDLE_END_TIME, Time.toLong(end));
+        bundle.putLong(BUNDLE_START_TIME, Time.toLong(timeEntry.getStart()));
+        bundle.putLong(BUNDLE_END_TIME, Time.toLong(timeEntry.getEnd()));
         bundle.putString(BUNDLE_MODE, Mode.END.toString());
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -140,8 +146,8 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
 
     public void selectEndDateClicked(View v) {
         Bundle bundle = new Bundle();
-        bundle.putLong(BUNDLE_START_TIME, Time.toLong(start));
-        bundle.putLong(BUNDLE_END_TIME, Time.toLong(end));
+        bundle.putLong(BUNDLE_START_TIME, Time.toLong(timeEntry.getStart()));
+        bundle.putLong(BUNDLE_END_TIME, Time.toLong(timeEntry.getEnd()));
         bundle.putString(BUNDLE_MODE, Mode.END.toString());
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -151,23 +157,23 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
     }
 
     protected void newStartTime(int hour, int minute) {
-        start = new DateTime(start.getYear(), start.getMonthOfYear(), start.getDayOfMonth(), hour, minute);
-        startTime.setText(Time.toTimeString(start));
+        timeEntry.setStart(new DateTime(timeEntry.getStart().getYear(), timeEntry.getStart().getMonthOfYear(), timeEntry.getStart().getDayOfMonth(), hour, minute));
+        startTime.setText(Time.toTimeString(timeEntry.getStart()));
     }
 
     protected void newStartDate(int year, int month, int day) {
-        start = new DateTime(year, month, day, start.getHourOfDay(), start.getMinuteOfHour(), start.getSecondOfMinute());
-        startDate.setText(Time.toDateString(start));
+        timeEntry.setStart(new DateTime(year, month, day, timeEntry.getStart().getHourOfDay(), timeEntry.getStart().getMinuteOfHour(), timeEntry.getStart().getSecondOfMinute()));
+        startDate.setText(Time.toDateString(timeEntry.getStart()));
     }
 
     protected void newEndTime(int hour, int minute) {
-        end = new DateTime(end.getYear(), end.getMonthOfYear(), end.getDayOfMonth(), hour, minute);
-        endTime.setText(Time.toTimeString(end));
+        timeEntry.setEnd(new DateTime(timeEntry.getEnd().getYear(), timeEntry.getEnd().getMonthOfYear(), timeEntry.getEnd().getDayOfMonth(), hour, minute));
+        endTime.setText(Time.toTimeString(timeEntry.getEnd()));
     }
 
     protected void newEndDate(int year, int month, int day) {
-        end = new DateTime(year, month, day, start.getHourOfDay(), start.getMinuteOfHour(), start.getSecondOfMinute());
-        endDate.setText(Time.toDateString(end));
+        timeEntry.setEnd(new DateTime(year, month, day, timeEntry.getEnd().getHourOfDay(), timeEntry.getEnd().getMinuteOfHour(), timeEntry.getEnd().getSecondOfMinute()));
+        endDate.setText(Time.toDateString(timeEntry.getEnd()));
     }
 
     private static class SelectDateDialogFragment extends DialogFragment {

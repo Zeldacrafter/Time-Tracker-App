@@ -5,6 +5,8 @@ import android.provider.BaseColumns;
 
 public class ActivityDB {
 
+    public static final int NO_ID_VALUE = -1;
+
     public static final String SQL_CREATE_TABLE =
             "CREATE TABLE IF NOT EXISTS "
                     + FeedEntry.TABLE_NAME
@@ -72,6 +74,9 @@ public class ActivityDB {
 
     @Override
     public String toString() {
+        //NOTE: Used in TimeModifier.class in the spinner.
+        //      The ArrayAdapter of the spinner takes the toString method of its elements
+        //      to display the spinner-item names.
         return getName();
     }
 

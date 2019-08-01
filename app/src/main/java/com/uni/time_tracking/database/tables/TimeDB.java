@@ -52,6 +52,13 @@ public class TimeDB {
         return activityID;
     }
 
+    public void setStart(DateTime start) {
+        this.start = start;
+    }
+
+    public void setEnd(DateTime end) {
+        this.end = end;
+    }
 
     public static final class FeedEntry implements BaseColumns {
         //Table name

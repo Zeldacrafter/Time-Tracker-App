@@ -15,9 +15,8 @@ import com.uni.time_tracking.R;
 
 abstract public class CategoryModifier extends AppCompatActivity {
 
-    //TODO: Finish Color
     //TODO: Simpler Color selector with sample colors before complex one
-    //TODO: Save color so that it is the same next time"
+    //TODO: Save previously selected colors?
 
     //TODO: Icon
 
@@ -30,7 +29,6 @@ abstract public class CategoryModifier extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_add_category);
 
         nameText = findViewById(R.id.add_category_name_text);
@@ -43,7 +41,6 @@ abstract public class CategoryModifier extends AppCompatActivity {
             colorPicker.setBackgroundColor(color);
         });
         colorPickerDialog.setHexaDecimalTextColor(Color.parseColor("#FFFFFF"));
-
     }
 
     @Override
@@ -53,6 +50,10 @@ abstract public class CategoryModifier extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Called from clicking the button for changing the color.
+     * @param v The view that called the method.
+     */
     public void colorPickerClicked(View v) {
         colorPickerDialog.show();
     }

@@ -1,6 +1,5 @@
 package com.uni.time_tracking.activities.time;
 
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -17,11 +16,6 @@ public class AddTime extends TimeModifier {
     public static final String TAG = "AddTime";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
@@ -29,12 +23,12 @@ public class AddTime extends TimeModifier {
                 //TODO: Highlight missing box (Wiggle?)
                 //TODO: Error message not as toast
 
-                if (Time.toLong(start) >= Time.toLong(end)) {
+                if (Time.toLong(timeEntry.getStart()) >= Time.toLong(timeEntry.getEnd())) {
                     showToast("The start must come before the end.", getApplicationContext());
                 } else {
 
                     DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
-                    dbHelper.addEntryTime(start, end, activity.getId());
+                    dbHelper.addEntryTime(timeEntry.getStart(), timeEntry.getEnd(), activity.getId());
                     dbHelper.close();
 
                     showToast("Saved new Time-Entry!", getApplicationContext());

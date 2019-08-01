@@ -11,6 +11,7 @@ import com.uni.time_tracking.Time;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.TimeDB;
 
+import static com.uni.time_tracking.Utils._assert;
 import static com.uni.time_tracking.Utils.showToast;
 
 public class EditTime extends TimeModifier {
@@ -28,18 +29,14 @@ public class EditTime extends TimeModifier {
         super.onCreate(savedInstanceState);
 
         Bundle extras = getIntent().getExtras();
+        _assert(extras != null);
         idToEdit = extras.getInt(BUNDLE_TIME_ID, TimeDB.NO_ID_VALUE);
+        _assert(idToEdit != TimeDB.NO_ID_VALUE, "No value passed for BUNDLE_TIME_ID.");
         activityID = extras.getInt(BUNDLE_ACTIVITY_ID);
+        _assert(activityID > 0, "Got activityID " + activityID + " > 0. This is not a valid ID. Was one passed at all?");
 
-        //FIXME: check -1
+        _assert(getIndexOfSpinnerItemWithName(activityID) != -1);
         categorySpinner.setSelection(getIndexOfSpinnerItemWithName(activityID));
-    }
-
-    private int getIndexOfSpinnerItemWithName(int id) {
-        for(int i = 0; i < spinnerItems.length; i++) {
-            if(spinnerItems[i].getId() == id) return i;
-        }
-        return -1;
     }
 
     @Override
@@ -50,11 +47,11 @@ public class EditTime extends TimeModifier {
                 //TODO: Highlight missing box (Wiggle?)
                 //TODO: Error message not as toast
 
-                if (Time.toLong(start) >= Time.toLong(end)) {
+                if (Time.toLong(timeEntry.getStart()) >= Time.toLong(timeEntry.getEnd())) {
                     showToast("The start must come before the end.", getApplicationContext());
                 } else {
                     DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
-                    dbHelper.editEntryTime(idToEdit, start, end, activity.getId());
+                    dbHelper.editEntryTime(idToEdit, timeEntry.getStart(), timeEntry.getEnd(), activity.getId());
                     dbHelper.close();
 
                     showToast("Edited Time-Entry!", getApplicationContext());
@@ -66,5 +63,17 @@ public class EditTime extends TimeModifier {
                 Log.e(TAG, "Did not find menu item");
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Returns the position of the item with the specified ID in the spinner.
+     * @param id The id of the ActivityDB entry.
+     * @return The position of the ActivityDB entry in the spinner. Returns -1 if not found.
+     */
+    private int getIndexOfSpinnerItemWithName(int id) {
+        for(int i = 0; i < spinnerItems.length; i++) {
+            if(spinnerItems[i].getId() == id) return i;
+        }
+        return -1;
     }
 }

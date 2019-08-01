@@ -277,7 +277,7 @@ public class CategoryListFragment extends Fragment {
                         dbHelper.deleteActivity(activityID);
                         dbHelper.close();
 
-                        _assert(getTargetFragment() instanceof CategoryListFragment, "");
+                        _assert(getTargetFragment() instanceof CategoryListFragment);
                         ((CategoryListFragment)getTargetFragment()).addCategoriesToList();
                     })
                     .setNegativeButton("Cancel", (dialog, id) -> {});
