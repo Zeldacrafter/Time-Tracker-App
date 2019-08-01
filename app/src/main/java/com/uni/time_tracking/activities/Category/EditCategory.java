@@ -1,4 +1,4 @@
-package com.uni.time_tracking.activities.Category;
+package com.uni.time_tracking.activities.category;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +10,7 @@ import com.uni.time_tracking.R;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
 
-import static com.uni.time_tracking.General.showToast;
+import static com.uni.time_tracking.Utils.showToast;
 
 public class EditCategory extends CategoryModifier {
 

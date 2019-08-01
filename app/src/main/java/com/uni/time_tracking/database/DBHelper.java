@@ -12,14 +12,13 @@ import android.graphics.Color;
 import android.util.Log;
 
 
-import com.uni.time_tracking.General;
+import com.uni.time_tracking.Utils;
 import com.uni.time_tracking.Time;
 import com.uni.time_tracking.database.tables.ActivityDB;
 import com.uni.time_tracking.database.tables.TimeDB;
 
 import org.joda.time.DateTime;
 
-import java.sql.SQLInput;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -97,7 +96,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void addEntryActivity(String name, int color){
         ContentValues values = new ContentValues();
         values.put(ActivityDB.FeedEntry.COLUMN_NAME, name);
-        values.put(ActivityDB.FeedEntry.COLUMN_COLOR, General.colorIntToHex(color));
+        values.put(ActivityDB.FeedEntry.COLUMN_COLOR, Utils.colorIntToHex(color));
 
         getWritableDatabase().insert(ActivityDB.FeedEntry.TABLE_NAME, null, values);
     }
@@ -157,7 +156,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.beginTransaction();
         String query = "UPDATE " + ActivityDB.FeedEntry.TABLE_NAME + " SET " +
                 ActivityDB.FeedEntry.COLUMN_NAME + " = \"" + activity.getName() + "\", " +
-                ActivityDB.FeedEntry.COLUMN_COLOR + " = \"" + General.colorIntToHex(activity.getColor()) + "\", " +
+                ActivityDB.FeedEntry.COLUMN_COLOR + " = \"" + Utils.colorIntToHex(activity.getColor()) + "\", " +
                 ActivityDB.FeedEntry.COLUMN_ACTIVE + " = " + (activity.isActive()  ? 1 : 0) +
                 " WHERE " + ActivityDB.FeedEntry._ID + " = ?";
         db.execSQL(query, new String[] {id+""});

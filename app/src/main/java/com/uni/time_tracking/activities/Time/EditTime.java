@@ -1,4 +1,4 @@
-package com.uni.time_tracking.activities.Time;
+package com.uni.time_tracking.activities.time;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +11,7 @@ import com.uni.time_tracking.Time;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.TimeDB;
 
-import static com.uni.time_tracking.General.showToast;
+import static com.uni.time_tracking.Utils.showToast;
 
 public class EditTime extends TimeModifier {
 

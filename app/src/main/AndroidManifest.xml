@@ -9,9 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.Category.AddCategory"></activity>
+        <activity android:name=".activities.category.AddCategory"></activity>
         <activity
-            android:name=".activities.MainScreen.MainActivity"
+            android:name=".activities.mainScreen.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,19 +21,19 @@
         </activity>
         <activity
             android:name=".activities.DevAndroidDatabaseManager"
-            android:parentActivityName=".activities.MainScreen.MainActivity"
+            android:parentActivityName=".activities.mainScreen.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.Category.EditCategory"
-            android:parentActivityName=".activities.MainScreen.MainActivity"
+            android:name=".activities.category.EditCategory"
+            android:parentActivityName=".activities.mainScreen.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.Time.AddTime"
-            android:parentActivityName=".activities.MainScreen.MainActivity"
+            android:name=".activities.time.AddTime"
+            android:parentActivityName=".activities.mainScreen.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.Time.EditTime"
-            android:parentActivityName=".activities.MainScreen.MainActivity"
+            android:name=".activities.time.EditTime"
+            android:parentActivityName=".activities.mainScreen.MainActivity"
             android:screenOrientation="portrait" />
     </application>
 

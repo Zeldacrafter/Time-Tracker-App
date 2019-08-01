@@ -1,4 +1,4 @@
-package com.uni.time_tracking.activities.MainScreen;
+package com.uni.time_tracking.activities.mainScreen;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -23,7 +23,7 @@ import androidx.fragment.app.FragmentManager;
 import com.uni.time_tracking.Pair;
 import com.uni.time_tracking.R;
 import com.uni.time_tracking.Time;
-import com.uni.time_tracking.activities.Category.EditCategory;
+import com.uni.time_tracking.activities.category.EditCategory;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
 import com.uni.time_tracking.database.tables.TimeDB;

@@ -1,4 +1,4 @@
-package com.uni.time_tracking.activities.MainScreen;
+package com.uni.time_tracking.activities.mainScreen;
 
 import android.content.Intent;
 import android.graphics.RectF;
@@ -13,9 +13,9 @@ import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.uni.time_tracking.R;
 import com.uni.time_tracking.Time;
-import com.uni.time_tracking.activities.Time.AddTime;
-import com.uni.time_tracking.activities.Time.EditTime;
-import com.uni.time_tracking.activities.Time.TimeModifier;
+import com.uni.time_tracking.activities.time.AddTime;
+import com.uni.time_tracking.activities.time.EditTime;
+import com.uni.time_tracking.activities.time.TimeModifier;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
 import com.uni.time_tracking.database.tables.TimeDB;

@@ -1,4 +1,4 @@
-package com.uni.time_tracking.activities.MainScreen;
+package com.uni.time_tracking.activities.mainScreen;
 
 import android.content.ClipData;
 import android.graphics.RectF;

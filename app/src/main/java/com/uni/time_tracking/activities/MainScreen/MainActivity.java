@@ -1,11 +1,11 @@
-package com.uni.time_tracking.activities.MainScreen;
+package com.uni.time_tracking.activities.mainScreen;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.uni.time_tracking.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.uni.time_tracking.activities.Category.AddCategory;
+import com.uni.time_tracking.activities.category.AddCategory;
 import com.uni.time_tracking.activities.DevAndroidDatabaseManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;

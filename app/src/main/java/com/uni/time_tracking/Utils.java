@@ -3,9 +3,9 @@ package com.uni.time_tracking;
 import android.content.Context;
 import android.widget.Toast;
 
-public class General {
+public class Utils {
 
-    private General(){}
+    private Utils(){}
 
     public static void showToast(String msg, Context context){
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
