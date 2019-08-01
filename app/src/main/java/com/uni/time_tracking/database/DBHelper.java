@@ -351,7 +351,11 @@ public class DBHelper extends SQLiteOpenHelper {
                 TimeDB.FeedEntry.COLUMN_START + ", " +
                 TimeDB.FeedEntry.COLUMN_END + ", " +
                 TimeDB.FeedEntry.COLUMN_ACTIVITY_ID  +
-                " FROM " + TimeDB.FeedEntry.TABLE_NAME;
+                " FROM " + TimeDB.FeedEntry.TABLE_NAME +
+                " WHERE " + TimeDB.FeedEntry.COLUMN_START +
+                    " <= " + year + (month < 10 ? "0" : "") + month + "99999999" +
+                " AND " + TimeDB.FeedEntry.COLUMN_END +
+                    " >= " + year + (month < 10 ? "0" : "") + month + "00000000";
 
         Cursor c = getReadableDatabase().rawQuery(query, null);
 
@@ -364,29 +368,24 @@ public class DBHelper extends SQLiteOpenHelper {
             long end = c.isNull(2) ? Time.toLong(Time.getCurrentTime()) : c.getLong(2);
             int activity_id = c.getInt(3);
 
-            long startYearMonth = start/100000000;
-            long endYearMonth = end/100000000;
+            long startYearMonth = start / 100000000;
+            long endYearMonth = end / 100000000;
 
             long wantedYearMonth = year*100 + month;
 
-            if(startYearMonth <= wantedYearMonth && endYearMonth >= wantedYearMonth) {
-                //The current time fits the wanted time interval.
-
-                if(startYearMonth < wantedYearMonth) {
-                    // Start time starts too early.
-                    // Set to wanted month, first day, 0 hours/mins/secs.
-                    start = wantedYearMonth*100000000 + 1000000; //01 00:00:00
-                }
-
-                if(endYearMonth > wantedYearMonth) {
-                    // End time ends too late.
-                    // Set to wanted month, last day, 23 hours, 59 mins/secs.
-                    long maxDaysInMonth = (new GregorianCalendar(year, month, 1)).getActualMaximum(Calendar.DAY_OF_MONTH);
-                    end = wantedYearMonth*100000000 + maxDaysInMonth*1000000 + 235959; //eg 31 23:59:59
-                }
-
-                result.add(new TimeDB(id, Time.fromLong(start), Time.fromLong(end), activity_id));
+            if(startYearMonth < wantedYearMonth) {
+                // Start time starts too early.
+                // Set to wanted month, first day, 0 hours/mins/secs.
+                start = wantedYearMonth*100000000 + 1000000; //01 00:00:00
             }
+
+            if(endYearMonth > wantedYearMonth) {
+                // End time ends too late.
+                // Set to wanted month, last day, 23 hours, 59 mins/secs.
+                long maxDaysInMonth = (new GregorianCalendar(year, month, 1)).getActualMaximum(Calendar.DAY_OF_MONTH);
+                end = wantedYearMonth*100000000 + maxDaysInMonth*1000000 + 235959; //eg 31 23:59:59
+            }
+            result.add(new TimeDB(id, Time.fromLong(start), Time.fromLong(end), activity_id));
         }
 
         c.close();
