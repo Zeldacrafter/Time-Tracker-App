@@ -5,16 +5,47 @@ import android.widget.Toast;
 
 public class Utils {
 
+    /**
+     * Private constructor to make sure this class cannot be instantiated.
+     */
     private Utils(){}
 
-    public static void showToast(String msg, Context context){
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+    /**
+     * Replaces java-asserts because they don't work on android.
+     * Throws AssertionError in case the condition does not hold true.
+     * @param condition Condition that must hold true.
+     * @param message Message in case the above condition does not hold true.
+     */
+    public static void _assert(boolean condition, String message) {
+        if (!condition) {
+            throw new AssertionError(message);
+        }
     }
 
-    public static void showToast(String msg, Context context, int duration){
-        Toast.makeText(context, msg, duration).show();
+    /**
+     * Show a toast with duration {@link Toast#LENGTH_SHORT}.
+     * @param message Toast message.
+     * @param context Context.
+     */
+    public static void showToast(String message, Context context){
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Show a toast.
+     * @param message Toast message.
+     * @param context Context.
+     * @param duration duration to show. Must be {@link Toast#LENGTH_SHORT} pr {@link Toast#LENGTH_LONG}.
+     */
+    public static void showToast(String message, Context context, int duration){
+        Toast.makeText(context, message, duration).show();
+    }
+
+    /**
+     * Converts a color to its hexadecimal representation.
+     * @param color The color.
+     * @return The hexadecimal representation as String of format '#RRGGBB'
+     */
     public static String colorIntToHex(int color) {
         return String.format("#%06X", (0xFFFFFF & color));
     }

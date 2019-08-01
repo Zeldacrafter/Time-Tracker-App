@@ -30,7 +30,7 @@ public class Time {
         return new DateTime(c);
     }
 
-    public static long toLong(@NonNull DateTime dateTime) {
+    public static long toLong(DateTime dateTime) {
         DateTimeFormatter f = DateTimeFormat.forPattern("yyyyMMddHHmmss");
         return Long.parseLong(dateTime.toString(f));
     }
@@ -43,17 +43,13 @@ public class Time {
         return new Period(d2, d1);
     }
 
-    public static DateTimeZone getTimezone() {
-        return DateTimeZone.forTimeZone(TimeZone.getDefault());
-    }
-
     public static String toString(DateTime dateTime) {
         DateTimeFormatter f = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         return dateTime.toString(f);
     }
 
     public static String toDateString(DateTime dateTime) {
-        //TODO: Date format
+        //TODO: Date format in settings. DD-MM-YYYY or MM-DD-YYYY ?
         DateTimeFormatter f = DateTimeFormat.forPattern("dd.MM.yyyy");
         return dateTime.toString(f);
     }
@@ -75,5 +71,9 @@ public class Time {
                 .appendSeconds()
                 .toFormatter();
         return minutesAndSeconds.print(p);
+    }
+
+    private static DateTimeZone getTimezone() {
+        return DateTimeZone.forTimeZone(TimeZone.getDefault());
     }
 }
