@@ -28,7 +28,7 @@ public class Utils {
      * @param condition Condition that must hold true.
      */
     public static void _assert(boolean condition) {
-        _assert(condition);
+        _assert(condition, "");
     }
 
     /**
