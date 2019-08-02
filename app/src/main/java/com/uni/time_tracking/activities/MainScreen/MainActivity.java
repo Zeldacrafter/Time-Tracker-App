@@ -64,16 +64,14 @@ public class MainActivity extends AppCompatActivity {
             case (R.id.top_menu_dev_db_viewer):
                 Intent dbManager = new Intent(this, DevAndroidDatabaseManager.class);
                 startActivity(dbManager);
-                break;
+                return true;
             case (R.id.top_menu_add_category):
                 Intent addCategory = new Intent(this, AddCategory.class);
                 startActivity(addCategory);
-                break;
+                return true;
             default:
-                Log.e(TAG, "Did not find menu item");
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

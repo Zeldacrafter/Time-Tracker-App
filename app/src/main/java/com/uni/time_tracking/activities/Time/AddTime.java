@@ -34,12 +34,11 @@ public class AddTime extends TimeModifier {
                     showToast("Saved new Time-Entry!", getApplicationContext());
                     finish();
                 }
-                break;
+                return true;
 
             default:
-                Log.e(TAG, "Did not find menu item");
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
 }

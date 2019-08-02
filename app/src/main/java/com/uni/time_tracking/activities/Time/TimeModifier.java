@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,9 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -29,6 +32,8 @@ import com.uni.time_tracking.database.tables.TimeDB;
 
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
+
+import static com.uni.time_tracking.Utils._assert;
 
 public abstract class TimeModifier extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -71,6 +76,7 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
         endDate = findViewById(R.id.add_time_select_end_date);
 
         Bundle extras = getIntent().getExtras();
+        _assert(extras != null);
         int timeID = extras.getInt(BUNDLE_ID, TimeDB.NO_ID_VALUE);
         DateTime start = Time.fromLong(extras.getLong(BUNDLE_START_TIME));
         DateTime end = Time.fromLong(extras.getLong(BUNDLE_END_TIME));
@@ -98,6 +104,16 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {

@@ -66,7 +66,7 @@ public class EditTime extends TimeModifier {
                     showToast("Edited Time-Entry!", getApplicationContext());
                     finish();
                 }
-                break;
+                return true;
 
             case (R.id.top_menu_delete):
                 DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
@@ -75,12 +75,11 @@ public class EditTime extends TimeModifier {
 
                 showToast("Deleted Time-Entry!", getApplicationContext());
                 finish();
-                break;
+                return true;
 
             default:
-                Log.e(TAG, "Did not find menu item");
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     /**

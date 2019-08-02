@@ -42,13 +42,10 @@ public class AddCategory extends CategoryModifier {
                     showToast("Saved new Category!", getApplicationContext());
                     finish();
                 }
-                break;
+                return true;
 
             default:
-                Log.e(TAG, "Did not find menu item");
-                break;
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }

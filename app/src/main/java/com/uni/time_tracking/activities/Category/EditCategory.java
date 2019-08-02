@@ -1,7 +1,6 @@
 package com.uni.time_tracking.activities.category;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -59,13 +58,10 @@ public class EditCategory extends CategoryModifier {
                     showToast("Edited Category successfully!", getApplicationContext());
                     finish();
                 }
-                break;
+                return true;
 
             default:
-                Log.e(TAG, "Did not find menu item");
-                break;
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }
