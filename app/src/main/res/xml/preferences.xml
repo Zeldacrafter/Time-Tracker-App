@@ -1,5 +1,34 @@
 <androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory app:title="@string/prefs_title_calendar">
+
+        <SwitchPreferenceCompat
+            app:key="simultaneous_activities"
+            app:title="@string/prefs_simultaneous_activities_active"
+            app:summary="@string/prefs_simultaneous_activities_active_long"/>
+
+        <SwitchPreferenceCompat
+            app:key="simultaneous_activities"
+            app:title="@string/prefs_simultaneous_activities_active"
+            app:summary="@string/prefs_simultaneous_activities_active_long"/>
+
+        <SwitchPreferenceCompat
+            app:key="remove_short_entries"
+            app:title="@string/prefs_remove_short_entries"
+            app:summary="@string/prefs_remove_short_entries_long"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/prefs_title_appearance">
+
+        <SwitchPreferenceCompat
+            app:key="dark_mode"
+            app:title="@string/prefs_dark_mode" />
+
+    </PreferenceCategory>
+
+    <!-- Here for reference of what can be done
+
     <PreferenceCategory app:title="@string/messages_header">
 
         <EditTextPreference
@@ -31,5 +60,7 @@
             app:title="@string/attachment_title" />
 
     </PreferenceCategory>
+
+    -->
 
 </androidx.preference.PreferenceScreen>

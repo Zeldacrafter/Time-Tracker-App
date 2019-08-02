@@ -40,19 +40,17 @@
     <string name="popup_menu_activate">Activate Activity</string>
     <string name="title_activity_settings">Settings</string>
 
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
+    <!-- Preference -->
+    <string name="prefs_title_calendar">Calendar</string>
+    <string name="prefs_title_appearance">Appearance</string>
+    <string name="prefs_dark_mode">Dark Mode</string>
+    <string name="prefs_simultaneous_activities_active">Simultaneous Activities</string>
+    <string name="prefs_simultaneous_activities_active_long">
+            Allow multiple Activities running at the same time</string>
+    <string name="prefs_remove_short_entries">Remove short entries</string>
+    <string name="prefs_remove_short_entries_long">
+            Remove all entries with a duration of less that 1 minute</string>
+    <string name="prefs_">Dark Mode</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
 </resources>
