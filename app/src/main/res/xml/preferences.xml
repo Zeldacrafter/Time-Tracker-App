@@ -1,21 +1,19 @@
-<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory app:title="@string/prefs_title_calendar">
 
         <SwitchPreferenceCompat
             app:key="simultaneous_activities"
             app:title="@string/prefs_simultaneous_activities_active"
-            app:summary="@string/prefs_simultaneous_activities_active_long"/>
-
-        <SwitchPreferenceCompat
-            app:key="simultaneous_activities"
-            app:title="@string/prefs_simultaneous_activities_active"
-            app:summary="@string/prefs_simultaneous_activities_active_long"/>
+            app:summary="@string/prefs_simultaneous_activities_active_long"
+            android:defaultValue="true"/>
 
         <SwitchPreferenceCompat
             app:key="remove_short_entries"
             app:title="@string/prefs_remove_short_entries"
-            app:summary="@string/prefs_remove_short_entries_long"/>
+            app:summary="@string/prefs_remove_short_entries_long"
+            android:defaultValue="false"/>
 
     </PreferenceCategory>
 
@@ -23,7 +21,8 @@
 
         <SwitchPreferenceCompat
             app:key="dark_mode"
-            app:title="@string/prefs_dark_mode" />
+            app:title="@string/prefs_dark_mode"
+            android:defaultValue="false"/>
 
     </PreferenceCategory>
 
