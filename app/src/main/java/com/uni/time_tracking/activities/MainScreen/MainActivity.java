@@ -1,6 +1,7 @@
 package com.uni.time_tracking.activities.mainScreen;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.uni.time_tracking.R;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
 import android.util.Log;
 import android.view.Menu;
@@ -26,19 +28,20 @@ public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView navView;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = item -> {
-                switch (item.getItemId()) {
-                    case R.id.navigation_home:
-                        loadFragment(new CategoryListFragment());
-                        return true;
-                    case R.id.navigation_calendar:
-                        loadFragment(new CalendarFragment());
-                        return true;
-                    case R.id.navigation_settings:
-                        return true;
-                }
-                return false;
-            };
+        = item -> {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    loadFragment(new CategoryListFragment());
+                    return true;
+                case R.id.navigation_calendar:
+                    loadFragment(new CalendarFragment());
+                    return true;
+                case R.id.navigation_settings:
+                    loadFragment(new SettingsFragment());
+                    return true;
+            }
+            return false;
+        };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
