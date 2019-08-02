@@ -2,12 +2,14 @@ package com.uni.time_tracking.activities.time;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 
 import com.uni.time_tracking.R;
 import com.uni.time_tracking.Time;
+import com.uni.time_tracking.Utils;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.TimeDB;
 
@@ -40,10 +42,17 @@ public class EditTime extends TimeModifier {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.top_menu_delete, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
-            case (R.id.menu_add_category_or_time_done):
+            case (R.id.top_menu_confirm):
                 //TODO: Highlight missing box (Wiggle?)
                 //TODO: Error message not as toast
 
@@ -57,6 +66,15 @@ public class EditTime extends TimeModifier {
                     showToast("Edited Time-Entry!", getApplicationContext());
                     finish();
                 }
+                break;
+
+            case (R.id.top_menu_delete):
+                DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
+                dbHelper.deleteTimeEntry(timeEntry.getId());
+                dbHelper.close();
+
+                showToast("Deleted Time-Entry!", getApplicationContext());
+                finish();
                 break;
 
             default:

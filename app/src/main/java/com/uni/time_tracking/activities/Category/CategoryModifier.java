@@ -46,7 +46,7 @@ abstract public class CategoryModifier extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //Menu bar at top
-        getMenuInflater().inflate(R.menu.top_menu_add_category_or_time, menu);
+        getMenuInflater().inflate(R.menu.top_menu_confirm, menu);
         return true;
     }
 

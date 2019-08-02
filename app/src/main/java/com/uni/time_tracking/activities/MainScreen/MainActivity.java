@@ -61,11 +61,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case (R.id.menu_dev_db_viewer):
+            case (R.id.top_menu_dev_db_viewer):
                 Intent dbManager = new Intent(this, DevAndroidDatabaseManager.class);
                 startActivity(dbManager);
                 break;
-            case (R.id.menu_add_category):
+            case (R.id.top_menu_add_category):
                 Intent addCategory = new Intent(this, AddCategory.class);
                 startActivity(addCategory);
                 break;

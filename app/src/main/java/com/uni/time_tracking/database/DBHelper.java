@@ -366,15 +366,17 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     public void deactivateTimeEntry(int timeID) {
 
-        _assert(timeID > 0, timeID+"");
+        _assert(timeID > 0, "ID = " + timeID);
 
+        SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TimeDB.FeedEntry.COLUMN_END, Time.toLong(Time.getCurrentTime()));
-        getWritableDatabase().update(
+        db.update(
                 TimeDB.FeedEntry.TABLE_NAME,
                 contentValues,
                 TimeDB.FeedEntry._ID + " = ?",
                 new String[] {""+timeID});
+        db.close();
     }
 
     /**
@@ -451,13 +453,11 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param activityID The ID of the activity we want to delete.
      */
     public void deleteActivity(int activityID) {
-        _assert(activityID > 0, activityID+"");
+        _assert(activityID > 0, "ID = " + activityID);
 
         SQLiteDatabase db = getWritableDatabase();
-
-        db.delete(TimeDB.FeedEntry.TABLE_NAME, TimeDB.FeedEntry.COLUMN_ACTIVITY_ID + "=" + activityID, null);
-        db.delete(ActivityDB.FeedEntry.TABLE_NAME, ActivityDB.FeedEntry._ID + "=" + activityID, null);
-
+        db.delete(TimeDB.FeedEntry.TABLE_NAME, TimeDB.FeedEntry.COLUMN_ACTIVITY_ID + " = ?" + activityID, new String[]{activityID+""});
+        db.delete(ActivityDB.FeedEntry.TABLE_NAME, ActivityDB.FeedEntry._ID + " = ?" + activityID, new String[]{activityID+""});
         db.close();
     }
 
@@ -466,7 +466,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param activityID The ID of the activity.
      */
     public void toggleActivityActive(int activityID) {
-        _assert(activityID > 0, activityID+"");
+        _assert(activityID > 0, "ID = " + activityID);
 
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
@@ -479,6 +479,14 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(query);
         db.setTransactionSuccessful();
         db.endTransaction();
+        db.close();
+    }
+
+    public void deleteTimeEntry(int id) {
+        _assert(id > 0, "ID = " + id);
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TimeDB.FeedEntry.TABLE_NAME, TimeDB.FeedEntry._ID + " = ?", new String[]{id+""});
         db.close();
     }
 

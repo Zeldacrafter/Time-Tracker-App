@@ -8,6 +8,7 @@
     <string name="nav_top_dev_database_viewer">DEV: Database Viewer</string>
     <string name="nav_top_add_category">Add Category</string>
     <string name="nav_top_done">Done</string>
+    <string name="nav_top_delete">Delete</string>
 
     <!-- Add Category -->
     <string name="add_category_title"><b>Add new category:</b></string>

@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_dev_db_viewer"
+        android:id="@+id/top_menu_dev_db_viewer"
         android:orderInCategory="100"
         android:icon="@drawable/ic_developer_mode_24px"
         android:title="@string/nav_top_dev_database_viewer"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/menu_add_category"
+        android:id="@+id/top_menu_add_category"
         android:orderInCategory="100"
         android:icon="@drawable/ic_add_circle_24px"
         android:title="@string/nav_top_add_category"

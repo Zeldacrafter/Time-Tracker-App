@@ -43,7 +43,7 @@ public class EditCategory extends CategoryModifier {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case (R.id.menu_add_category_or_time_done):
+            case (R.id.top_menu_confirm):
                 if ("".equals(nameText.getText().toString())) {
                     //TODO: Highlight missing box (Wiggle?)
                     //TODO: Error message not as toast
