@@ -39,6 +39,9 @@ abstract public class CategoryModifier extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_category);
 
+        _assert(getSupportActionBar() != null);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         nameText = findViewById(R.id.add_category_name_text);
 
         colorPicker = findViewById(R.id.color_picker_button);
@@ -53,9 +56,19 @@ abstract public class CategoryModifier extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //Menu bar at top
         getMenuInflater().inflate(R.menu.top_menu_confirm, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**

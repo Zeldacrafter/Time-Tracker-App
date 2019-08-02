@@ -68,6 +68,9 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_time);
 
+        _assert(getSupportActionBar() != null);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         layout = findViewById(R.id.add_time_layout);
         categorySpinner = findViewById(R.id.add_time_category_spinner);
         startTime = findViewById(R.id.add_time_select_start_time);

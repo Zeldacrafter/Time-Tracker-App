@@ -19,7 +19,6 @@ public class EditCategory extends CategoryModifier {
     public static final String BUNDLE_ACTIVITY_ID = "Activity_ID";
     private ActivityDB activityToEdit;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +36,6 @@ public class EditCategory extends CategoryModifier {
         colorPickerDialog.setInitialColor(currentColor);
         colorPickerDialog.setLastColor(currentColor);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
