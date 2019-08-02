@@ -24,7 +24,6 @@ import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.alamkanak.weekview.WeekViewUtil;
 import com.uni.time_tracking.R;
-import com.uni.time_tracking.Utils;
 
 import org.jetbrains.annotations.NotNull;
 

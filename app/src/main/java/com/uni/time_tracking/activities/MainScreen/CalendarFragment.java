@@ -65,10 +65,10 @@ public class CalendarFragment extends BaseCalendarFragment {
         TimeDB timeEntry = dbHelper.getTimeEntry(Integer.parseInt(event.getId()));
         dbHelper.close();
 
-        editTimeEntry.putExtra(EditTime.BUNDLE_ID, timeEntry.getId());
+        editTimeEntry.putExtra(TimeModifier.BUNDLE_ID, timeEntry.getId());
         editTimeEntry.putExtra(TimeModifier.BUNDLE_START_TIME, Time.toLong(timeEntry.getStart()));
         editTimeEntry.putExtra(TimeModifier.BUNDLE_END_TIME, Time.toLong(timeEntry.getEnd()));
-        editTimeEntry.putExtra(EditTime.BUNDLE_ACTIVITY_ID, timeEntry.getActivityID());
+        editTimeEntry.putExtra(TimeModifier.BUNDLE_ACTIVITY_ID, timeEntry.getActivityID());
 
         startActivity(editTimeEntry);
     }
