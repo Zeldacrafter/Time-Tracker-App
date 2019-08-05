@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.uni.time_tracking.Utils._assert;
 
@@ -74,9 +75,9 @@ abstract public class CategoryModifier extends AppCompatActivity {
 
     /**
      * Called from clicking the button for changing the color.
-     * @param v The view that called the method.
      */
-    public void colorPickerClicked(View v) {
+    @OnClick(R.id.color_picker_button)
+    public void colorPickerClicked() {
         colorPickerDialog.show();
     }
 }

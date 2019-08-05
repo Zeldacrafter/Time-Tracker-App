@@ -35,6 +35,7 @@ import org.joda.time.DateTime;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.uni.time_tracking.Utils._assert;
 
@@ -123,7 +124,8 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) { /* Do nothing. */ }
 
-    public void selectStartTimeClicked(View v) {
+    @OnClick(R.id.add_time_select_start_time)
+    public void selectStartTimeClicked() {
         Bundle bundle = new Bundle();
         bundle.putLong(BUNDLE_START_TIME, Time.toLong(timeEntry.getStart()));
         bundle.putLong(BUNDLE_END_TIME, Time.toLong(timeEntry.getEnd()));
@@ -135,7 +137,8 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
         dialog.show(fragmentManager, null);
     }
 
-    public void selectStartDateClicked(View v) {
+    @OnClick(R.id.add_time_select_start_date)
+    public void selectStartDateClicked() {
         Bundle bundle = new Bundle();
         bundle.putLong(BUNDLE_START_TIME, Time.toLong(timeEntry.getStart()));
         bundle.putLong(BUNDLE_END_TIME, Time.toLong(timeEntry.getEnd()));
@@ -147,7 +150,8 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
         dialog.show(fragmentManager, null);
     }
 
-    public void selectEndTimeClicked(View v) {
+    @OnClick(R.id.add_time_select_end_time)
+    public void selectEndTimeClicked() {
         Bundle bundle = new Bundle();
         bundle.putLong(BUNDLE_START_TIME, Time.toLong(timeEntry.getStart()));
         bundle.putLong(BUNDLE_END_TIME, Time.toLong(timeEntry.getEnd()));
@@ -159,7 +163,8 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
         dialog.show(fragmentManager, null);
     }
 
-    public void selectEndDateClicked(View v) {
+    @OnClick(R.id.add_time_select_end_date)
+    public void selectEndDateClicked() {
         Bundle bundle = new Bundle();
         bundle.putLong(BUNDLE_START_TIME, Time.toLong(timeEntry.getStart()));
         bundle.putLong(BUNDLE_END_TIME, Time.toLong(timeEntry.getEnd()));

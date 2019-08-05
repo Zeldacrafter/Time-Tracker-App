@@ -37,6 +37,7 @@ import java.text.DateFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 import static com.uni.time_tracking.Utils._assert;
 
@@ -54,7 +55,9 @@ abstract class BaseCalendarFragment extends Fragment implements
     private DateFormat timeFormat;
 
     @BindView(R.id.fragment_week_view) protected WeekView weekView;
-    @BindView(R.id.fragment_draggable_view) private TextView draggableView;
+    @BindView(R.id.fragment_draggable_view) protected TextView draggableView;
+
+    private Unbinder unbinder;
 
     @Nullable
     @Override
@@ -65,7 +68,7 @@ abstract class BaseCalendarFragment extends Fragment implements
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
         _assert(getActivity() != null,
                 "Fragment is not yet associated with any activity." +
@@ -132,6 +135,12 @@ abstract class BaseCalendarFragment extends Fragment implements
         weekView.setPastBackgroundColor(Color.rgb(85,189,200));
         weekView.setPastWeekendBackgroundColor(Color.argb(50, 0,255,0));
         */
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     private class DragTapListener implements View.OnLongClickListener {

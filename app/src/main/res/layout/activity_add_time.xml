@@ -63,8 +63,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text=""
-                android:onClick="selectStartTimeClicked" />
+                android:text="" />
 
         </LinearLayout>
 
@@ -85,8 +84,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text=""
-                android:onClick="selectStartDateClicked" />
+                android:text="" />
 
         </LinearLayout>
 
@@ -107,8 +105,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text=""
-                android:onClick="selectEndTimeClicked" />
+                android:text="" />
 
         </LinearLayout>
 
@@ -129,8 +126,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text=""
-                android:onClick="selectEndDateClicked" />
+                android:text="" />
 
         </LinearLayout>
 
