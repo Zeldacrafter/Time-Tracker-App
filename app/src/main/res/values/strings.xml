@@ -53,6 +53,27 @@
             Remove all entries with a duration of less that 1 minute</string>
     <string name="pref_third_party">Third-Party Software</string>
 
-    <string name="third_party_string">Third Party Apps</string>
+    <string name="third_party_title">Third Party Apps</string>
+    <string name="third_party_string">
+
+        &#8226; <a href="https://github.com/AndroidDeveloperLB/Android-Week-View">Week-View</a>
+            licensed under the <a href="https://raw.githubusercontent.com/AndroidDeveloperLB/Android-Week-View/develop/LICENSE">Apache License 2.0</a>\n\n
+
+        &#8226; <a href="https://github.com/dlew/joda-time-android">Joda Time for android</a>
+            licensed under the <a href="https://raw.githubusercontent.com/dlew/joda-time-android/master/LICENSE">Apache License 2.0</a>\n\n
+
+        &#8226; <a href="https://github.com/JakeWharton/butterknife">Butterknife</a>
+            licensed under the <a href="https://raw.githubusercontent.com/JakeWharton/butterknife/master/LICENSE.txt">Apache License 2.0</a>\n\n
+
+        &#8226; <a href="https://material.io/resources/icons/">Material Icons</a>
+            licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache License 2.0</a>\n\n
+
+        &#8226; <a href="https://github.com/AzeeSoft/AndroidPhotoshopColorPicker">Color Picker</a>
+            licensed under the <a href="https://raw.githubusercontent.com/AzeeSoft/AndroidPhotoshopColorPicker/master/LICENSE">Artistic License 2.0</a>\n\n
+
+        &#8226; <a href="https://github.com/prolificinteractive/material-calendarview">Date Picker</a>
+            licensed under the <a href="https://raw.githubusercontent.com/prolificinteractive/material-calendarview/master/LICENSE">MIT License</a>\n\n
+
+    </string>
 
 </resources>
