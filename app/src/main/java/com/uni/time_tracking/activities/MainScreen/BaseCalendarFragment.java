@@ -35,6 +35,9 @@ import java.util.Locale;
 
 import java.text.DateFormat;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.uni.time_tracking.Utils._assert;
 
 abstract class BaseCalendarFragment extends Fragment implements
@@ -50,8 +53,8 @@ abstract class BaseCalendarFragment extends Fragment implements
     private DateFormat shortDateFormat;
     private DateFormat timeFormat;
 
-    protected WeekView weekView;
-    private TextView draggableView;
+    @BindView(R.id.fragment_week_view) protected WeekView weekView;
+    @BindView(R.id.fragment_draggable_view) private TextView draggableView;
 
     @Nullable
     @Override
@@ -62,9 +65,7 @@ abstract class BaseCalendarFragment extends Fragment implements
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        weekView = view.findViewById(R.id.fragment_week_view);
-        draggableView = view.findViewById(R.id.fragment_draggable_view);
+        ButterKnife.bind(this, view);
 
         _assert(getActivity() != null,
                 "Fragment is not yet associated with any activity." +

@@ -33,6 +33,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.uni.time_tracking.Utils._assert;
 
 public class CategoryListFragment extends Fragment {
@@ -42,7 +45,7 @@ public class CategoryListFragment extends Fragment {
     /**
      * Hold one element for each activity-entry. Also see {@link #addCategoriesToList()}.
      */
-    private LinearLayout categoryList;
+    @BindView(R.id.home_category_list) private LinearLayout categoryList;
 
     /**
      * Holds all TextViews that show how long any activity has been active (if enabled at all).
@@ -68,8 +71,6 @@ public class CategoryListFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        categoryList = view.findViewById(R.id.home_category_list);
-
         viewRefreshHandler.post(viewRefreshRunnable);
 
         super.onViewCreated(view, savedInstanceState);
@@ -78,8 +79,9 @@ public class CategoryListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_category_list, container, false);
+        View v = inflater.inflate(R.layout.fragment_main_category_list, container, false);
+        ButterKnife.bind(this, v);
+        return v;
     }
 
     @Override

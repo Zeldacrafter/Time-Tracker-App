@@ -17,6 +17,9 @@ import com.uni.time_tracking.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.uni.time_tracking.Utils._assert;
 
 abstract public class CategoryModifier extends AppCompatActivity {
@@ -28,9 +31,9 @@ abstract public class CategoryModifier extends AppCompatActivity {
 
     //TODO: Icon
 
-    protected EditText nameText;
+    @BindView(R.id.add_category_name_text) protected EditText nameText;
+    @BindView(R.id.color_picker_button) protected Button colorPicker;
     protected ColorPickerDialog colorPickerDialog;
-    protected Button colorPicker;
 
     protected int currentColor;
 
@@ -38,13 +41,11 @@ abstract public class CategoryModifier extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_category);
+        ButterKnife.bind(this);
 
         _assert(getSupportActionBar() != null);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        nameText = findViewById(R.id.add_category_name_text);
-
-        colorPicker = findViewById(R.id.color_picker_button);
         colorPickerDialog = ColorPickerDialog.createColorPickerDialog(this, ColorPickerDialog.DARK_THEME);
         colorPickerDialog.hideOpacityBar();
         colorPickerDialog.setOnColorPickedListener((color, hexVal) -> {

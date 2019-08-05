@@ -41,4 +41,7 @@ dependencies {
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'
     //Needed for: https://github.com/prolificinteractive/material-calendarview/issues/947#issuecomment-485263840
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
+
+    implementation 'com.jakewharton:butterknife:10.1.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
 }

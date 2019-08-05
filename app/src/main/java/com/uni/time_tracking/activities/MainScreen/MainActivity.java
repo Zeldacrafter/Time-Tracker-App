@@ -13,20 +13,21 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.preference.PreferenceManager;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import net.danlew.android.joda.JodaTimeAndroid;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    BottomNavigationView navView;
+    @BindView(R.id.nav_view) BottomNavigationView navView;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
         = item -> {
             switch (item.getItemId()) {
@@ -47,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        navView = findViewById(R.id.nav_view);
+        ButterKnife.bind(this);
+
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         JodaTimeAndroid.init(this);

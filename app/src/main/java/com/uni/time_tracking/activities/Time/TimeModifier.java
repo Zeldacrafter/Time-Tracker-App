@@ -33,6 +33,9 @@ import com.uni.time_tracking.database.tables.TimeDB;
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.uni.time_tracking.Utils._assert;
 
 public abstract class TimeModifier extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -56,27 +59,21 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
     protected ActivityDB activity;
     protected ActivityDB[] spinnerItems;
 
-    protected LinearLayout layout;
-    protected Spinner categorySpinner;
-    protected Button startTime;
-    protected Button startDate;
-    protected Button endTime;
-    protected Button endDate;
+    @BindView(R.id.add_time_layout) protected LinearLayout layout;
+    @BindView(R.id.add_time_category_spinner) protected Spinner categorySpinner;
+    @BindView(R.id.add_time_select_start_time) protected Button startTime;
+    @BindView(R.id.add_time_select_start_date) protected Button startDate;
+    @BindView(R.id.add_time_select_end_time) protected Button endTime;
+    @BindView(R.id.add_time_select_end_date) protected Button endDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_time);
+        ButterKnife.bind(this);
 
         _assert(getSupportActionBar() != null);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        layout = findViewById(R.id.add_time_layout);
-        categorySpinner = findViewById(R.id.add_time_category_spinner);
-        startTime = findViewById(R.id.add_time_select_start_time);
-        startDate = findViewById(R.id.add_time_select_start_date);
-        endTime = findViewById(R.id.add_time_select_end_time);
-        endDate = findViewById(R.id.add_time_select_end_date);
 
         Bundle extras = getIntent().getExtras();
         _assert(extras != null);
