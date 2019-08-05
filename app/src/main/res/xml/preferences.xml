@@ -26,6 +26,14 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/prefs_title_other">
+
+        <Preference
+            app:key="third_party"
+            app:title="@string/pref_third_party"/>
+
+    </PreferenceCategory>
+
     <!-- Here for reference of what can be done
 
     <PreferenceCategory app:title="@string/messages_header">

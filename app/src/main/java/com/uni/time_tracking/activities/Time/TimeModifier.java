@@ -26,6 +26,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.uni.time_tracking.R;
 import com.uni.time_tracking.Time;
+import com.uni.time_tracking.activities.ActivityWithBackButton;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
 import com.uni.time_tracking.database.tables.TimeDB;
@@ -39,7 +40,7 @@ import butterknife.OnClick;
 
 import static com.uni.time_tracking.Utils._assert;
 
-public abstract class TimeModifier extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public abstract class TimeModifier extends ActivityWithBackButton implements AdapterView.OnItemSelectedListener {
 
     private static final String BUNDLE_MODE = "Bundle_Mode";
 
@@ -73,9 +74,6 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
         setContentView(R.layout.activity_add_time);
         ButterKnife.bind(this);
 
-        _assert(getSupportActionBar() != null);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         Bundle extras = getIntent().getExtras();
         _assert(extras != null);
         int timeID = extras.getInt(BUNDLE_ID, TimeDB.NO_ID_VALUE);
@@ -103,17 +101,6 @@ public abstract class TimeModifier extends AppCompatActivity implements AdapterV
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.top_menu_confirm, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override

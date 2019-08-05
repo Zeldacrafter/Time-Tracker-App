@@ -10,20 +10,16 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.azeesoft.lib.colorpicker.ColorPickerDialog;
 import com.uni.time_tracking.R;
-
-import org.jetbrains.annotations.NotNull;
+import com.uni.time_tracking.activities.ActivityWithBackButton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.uni.time_tracking.Utils._assert;
-
-abstract public class CategoryModifier extends AppCompatActivity {
+abstract public class CategoryModifier extends ActivityWithBackButton {
 
     public static final String TAG = "CategoryModifier";
 
@@ -44,9 +40,6 @@ abstract public class CategoryModifier extends AppCompatActivity {
         setContentView(R.layout.activity_add_category);
         ButterKnife.bind(this);
 
-        _assert(getSupportActionBar() != null);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         colorPickerDialog = ColorPickerDialog.createColorPickerDialog(this, ColorPickerDialog.DARK_THEME);
         colorPickerDialog.hideOpacityBar();
         colorPickerDialog.setOnColorPickedListener((color, hexVal) -> {
@@ -60,17 +53,6 @@ abstract public class CategoryModifier extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.top_menu_confirm, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NotNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     /**

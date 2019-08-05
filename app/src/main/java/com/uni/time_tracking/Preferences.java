@@ -10,6 +10,7 @@ public class Preferences {
     public static final String KEY_SIMULTANEOUS_ACTIVITIES = "simultaneous_activities";
     public static final String KEY_REMOVE_SHORT_ENTRIES = "remove_short_entries";
     public static final String KEY_DARK_MODE = "dark_mode";
+    public static final String KEY_THIRD_PARTY = "third_party";
 
     public static boolean isSimultaneousActivitiesAllowed(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

@@ -37,6 +37,10 @@
             android:name=".activities.time.EditTime"
             android:parentActivityName=".activities.mainScreen.MainActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.mainScreen.settings.ThirdPartyList"
+            android:parentActivityName=".activities.mainScreen.MainActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
