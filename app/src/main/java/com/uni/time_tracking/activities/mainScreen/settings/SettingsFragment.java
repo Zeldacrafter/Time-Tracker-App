@@ -23,7 +23,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         thirdParty = findPreference(Preferences.KEY_THIRD_PARTY);
         _assert(thirdParty != null);
         thirdParty.setOnPreferenceClickListener(preference -> {
-            Log.d("ABC", "ABC");
             Intent intent = new Intent(getContext(), ThirdPartyList.class);
             startActivity(intent);
             return true;
