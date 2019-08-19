@@ -58,7 +58,7 @@
     <string name="prefs_simultaneous_activities_active">Simultaneous Activities [TODO]</string>
     <string name="prefs_simultaneous_activities_active_long">
             Allow multiple Activities running at the same time</string>
-    <string name="prefs_remove_short_entries">Remove short entries [TODO]</string>
+    <string name="prefs_remove_short_entries">Remove short entries</string>
     <string name="prefs_remove_short_entries_long">
             Remove all entries with a duration of less that 1 minute</string>
 

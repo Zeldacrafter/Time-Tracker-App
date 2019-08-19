@@ -232,7 +232,7 @@ public class CategoryListFragment extends Fragment {
             // No active Time-Entry. activate now.
             dbHelper.activateTimeActivity(activityID);
         } else {
-            dbHelper.deactivateTimeEntry(time.getId());
+            dbHelper.deactivateTimeEntry(time.getId(), context);
         }
         dbHelper.close();
     }

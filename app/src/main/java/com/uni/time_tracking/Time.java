@@ -36,7 +36,45 @@ public class Time {
     }
 
     public static String differenceToNowString(DateTime dateTime) {
-        return toString(difference(getCurrentTime(), dateTime));
+        return toString(differenceToNow(dateTime));
+    }
+
+    public static Period differenceToNow(DateTime dateTime) {
+        return difference(getCurrentTime(), dateTime);
+    }
+
+    /**
+     * Compares if the length of the first period is longer than the second.
+     * @param p1 The first period.
+     * @param p2 The second period.
+     * @return returns {@code true} if the first period is longer or just as long as the first one
+     *         and {@code false} otherwise.
+     */
+    public static boolean isFirstPeriodLonger(Period p1, Period p2) {
+        if (p1.getYears() > p2.getYears()) return true;
+        if (p1.getYears() < p2.getYears()) return false;
+
+        if (p1.getMonths() > p2.getMonths()) return true;
+        if (p1.getMonths() < p2.getMonths()) return false;
+
+        if (p1.getDays() > p2.getDays()) return true;
+        if (p1.getDays() < p2.getDays()) return false;
+
+        if (p1.getHours() > p2.getHours()) return true;
+        if (p1.getHours() < p2.getHours()) return false;
+
+        if (p1.getYears() > p2.getYears()) return true;
+        if (p1.getYears() < p2.getYears()) return false;
+        
+        if (p1.getMinutes() > p2.getMinutes()) return true;
+        if (p1.getMinutes() < p2.getMinutes()) return false;
+
+
+        if (p1.getSeconds() > p2.getSeconds()) return true;
+        if (p1.getSeconds() < p2.getSeconds()) return false;
+
+        if (p1.getMillis() > p2.getMillis()) return true;
+        return p1.getMillis() == p2.getMillis();
     }
 
     private static Period difference(DateTime d1, DateTime d2) {

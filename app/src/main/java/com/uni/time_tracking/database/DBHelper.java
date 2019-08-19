@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.util.Log;
 
+import com.uni.time_tracking.Preferences;
 import com.uni.time_tracking.Utils;
 import com.uni.time_tracking.Time;
 import com.uni.time_tracking.database.tables.ActivityDB;
@@ -18,6 +19,7 @@ import com.uni.time_tracking.database.tables.TimeDB;
 
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
+import org.joda.time.Period;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -364,18 +366,40 @@ public class DBHelper extends SQLiteOpenHelper {
      * to the current system-time.
      * @param timeID The ID of the {@link TimeDB} entry.
      */
-    public void deactivateTimeEntry(int timeID) {
+    public void deactivateTimeEntry(int timeID, Context context) {
 
         _assert(timeID > 0, "ID = " + timeID);
 
         SQLiteDatabase db = getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(TimeDB.FeedEntry.COLUMN_END, Time.toLong(Time.getCurrentTime()));
-        db.update(
-                TimeDB.FeedEntry.TABLE_NAME,
-                contentValues,
+
+        Cursor c = db.query(TimeDB.FeedEntry.TABLE_NAME,
+                new String[] {TimeDB.FeedEntry.COLUMN_START},
                 TimeDB.FeedEntry._ID + " = ?",
-                new String[] {""+timeID});
+                new String[] {"" + timeID},
+                null, null, null);
+        c.moveToFirst();
+        Period elapsedTime = Time.differenceToNow(Time.fromLong(c.getLong(0)));
+        Period oneMinute = new Period(0, 1, 0, 0);
+        c.close();
+
+        if (!Preferences.removeShortEntries(context) || Time.isFirstPeriodLonger(elapsedTime, oneMinute)) {
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(TimeDB.FeedEntry.COLUMN_END, Time.toLong(Time.getCurrentTime()));
+            int nrChanged = db.update(
+                    TimeDB.FeedEntry.TABLE_NAME,
+                    contentValues,
+                    TimeDB.FeedEntry._ID + " = ?",
+                    new String[] {""+timeID});
+            _assert(nrChanged == 1);
+        } else {
+            // We want to delete this entry because it is shorter than 1 minute and
+            // the corresponding option was selected by the user.
+            int nrDeleted = db.delete(TimeDB.FeedEntry.TABLE_NAME,
+                    TimeDB.FeedEntry._ID + " = ?",
+                    new String[] {"" + timeID});
+            _assert(nrDeleted == 1);
+        }
         db.close();
     }
 
