@@ -7,5 +7,6 @@
         android:id="@+id/diviver_horizontal"
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="@color/grey" />
+        android:background="@drawable/gradient_divider_horizontal"
+        />
 </LinearLayout>
