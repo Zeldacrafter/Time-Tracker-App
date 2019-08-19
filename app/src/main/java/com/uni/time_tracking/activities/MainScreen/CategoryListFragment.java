@@ -10,16 +10,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.jmedeisis.draglinearlayout.DragLinearLayout;
 import com.uni.time_tracking.Pair;
 import com.uni.time_tracking.R;
 import com.uni.time_tracking.Time;
@@ -48,7 +51,7 @@ public class CategoryListFragment extends Fragment {
     /**
      * Hold one element for each activity-entry. Also see {@link #addCategoriesToList()}.
      */
-    @BindView(R.id.home_category_list) protected LinearLayout categoryList;
+    @BindView(R.id.home_category_list) protected DragLinearLayout categoryList;
 
     /**
      * Holds all TextViews that show how long any activity has been active (if enabled at all).
@@ -84,6 +87,12 @@ public class CategoryListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main_category_list, container, false);
         unbinder = ButterKnife.bind(this, v);
+
+        categoryList.setOnViewSwapListener(
+                (firstView, firstPosition, secondView, secondPosition) -> {
+                    /*TODO: Make Change permanent*/
+                });
+
         return v;
     }
 
@@ -134,9 +143,28 @@ public class CategoryListFragment extends Fragment {
             innerLayout.setId(activity.getId()); //TODO: is this problematic with potential collisions?
 
             innerLayout.setOnClickListener(view -> CategoryListFragment.activityClicked(view.getContext(), view.getId()));
-            innerLayout.setOnLongClickListener(view -> {
+
+            TextView idText = new TextView(getContext());
+            idText.setText("ID:" + activity.getId());
+            idText.setTextAppearance(R.style.TextAppearance_AppCompat_Medium);
+            idText.setLayoutParams(layoutParams);
+
+            TextView nameText = new TextView(getContext());
+            nameText.setText("Name: " + activity.getName());
+            nameText.setTextAppearance(R.style.TextAppearance_AppCompat_Medium);
+            nameText.setLayoutParams(layoutParams);
+
+            TextView runningText = new TextView(getContext());
+            updateTime(runningText, activity.getId());
+            runningText.setTextAppearance(R.style.TextAppearance_AppCompat_Medium);
+            runningText.setLayoutParams(layoutParams);
+
+            ImageView moreIcon = new ImageView(getContext());
+            moreIcon.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_more_vert_24px, null));
+            moreIcon.setLayoutParams(layoutParams);
+            moreIcon.setOnClickListener(view -> {
                 //Creating the instance of PopupMenu
-                PopupMenu popup = new PopupMenu(getContext(), innerLayout);
+                PopupMenu popup = new PopupMenu(getContext(), moreIcon);
                 //Inflating the Popup using xml file
                 popup.getMenuInflater().inflate(R.menu.category_popup_menu, popup.getMenu());
                 //registering popup with OnMenuItemClickListener
@@ -176,21 +204,7 @@ public class CategoryListFragment extends Fragment {
                 });
 
                 popup.show(); //showing popup menu
-                return false;
             });
-
-            TextView idText = new TextView(getContext());
-            TextView nameText = new TextView(getContext());
-            TextView runningText = new TextView(getContext());
-            idText.setText("ID:" + activity.getId());
-            nameText.setText("Name: " + activity.getName());
-            updateTime(runningText, activity.getId());
-            idText.setTextAppearance(R.style.TextAppearance_AppCompat_Medium);
-            nameText.setTextAppearance(R.style.TextAppearance_AppCompat_Medium);
-            runningText.setTextAppearance(R.style.TextAppearance_AppCompat_Medium);
-            idText.setLayoutParams(layoutParams);
-            nameText.setLayoutParams(layoutParams);
-            runningText.setLayoutParams(layoutParams);
 
             toRefreshRunningActivities.add(new Pair<>(runningText, activity.getId()));
 
@@ -206,6 +220,7 @@ public class CategoryListFragment extends Fragment {
             innerLayout.addView(nameText);
             innerLayout.addView(space2);
             innerLayout.addView(runningText);
+            innerLayout.addView(moreIcon);
 
             if(!activity.isActive()) {
                 // Make view semi transperent.
@@ -213,6 +228,7 @@ public class CategoryListFragment extends Fragment {
             }
 
             categoryList.addView(innerLayout);
+            categoryList.setViewDraggable(innerLayout, innerLayout);
 
             divider = inflater.inflate(R.layout.divider_horizontal, null); //FIXME: Dont pass null?
             categoryList.addView(divider);
