@@ -512,8 +512,12 @@ public class DBHelper extends SQLiteOpenHelper {
         _assert(activityID > 0, "ID = " + activityID);
 
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(TimeDB.FeedEntry.TABLE_NAME, TimeDB.FeedEntry.COLUMN_ACTIVITY_ID + " = ?" + activityID, new String[]{activityID+""});
-        db.delete(ActivityDB.FeedEntry.TABLE_NAME, ActivityDB.FeedEntry._ID + " = ?" + activityID, new String[]{activityID+""});
+        db.delete(TimeDB.FeedEntry.TABLE_NAME,
+                TimeDB.FeedEntry.COLUMN_ACTIVITY_ID + " = ?",
+                new String[]{activityID+""});
+        db.delete(ActivityDB.FeedEntry.TABLE_NAME,
+                ActivityDB.FeedEntry._ID + " = ?",
+                new String[]{activityID+""});
         db.close();
     }
 
