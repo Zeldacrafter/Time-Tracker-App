@@ -2,6 +2,7 @@ package com.uni.time_tracking.activities.mainScreen;
 
 import android.content.ClipData;
 import android.graphics.RectF;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -143,12 +144,17 @@ abstract class BaseCalendarFragment extends Fragment implements
         unbinder.unbind();
     }
 
+    @SuppressWarnings("deprecation")
     private class DragTapListener implements View.OnLongClickListener {
         @Override
         public boolean onLongClick(View v) {
             ClipData data = ClipData.newPlainText("", "");
             View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
-            v.startDrag(data, shadowBuilder, v, 0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                v.startDragAndDrop(data, shadowBuilder, v, 0);
+            } else {
+                v.startDrag(data, shadowBuilder, v, 0);
+            }
             return true;
         }
     }

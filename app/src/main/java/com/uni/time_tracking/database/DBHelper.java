@@ -316,16 +316,31 @@ public class DBHelper extends SQLiteOpenHelper {
             ContentValues contentValues = new ContentValues();
             contentValues.put(TimeDB.FeedEntry.COLUMN_END, Time.toLong(Time.getCurrentTime()));
 
-            db.update(TimeDB.FeedEntry.TABLE_NAME,
-                    contentValues,
+
+            Cursor c = db.query(TimeDB.FeedEntry.TABLE_NAME,
+                    new String[]{TimeDB.FeedEntry._ID},
                     TimeDB.FeedEntry.COLUMN_ACTIVITY_ID + " IS NOT ? " +
                             "AND " + TimeDB.FeedEntry.COLUMN_END + " IS NULL",
-                    new String[]{""+activityID});
+                    new String[]{""+activityID},
+                    null, null, null);
+
+            _assert(c.getCount() < 2);
+
+            if(c.getCount() == 1) {
+                c.moveToFirst();
+                db.close();
+                deactivateTimeEntry(c.getInt(0), context);
+                db = getWritableDatabase();
+                //FIXME: Ugly workaround. DB gets closed in deactivateTimeEntry() so we need to reopen it.
+            }
+
+            c.close();
         }
 
         ContentValues values = new ContentValues();
         values.put(TimeDB.FeedEntry.COLUMN_START, Time.toLong(Time.getCurrentTime()));
         values.put(TimeDB.FeedEntry.COLUMN_ACTIVITY_ID, activityID);
+
         db.insert(TimeDB.FeedEntry.TABLE_NAME, null, values);
 
         db.close();
