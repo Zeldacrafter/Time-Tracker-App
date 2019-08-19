@@ -304,14 +304,31 @@ public class DBHelper extends SQLiteOpenHelper {
      * Adds a new active {@link TimeDB} entry for an activity starting at the current system-time.
      * @param activityID The ID of the activity.
      */
-    public void activateTimeActivity(int activityID) {
+    public void activateTimeActivity(int activityID, Context context) {
         _assert(activityID > 0, activityID+"");
         _assert(!isActivityActive(activityID), "This activity is already active.");
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        if (!Preferences.isSimultaneousActivitiesAllowed(context)) {
+            // If another activity has an active entry entry we want to stop that activity from
+            // running because the user selected this in the settings.
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(TimeDB.FeedEntry.COLUMN_END, Time.toLong(Time.getCurrentTime()));
+
+            db.update(TimeDB.FeedEntry.TABLE_NAME,
+                    contentValues,
+                    TimeDB.FeedEntry.COLUMN_ACTIVITY_ID + " IS NOT ? " +
+                            "AND " + TimeDB.FeedEntry.COLUMN_END + " IS NULL",
+                    new String[]{""+activityID});
+        }
 
         ContentValues values = new ContentValues();
         values.put(TimeDB.FeedEntry.COLUMN_START, Time.toLong(Time.getCurrentTime()));
         values.put(TimeDB.FeedEntry.COLUMN_ACTIVITY_ID, activityID);
-        getWritableDatabase().insert(TimeDB.FeedEntry.TABLE_NAME, null, values);
+        db.insert(TimeDB.FeedEntry.TABLE_NAME, null, values);
+
+        db.close();
     }
 
     public void editEntryTime(int id, DateTime start, DateTime end, int activityID) {
@@ -493,6 +510,7 @@ public class DBHelper extends SQLiteOpenHelper {
         _assert(activityID > 0, "ID = " + activityID);
 
         SQLiteDatabase db = getWritableDatabase();
+
         db.beginTransaction();
         String query = "UPDATE " + ActivityDB.FeedEntry.TABLE_NAME +
                 " SET " + ActivityDB.FeedEntry.COLUMN_ACTIVE + " = CASE " + ActivityDB.FeedEntry.COLUMN_ACTIVE +

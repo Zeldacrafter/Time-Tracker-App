@@ -55,7 +55,7 @@
     <string name="prefs_title_appearance">Appearance</string>
     <string name="prefs_title_other">Other</string>
     <string name="prefs_dark_mode">Dark Mode [TODO]</string>
-    <string name="prefs_simultaneous_activities_active">Simultaneous Activities [TODO]</string>
+    <string name="prefs_simultaneous_activities_active">Simultaneous Activities</string>
     <string name="prefs_simultaneous_activities_active_long">
             Allow multiple Activities running at the same time</string>
     <string name="prefs_remove_short_entries">Remove short entries</string>
