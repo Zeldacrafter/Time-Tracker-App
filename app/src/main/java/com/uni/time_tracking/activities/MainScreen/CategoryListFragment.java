@@ -26,7 +26,6 @@ import com.jmedeisis.draglinearlayout.DragLinearLayout;
 import com.uni.time_tracking.Pair;
 import com.uni.time_tracking.R;
 import com.uni.time_tracking.Time;
-import com.uni.time_tracking.Utils;
 import com.uni.time_tracking.activities.category.EditCategory;
 import com.uni.time_tracking.database.DBHelper;
 import com.uni.time_tracking.database.tables.ActivityDB;
@@ -89,9 +88,9 @@ public class CategoryListFragment extends Fragment {
         unbinder = ButterKnife.bind(this, v);
 
         categoryList.setOnViewSwapListener(
-                (firstView, firstPosition, secondView, secondPosition) -> {
-                    /*TODO: Make Change permanent*/
-                });
+                (firstView, firstPosition, secondView, secondPosition) ->
+                DBHelper.getInstance(getContext()).swapActivityListOrder(firstView.getId(), secondView.getId())
+        );
 
         return v;
     }

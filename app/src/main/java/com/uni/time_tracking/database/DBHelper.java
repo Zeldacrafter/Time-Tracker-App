@@ -101,9 +101,39 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(ActivityDB.FeedEntry.COLUMN_NAME, name);
         values.put(ActivityDB.FeedEntry.COLUMN_COLOR, Utils.colorIntToHex(color));
+        values.put(ActivityDB.FeedEntry.COLUMN_LIST_POSITION, Long.MAX_VALUE);
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(ActivityDB.FeedEntry.TABLE_NAME, null, values);
+
+        db.close();
+
+        squashListPositions();
+    }
+
+    /**
+     * Changes the {@link ActivityDB.FeedEntry#COLUMN_LIST_POSITION} values so that they dont have
+     * gaps. Values of '1' '7' '3' would be changed to '1' '3' '2'
+     */
+    private void squashListPositions() {
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor cursor = db.query(ActivityDB.FeedEntry.TABLE_NAME,
+                new String[]{ActivityDB.FeedEntry._ID},
+                null, null, null, null,
+                ActivityDB.FeedEntry.COLUMN_LIST_POSITION);
+
+        for (int pos = 0; cursor.moveToNext(); pos++) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(ActivityDB.FeedEntry.COLUMN_LIST_POSITION, pos);
+
+            db.update(ActivityDB.FeedEntry.TABLE_NAME,
+                    contentValues,
+                    ActivityDB.FeedEntry._ID + " = ?",
+                    new String[] {cursor.getInt(0)+""});
+        }
+
+        cursor.close();
         db.close();
     }
 
@@ -142,8 +172,10 @@ public class DBHelper extends SQLiteOpenHelper {
                         ActivityDB.FeedEntry._ID,
                         ActivityDB.FeedEntry.COLUMN_NAME,
                         ActivityDB.FeedEntry.COLUMN_COLOR,
-                        ActivityDB.FeedEntry.COLUMN_ACTIVE},
-                null, null, null, null, null);
+                        ActivityDB.FeedEntry.COLUMN_ACTIVE,
+                        ActivityDB.FeedEntry.COLUMN_LIST_POSITION},
+                null, null, null, null,
+                ActivityDB.FeedEntry.COLUMN_LIST_POSITION);
 
         ActivityDB[] values = new ActivityDB[cursor.getCount()];
         for (int count = 0; cursor.moveToNext(); count++){
@@ -152,14 +184,63 @@ public class DBHelper extends SQLiteOpenHelper {
             String name = cursor.getString(1);
             int color = Color.parseColor(cursor.getString(2));
             boolean active = cursor.getInt(3) == 1;
+            int listPos = cursor.getInt(4);
 
-            values[count] = new ActivityDB(id, name, active, color);
+            values[count] = new ActivityDB(id, name, active, color, listPos);
         }
 
         cursor.close();
         db.close();
 
         return values;
+    }
+
+    /**
+     * Swaps the values of the {@link ActivityDB.FeedEntry#COLUMN_LIST_POSITION} columns of two rows.
+     * @param id1 The id of the first row.
+     * @param id2 The if of the second row.
+     */
+    public void swapActivityListOrder(int id1, int id2) {
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        //Get the COLUMN_LIST_POSITION value of the first row
+        Cursor pos1Cursor = db.query(ActivityDB.FeedEntry.TABLE_NAME,
+                new String[]{ActivityDB.FeedEntry.COLUMN_LIST_POSITION},
+                ActivityDB.FeedEntry._ID + " = ?",
+                new String[] {id1+""},
+                null, null, null);
+        pos1Cursor.moveToFirst();
+        int pos1 = pos1Cursor.getInt(0);
+        pos1Cursor.close();
+
+        //Get the COLUMN_LIST_POSITION value of the second row
+        Cursor pos2Cursor = db.query(ActivityDB.FeedEntry.TABLE_NAME,
+                new String[]{ActivityDB.FeedEntry.COLUMN_LIST_POSITION},
+                ActivityDB.FeedEntry._ID + " = ?",
+                new String[] {id2+""},
+                null, null, null);
+        pos2Cursor.moveToFirst();
+        int pos2 = pos2Cursor.getInt(0);
+        pos2Cursor.close();
+
+        //Set the COLUMN_LIST_POSITION value of the first row
+        ContentValues pos1Values = new ContentValues();
+        pos1Values.put(ActivityDB.FeedEntry.COLUMN_LIST_POSITION, pos2);
+        db.update(ActivityDB.FeedEntry.TABLE_NAME,
+                pos1Values,
+                ActivityDB.FeedEntry._ID + " = ?",
+                new String[]{id1+""});
+
+        //Set the COLUMN_LIST_POSITION value of the second row
+        ContentValues pos2Values = new ContentValues();
+        pos2Values.put(ActivityDB.FeedEntry.COLUMN_LIST_POSITION, pos1);
+        db.update(ActivityDB.FeedEntry.TABLE_NAME,
+                pos2Values,
+                ActivityDB.FeedEntry._ID + " = ?",
+                new String[]{id2+""});
+
+        db.close();
     }
 
     /**
@@ -195,11 +276,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = getWritableDatabase();
 
+        //TODO: No raw query
+
         String query =
                 "SELECT "
                         + ActivityDB.FeedEntry._ID + ", "
                         + ActivityDB.FeedEntry.COLUMN_NAME + ", "
-                        + ActivityDB.FeedEntry.COLUMN_COLOR +
+                        + ActivityDB.FeedEntry.COLUMN_COLOR + ", "
+                        + ActivityDB.FeedEntry.COLUMN_LIST_POSITION +
                         " FROM "
                         + ActivityDB.FeedEntry.TABLE_NAME +
                         " WHERE "
@@ -217,7 +301,8 @@ public class DBHelper extends SQLiteOpenHelper {
             int id = Integer.parseInt(cursor.getString(0));
             String name = cursor.getString(1);
             int color = Color.parseColor(cursor.getString(2));
-            values[count] = new ActivityDB(id, name, true, color);
+            int listPos = cursor.getInt(3);
+            values[count] = new ActivityDB(id, name, true, color, listPos);
             count++;
         }
 
@@ -237,15 +322,17 @@ public class DBHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = getReadableDatabase();
 
+        //TODO: Dont use rawQuery
         String query = "SELECT " +
                 ActivityDB.FeedEntry.COLUMN_NAME + ", " +
                 ActivityDB.FeedEntry.COLUMN_ACTIVE + ", " +
-                ActivityDB.FeedEntry.COLUMN_COLOR  +
+                ActivityDB.FeedEntry.COLUMN_COLOR  + ", " +
+                ActivityDB.FeedEntry.COLUMN_LIST_POSITION  +
                 " FROM " + ActivityDB.FeedEntry.TABLE_NAME +
                 " WHERE " + ActivityDB.FeedEntry._ID + " = " + activityID;
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
-        ActivityDB result = new ActivityDB(activityID, c.getString(0), c.getInt(1) == 1, Color.parseColor(c.getString(2)));
+        ActivityDB result = new ActivityDB(activityID, c.getString(0), c.getInt(1) == 1, Color.parseColor(c.getString(2)), c.getInt(3));
 
         c.close();
         db.close();
@@ -511,6 +598,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void deleteActivity(int activityID) {
         _assert(activityID > 0, "ID = " + activityID);
 
+
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TimeDB.FeedEntry.TABLE_NAME,
                 TimeDB.FeedEntry.COLUMN_ACTIVITY_ID + " = ?",
@@ -519,6 +607,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 ActivityDB.FeedEntry._ID + " = ?",
                 new String[]{activityID+""});
         db.close();
+
+        squashListPositions();
     }
 
     /**

@@ -18,7 +18,9 @@ public class ActivityDB {
                     + FeedEntry.COLUMN_COLOR
                     + " TEXT NOT NULL DEFAULT '#FFFFFF', "
                     + FeedEntry.COLUMN_ACTIVE
-                    + " INTEGER NOT NULL DEFAULT 1)";
+                    + " INTEGER NOT NULL DEFAULT 1, "
+                    + FeedEntry.COLUMN_LIST_POSITION
+                    + " INTEGER)";
 
     public static final String SQL_DELETE_TABLE =
             "DROP TABLE IF EXISTS "
@@ -28,12 +30,14 @@ public class ActivityDB {
     private String name;
     private boolean active;
     private int color;
+    private int listPos;
 
-    public ActivityDB(int id, String name, boolean active, int color) {
+    public ActivityDB(int id, String name, boolean active, int color, int listPos) {
         this.id = id;
         this.name = name;
         this.active = active;
         this.color = color;
+        this.listPos = listPos;
     }
 
     public int getId() {
@@ -80,6 +84,10 @@ public class ActivityDB {
         return getName();
     }
 
+    public int getListPos() {
+        return listPos;
+    }
+
     public static final class FeedEntry implements BaseColumns {
         //Table name
         public static final String TABLE_NAME = "Activity";
@@ -87,7 +95,10 @@ public class ActivityDB {
         //Table columns
         public static final String COLUMN_NAME = "Name";
         public static final String COLUMN_ACTIVE = "Enabled";
-        public static final String COLUMN_COLOR = "Color"; //AS HEX TEXT
+        public static final String COLUMN_COLOR = "Color"; // As HEX text
+        /** Indicates in what position the element will be shown in
+         * for example the list on the home screen. */
+        public static final String COLUMN_LIST_POSITION = "ListPosition";
     }
 
 }
