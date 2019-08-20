@@ -8,6 +8,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.uni.time_tracking.activities.category.AddCategory;
 import com.uni.time_tracking.activities.DevAndroidDatabaseManager;
 import com.uni.time_tracking.activities.mainScreen.settings.SettingsFragment;
+import com.uni.time_tracking.database.DBHelper;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;

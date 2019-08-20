@@ -13,11 +13,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -37,6 +37,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static com.uni.time_tracking.Utils._assert;
@@ -126,46 +127,30 @@ public class CategoryListFragment extends Fragment {
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         _assert(inflater != null);
 
-        View divider = inflater.inflate(R.layout.divider_horizontal, null);
-        categoryList.addView(divider);
-
         DBHelper dbHelper = DBHelper.getInstance(getContext());
         ActivityDB[] activities = dbHelper.getAcitivities();
         dbHelper.close();
 
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0, 20, 0, 20);
-
+        categoryList.addView(inflater.inflate(R.layout.divider_horizontal, null));
         for (ActivityDB activity : activities) {
 
-            LinearLayout innerLayout = new LinearLayout(getContext());
-            innerLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            innerLayout.setOrientation(LinearLayout.HORIZONTAL);
-            innerLayout.setId(activity.getId()); //TODO: is this problematic with potential collisions?
+            RelativeLayout listItem = ((LinearLayout)inflater.inflate(R.layout.list_item, categoryList, true)).findViewById(R.id.list_item_rel_layout);
+            listItem.setId(activity.getId());
+            listItem.setOnClickListener(view -> CategoryListFragment.activityClicked(view.getContext(), view.getId()));
 
-            innerLayout.setOnClickListener(view -> CategoryListFragment.activityClicked(view.getContext(), view.getId()));
+            View colorView = listItem.findViewById(R.id.list_item_color);
+            colorView.setBackgroundColor(activity.getColor());
 
-            TextView idText = new TextView(getContext());
-            idText.setText("ID:" + activity.getId());
-            idText.setTextAppearance(R.style.TextAppearance_AppCompat_Medium);
-            idText.setLayoutParams(layoutParams);
+            TextView activityName = listItem.findViewById(R.id.list_item_name_text);
+            activityName.setText(activity.getName());
 
-            TextView nameText = new TextView(getContext());
-            nameText.setText("Name: " + activity.getName());
-            nameText.setTextAppearance(R.style.TextAppearance_AppCompat_Medium);
-            nameText.setLayoutParams(layoutParams);
+            TextView activeText = listItem.findViewById(R.id.list_item_active_text);
+            updateTime(activeText, activity.getId());
 
-            TextView runningText = new TextView(getContext());
-            updateTime(runningText, activity.getId());
-            runningText.setTextAppearance(R.style.TextAppearance_AppCompat_Medium);
-            runningText.setLayoutParams(layoutParams);
-
-            ImageView moreIcon = new ImageView(getContext());
-            moreIcon.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_more_vert_24px, null));
-            moreIcon.setLayoutParams(layoutParams);
-            moreIcon.setOnClickListener(view -> {
+            ImageView moreMenu = listItem.findViewById(R.id.list_item_more_icon);
+            moreMenu.setOnClickListener(view -> {
                 //Creating the instance of PopupMenu
-                PopupMenu popup = new PopupMenu(getContext(), moreIcon);
+                PopupMenu popup = new PopupMenu(getContext(), moreMenu);
                 //Inflating the Popup using xml file
                 popup.getMenuInflater().inflate(R.menu.category_popup_menu, popup.getMenu());
                 //registering popup with OnMenuItemClickListener
@@ -207,32 +192,14 @@ public class CategoryListFragment extends Fragment {
                 popup.show(); //showing popup menu
             });
 
-            toRefreshRunningActivities.add(new Pair<>(runningText, activity.getId()));
-
-            View space1 = new View(getContext());
-            View space2 = new View(getContext());
-            space1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
-            space2.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.5f));
-
-            space1.setBackgroundColor(activity.getColor());
-
-            innerLayout.addView(idText);
-            innerLayout.addView(space1);
-            innerLayout.addView(nameText);
-            innerLayout.addView(space2);
-            innerLayout.addView(runningText);
-            innerLayout.addView(moreIcon);
-
             if(!activity.isActive()) {
                 // Make view semi transperent.
-                innerLayout.setAlpha(0.5f);
+                listItem.setAlpha(0.5f);
             }
 
-            categoryList.addView(innerLayout);
-            categoryList.setViewDraggable(innerLayout, innerLayout);
+            categoryList.setViewDraggable(listItem, listItem);
 
-            divider = inflater.inflate(R.layout.divider_horizontal, null); //FIXME: Dont pass null?
-            categoryList.addView(divider);
+            categoryList.addView(inflater.inflate(R.layout.divider_horizontal, null));
         }
     }
 
