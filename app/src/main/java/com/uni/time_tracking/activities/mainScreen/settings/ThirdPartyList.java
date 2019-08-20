@@ -1,25 +1,19 @@
 package com.uni.time_tracking.activities.mainScreen.settings;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 
 import com.uni.time_tracking.R;
 import com.uni.time_tracking.activities.ActivityWithBackButton;
-import com.uni.time_tracking.activities.mainScreen.CategoryListFragment;
-import com.uni.time_tracking.database.DBHelper;
 
 import org.jetbrains.annotations.NotNull;
 

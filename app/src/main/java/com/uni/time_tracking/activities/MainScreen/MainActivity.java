@@ -8,7 +8,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.uni.time_tracking.activities.category.AddCategory;
 import com.uni.time_tracking.activities.DevAndroidDatabaseManager;
 import com.uni.time_tracking.activities.mainScreen.settings.SettingsFragment;
-import com.uni.time_tracking.database.DBHelper;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
@@ -30,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     @BindView(R.id.nav_view) BottomNavigationView navView;
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+    private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
         = item -> {
             switch (item.getItemId()) {
                 case R.id.navigation_home:

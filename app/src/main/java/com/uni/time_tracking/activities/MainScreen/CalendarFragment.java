@@ -5,7 +5,6 @@ import android.graphics.RectF;
 
 import com.alamkanak.weekview.WeekViewEvent;
 import com.uni.time_tracking.Time;
-import com.uni.time_tracking.Utils;
 import com.uni.time_tracking.activities.time.AddTime;
 import com.uni.time_tracking.activities.time.EditTime;
 import com.uni.time_tracking.activities.time.TimeModifier;

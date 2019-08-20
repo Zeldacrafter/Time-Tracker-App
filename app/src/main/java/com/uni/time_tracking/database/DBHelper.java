@@ -380,10 +380,9 @@ public class DBHelper extends SQLiteOpenHelper {
             c.moveToFirst();
             int id = c.getInt(0);
             DateTime start = Time.fromLong(c.getLong(1));
-            DateTime end = null;
             c.close();
             db.close();
-            return new TimeDB(id, start, end, activityID);
+            return new TimeDB(id, start, null, activityID);
         }
     }
 

@@ -1,7 +1,5 @@
 package com.uni.time_tracking;
 
-import androidx.annotation.NonNull;
-
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Period;

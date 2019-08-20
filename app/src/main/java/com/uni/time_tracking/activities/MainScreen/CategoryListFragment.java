@@ -37,7 +37,6 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static com.uni.time_tracking.Utils._assert;
@@ -57,7 +56,7 @@ public class CategoryListFragment extends Fragment {
      * Holds all TextViews that show how long any activity has been active (if enabled at all).
      * Every element also holds an integer, indicating what activityID this view corresponds to
      */
-    private ArrayList<Pair<TextView, Integer>> toRefreshRunningActivities = new ArrayList<>();
+    private final ArrayList<Pair<TextView, Integer>> toRefreshRunningActivities = new ArrayList<>();
     /**
      * Handle refreshing the text in {@link #toRefreshRunningActivities}.
      */
@@ -237,7 +236,7 @@ public class CategoryListFragment extends Fragment {
             String timeString = Time.differenceToNowString(time.getStart());
             runningText.setText(timeString);
         } else {
-            runningText.setText("Inactive!");
+            runningText.setText(getResources().getString(R.string.activity_list_activity_inactive));
         }
     }
 

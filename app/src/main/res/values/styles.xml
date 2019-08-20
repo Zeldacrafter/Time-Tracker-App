@@ -8,30 +8,4 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <!-- Test CalendarActivity -->
-
-    <style name="AppTheme.FullScreen" parent="@style/AppTheme">
-        <item name="android:windowFullscreen">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Button">
-        <item name="android:background">?selectableItemBackground</item>
-        <item name="android:gravity">left|center_vertical</item>
-        <item name="android:padding">16dp</item>
-        <item name="android:textAllCaps">false</item>
-    </style>
-
-    <!-- Color Picker -->
-    <style name="CustomColorPicker" parent="ColorPicker">
-        <item name="cp_backgroundColor">#4745e5</item>
-        <item name="cp_hexaDecimalTextColor">#000046</item>
-        <item name="cp_colorComponentsTextColor">#fff</item>
-        <item name="cp_positiveActionTextColor">@color/colorAccent</item>
-        <item name="cp_negativeActionTextColor">@color/colorPrimaryDark</item>
-        <item name="cp_sliderThumbColor">#accc</item>
-    </style>
-
 </resources>

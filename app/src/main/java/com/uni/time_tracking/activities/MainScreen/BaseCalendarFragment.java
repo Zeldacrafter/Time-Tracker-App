@@ -144,7 +144,6 @@ abstract class BaseCalendarFragment extends Fragment implements
         unbinder.unbind();
     }
 
-    @SuppressWarnings("deprecation")
     private class DragTapListener implements View.OnLongClickListener {
         @Override
         public boolean onLongClick(View v) {

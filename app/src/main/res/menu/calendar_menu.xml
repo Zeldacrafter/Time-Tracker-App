@@ -7,13 +7,6 @@
         android:title="@string/calendar_action_today"
         android:orderInCategory="1000"
         app:showAsAction="ifRoom" />
-    <Spinner>
-        android:id="@+id/spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:drawSelectorOnTop="true"
-        android:entries="@array/array_name"
-    </Spinner>
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/action_day_view"

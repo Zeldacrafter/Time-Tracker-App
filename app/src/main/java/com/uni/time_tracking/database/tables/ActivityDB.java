@@ -2,6 +2,8 @@ package com.uni.time_tracking.database.tables;
 
 import android.provider.BaseColumns;
 
+import org.jetbrains.annotations.NotNull;
+
 
 public class ActivityDB {
 
@@ -60,14 +62,6 @@ public class ActivityDB {
         return active;
     }
 
-    /**
-     * NOTE: This does not alter the database in any way.
-     * @param active new value.
-     */
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
     public int getColor() {
         return color;
     }
@@ -76,16 +70,13 @@ public class ActivityDB {
         this.color = color;
     }
 
+    @NotNull
     @Override
     public String toString() {
         //NOTE: Used in TimeModifier.class in the spinner.
         //      The ArrayAdapter of the spinner takes the toString method of its elements
         //      to display the spinner-item names.
         return getName();
-    }
-
-    public int getListPos() {
-        return listPos;
     }
 
     public static final class FeedEntry implements BaseColumns {

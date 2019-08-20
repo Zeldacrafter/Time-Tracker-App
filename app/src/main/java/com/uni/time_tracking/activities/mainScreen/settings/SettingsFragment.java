@@ -2,10 +2,8 @@ package com.uni.time_tracking.activities.mainScreen.settings;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
@@ -23,15 +21,12 @@ import static com.uni.time_tracking.Utils._assert;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
-    private Preference thirdParty;
-    private Preference deleteData;
-
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
-        thirdParty = findPreference(Preferences.KEY_THIRD_PARTY);
-        deleteData = findPreference(Preferences.KEY_DELETE_DATA);
+        Preference thirdParty = findPreference(Preferences.KEY_THIRD_PARTY);
+        Preference deleteData = findPreference(Preferences.KEY_DELETE_DATA);
         _assert(thirdParty != null);
         _assert(deleteData != null);
 
@@ -42,6 +37,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
 
         deleteData.setOnPreferenceClickListener(preference -> {
+            _assert(getActivity() != null);
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             ResetDatabaseDialog dialog = new ResetDatabaseDialog();
             dialog.show(fragmentManager, null);

@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,11 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -183,7 +179,7 @@ public abstract class TimeModifier extends ActivityWithBackButton implements Ada
         endDate.setText(Time.toDateString(timeEntry.getEnd()));
     }
 
-    private static class SelectDateDialogFragment extends DialogFragment {
+    public static class SelectDateDialogFragment extends DialogFragment {
 
         @NotNull
         @Override
@@ -228,7 +224,7 @@ public abstract class TimeModifier extends ActivityWithBackButton implements Ada
         }
     }
 
-    private static class SelectTimeDialogFragment extends DialogFragment {
+    public static class SelectTimeDialogFragment extends DialogFragment {
 
         @NonNull
         @Override

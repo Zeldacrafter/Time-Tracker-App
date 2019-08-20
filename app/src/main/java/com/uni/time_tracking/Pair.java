@@ -1,8 +1,8 @@
 package com.uni.time_tracking;
 
 public class Pair<T, S> {
-    public T item1;
-    public S item2;
+    public final T item1;
+    public final S item2;
 
     public Pair(T item1, S item2) {
         this.item1 = item1;

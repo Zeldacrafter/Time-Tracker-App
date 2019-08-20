@@ -1,6 +1,5 @@
 package com.uni.time_tracking.activities.time;
 
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;

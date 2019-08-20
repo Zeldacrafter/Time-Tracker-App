@@ -15,6 +15,7 @@
     <string name="placeholder">Placeholder Text</string>
 
     <string name="activity_list_title"><b>Activities</b></string>
+    <string name="activity_list_activity_inactive">Inactive!</string>
 
     <!-- Navigation Menu -->
     <string name="nav_bottom_hom">Home</string>
@@ -27,12 +28,10 @@
 
     <!-- Add Category -->
     <string name="add_category_title"><b>Add new category:</b></string>
-    <string name="add_category_name">Category Name:</string>
     <string name="add_category_name_hint">Name</string>
     <string name="add_category_color">Color</string>
 
     <!-- Add Time-Entry -->
-    <string name="add_time_title"><b>Add new Time-Entry:</b></string>
     <string name="add_time_category">Category:</string>
     <string name="add_time_start_time">Start Time:</string>
     <string name="add_time_start_date">Start Date:</string>
@@ -51,9 +50,6 @@
     <string name="popup_menu_edit">Edit Activity</string>
     <string name="popup_menu_delete">Delete Activity</string>
     <string name="popup_menu_toggle_activation">Toggle Activity activation</string>
-    <string name="popup_menu_deactivate">Deactivate Activity</string>
-    <string name="popup_menu_activate">Activate Activity</string>
-    <string name="title_activity_settings">Settings</string>
 
     <!-- Preference -->
     <string name="prefs_title_calendar">Calendar</string>
