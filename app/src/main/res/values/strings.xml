@@ -14,6 +14,8 @@
 
     <string name="placeholder">Placeholder Text</string>
 
+    <string name="activity_list_title"><b>Activities</b></string>
+
     <!-- Navigation Menu -->
     <string name="nav_bottom_hom">Home</string>
     <string name="nav_home_calendar">Calendar</string>
@@ -66,6 +68,8 @@
             Do not add entries with a duration of less that 1 minute</string>
 
     <string name="pref_third_party">Third-Party Software</string>
+
+    <string name="pref_delete_data">Delete All Data</string>
     
     <!-- Third Party Apps -->
     <string name="third_party_title"><b>Third Party Apps</b></string>

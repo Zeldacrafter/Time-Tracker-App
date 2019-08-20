@@ -32,6 +32,10 @@
             app:key="third_party"
             app:title="@string/pref_third_party"/>
 
+        <Preference
+            app:key="delete_data"
+            app:title="@string/pref_delete_data"/>
+
     </PreferenceCategory>
 
     <!-- Here for reference of what can be done

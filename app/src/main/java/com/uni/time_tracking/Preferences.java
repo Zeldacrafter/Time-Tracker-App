@@ -11,6 +11,7 @@ public class Preferences {
     public static final String KEY_REMOVE_SHORT_ENTRIES = "remove_short_entries";
     public static final String KEY_DARK_MODE = "dark_mode";
     public static final String KEY_THIRD_PARTY = "third_party";
+    public static final String KEY_DELETE_DATA = "delete_data";
 
     public static boolean isSimultaneousActivitiesAllowed(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
