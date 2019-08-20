@@ -97,6 +97,13 @@ public class ThirdPartyList extends ActivityWithBackButton {
                         getResources().getString(R.string.third_party_license_database_manager));
             }
         });
+        applySpan(spannable, getResources().getString(R.string.third_party_text_drag_lin_layout), new ClickableSpan() {
+            @Override
+            public void onClick(@NotNull View widget) {
+                createDialog(getResources().getString(R.string.third_party_link_drag_lin_layout),
+                        getResources().getString(R.string.third_party_license_drag_lin_layout));
+            }
+        });
 
         thirdPartyList.setText(spannable);
         thirdPartyList.setMovementMethod(LinkMovementMethod.getInstance());
@@ -114,6 +121,7 @@ public class ThirdPartyList extends ActivityWithBackButton {
     private void createDialog(String source_link, String license) {
         //TODO: Make pretty
         //FIXME: Link in title not clickable yet.
+        //FIXME: Years are clickable as phone numbers..
 
         // Linkify the message
         final SpannableString source_link_string = new SpannableString(source_link);

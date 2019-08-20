@@ -6,6 +6,7 @@
     <!ENTITY color_picker "Android Photoshop Color Picker">
     <!ENTITY calendar_view "Material Calendar View">
     <!ENTITY database_manager "Database-Manager for Android">
+    <!ENTITY drag_lin_layout "DragLinearLayout">
     ]>
 
 <resources>
@@ -74,6 +75,7 @@
     <string name="third_party_text_color_picker">&color_picker;</string>
     <string name="third_party_text_calendar_view">&calendar_view;</string>
     <string name="third_party_text_database_manager">&database_manager;</string>
+    <string name="third_party_text_drag_lin_layout">&drag_lin_layout;</string>
 
     <string name="third_party_link_week_view">
         <a href="https://github.com/AndroidDeveloperLB/Android-Week-View">
@@ -106,8 +108,13 @@
         </a>
     </string>
     <string name="third_party_link_database_manager">
-        <a href="https://github.com/JakeWharton/butterknife">
-            https://github.com/prolificinteractive/material-calendarview
+        <a href="https://github.com/sanathp/DatabaseManager_For_Android">
+            https://github.com/sanathp/DatabaseManager_For_Android
+        </a>
+    </string>
+    <string name="third_party_link_drag_lin_layout">
+        <a href="https://github.com/justasm/DragLinearLayout">
+            https://github.com/justasm/DragLinearLayout
         </a>
     </string>
     
@@ -119,6 +126,7 @@
         &#8226; &color_picker;\n\n
         &#8226; &calendar_view;\n\n
         &#8226; &database_manager;\n\n
+        &#8226; &drag_lin_layout;\n\n
     </string>
 
 </resources>
