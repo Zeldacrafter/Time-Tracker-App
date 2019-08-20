@@ -241,7 +241,7 @@ public class CategoryListFragment extends Fragment {
         }
     }
 
-    private static class DeleteActivityDialogFragment extends DialogFragment {
+    public static class DeleteActivityDialogFragment extends DialogFragment {
 
         private static final String BUNDLE_ACTIVITY_NAME = "Activity_Name";
         private static final String BUNDLE_ACTIVITY_ID = "Activity_ID";
