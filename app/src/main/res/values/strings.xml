@@ -12,6 +12,8 @@
 <resources>
     <string name="app_name">Time-Tracking</string>
 
+    <string name="placeholder">Placeholder Text</string>
+
     <!-- Navigation Menu -->
     <string name="nav_bottom_hom">Home</string>
     <string name="nav_home_calendar">Calendar</string>

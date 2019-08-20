@@ -122,11 +122,13 @@ public class CategoryListFragment extends Fragment {
 
         //Add all categories to the list.
 
+        _assert(getActivity() != null);
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        _assert(inflater != null);
+
         View divider = inflater.inflate(R.layout.divider_horizontal, null);
         categoryList.addView(divider);
 
-        //TODO: Maybe this should be a table-layout.
         DBHelper dbHelper = DBHelper.getInstance(getContext());
         ActivityDB[] activities = dbHelper.getAcitivities();
         dbHelper.close();
