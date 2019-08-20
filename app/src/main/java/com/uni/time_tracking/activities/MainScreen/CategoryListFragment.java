@@ -146,6 +146,7 @@ public class CategoryListFragment extends Fragment {
 
             TextView activeText = listItem.findViewById(R.id.list_item_active_text);
             updateTime(activeText, activity.getId());
+            toRefreshRunningActivities.add(new Pair<>(activeText, activity.getId()));
 
             ImageView moreMenu = listItem.findViewById(R.id.list_item_more_icon);
             moreMenu.setOnClickListener(view -> {
