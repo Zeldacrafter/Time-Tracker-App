@@ -38,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_calendar:
                     loadFragment(new CalendarFragment());
                     return true;
+                case R.id.navigation_evaluation:
+                    loadFragment(new EvaluationFragment());
+                    return true;
                 case R.id.navigation_settings:
                     loadFragment(new SettingsFragment());
                     return true;

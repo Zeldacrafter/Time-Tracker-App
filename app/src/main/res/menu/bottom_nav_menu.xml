@@ -12,6 +12,11 @@
         android:title="@string/nav_home_calendar" />
 
     <item
+        android:id="@+id/navigation_evaluation"
+        android:icon="@drawable/ic_bar_chart_24px"
+        android:title="@string/nav_home_evaluation" />
+
+    <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_settings_20px"
         android:title="@string/nav_home_settings" />

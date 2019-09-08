@@ -20,6 +20,7 @@
     <!-- Navigation Menu -->
     <string name="nav_bottom_hom">Home</string>
     <string name="nav_home_calendar">Calendar</string>
+    <string name="nav_home_evaluation">Evaluation</string>
     <string name="nav_home_settings">Settings</string>
     <string name="nav_top_dev_database_viewer">DEV: Database Viewer</string>
     <string name="nav_top_add_category">Add Category</string>
@@ -37,6 +38,10 @@
     <string name="add_time_start_date">Start Date:</string>
     <string name="add_time_end_time">End Time:</string>
     <string name="add_time_end_date">End Date:</string>
+    <string name="minus15">-15</string>
+    <string name="minus5">-5</string>
+    <string name="plus5">+5</string>
+    <string name="plus15">+15</string>
 
     <!-- CalendarView -->
     <string name="calendar_action_today">Today</string>
@@ -50,6 +55,9 @@
     <string name="popup_menu_edit">Edit Activity</string>
     <string name="popup_menu_delete">Delete Activity</string>
     <string name="popup_menu_toggle_activation">Toggle Activity activation</string>
+
+    <!-- Evaluation -->
+    <string name="evaluation_title"><b>Evaluation</b></string>
 
     <!-- Preference -->
     <string name="prefs_title_calendar">Calendar</string>
@@ -130,9 +138,5 @@
         &#8226; &database_manager;\n\n
         &#8226; &drag_lin_layout;\n\n
     </string>
-    <string name="minus15">-15</string>
-    <string name="minus5">-5</string>
-    <string name="plus5">+5</string>
-    <string name="plus15">+15</string>
 
 </resources>
