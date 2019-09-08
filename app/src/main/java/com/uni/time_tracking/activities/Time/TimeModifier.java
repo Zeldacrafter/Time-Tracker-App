@@ -44,6 +44,7 @@ public abstract class TimeModifier extends ActivityWithBackButton implements Ada
     public static final String BUNDLE_ACTIVITY_ID = "Activity_ID";
     public static final String BUNDLE_START_TIME = "Start_Time";
     public static final String BUNDLE_END_TIME = "End_Time";
+    public static final String BUNDLE_STILL_ACTIVE = "Still_Active";
 
     protected enum Mode {
         START,
@@ -70,12 +71,19 @@ public abstract class TimeModifier extends ActivityWithBackButton implements Ada
         setContentView(R.layout.activity_add_time);
         ButterKnife.bind(this);
 
+        // Get information about entry to edit from caller.
         Bundle extras = getIntent().getExtras();
         _assert(extras != null);
         int timeID = extras.getInt(BUNDLE_ID, TimeDB.NO_ID_VALUE);
         DateTime start = Time.fromLong(extras.getLong(BUNDLE_START_TIME));
-        DateTime end = Time.fromLong(extras.getLong(BUNDLE_END_TIME));
+        // If this has not been passed we are in the following scenario:
+        // We want to edit an activity-entry that is still running -> no end set yet.
+        DateTime end = this instanceof EditTime && extras.getBoolean(BUNDLE_STILL_ACTIVE, false) ?
+                Time.getCurrentTime()
+                    :
+                Time.fromLong(extras.getLong(BUNDLE_END_TIME));
         int timeActivityID = extras.getInt(BUNDLE_ACTIVITY_ID, TimeDB.NO_ID_VALUE);
+
         timeEntry = new TimeDB(timeID, start, end, timeActivityID);
 
         startTime.setText(Time.toTimeString(timeEntry.getStart()));

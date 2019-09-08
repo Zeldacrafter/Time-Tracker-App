@@ -469,8 +469,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 null, null, null);
         c.moveToFirst();
         TimeDB result = new TimeDB(id,
-                Time.fromLong(c.getLong(0)),
-                Time.fromLong(c.getLong(1)),
+                c.getLong(0) != 0 ? Time.fromLong(c.getLong(0)) : null,
+                c.getLong(1) != 0 ? Time.fromLong(c.getLong(1)) : null,
                 c.getInt(2));
 
         c.close();

@@ -66,7 +66,13 @@ public class CalendarFragment extends BaseCalendarFragment {
 
         editTimeEntry.putExtra(TimeModifier.BUNDLE_ID, timeEntry.getId());
         editTimeEntry.putExtra(TimeModifier.BUNDLE_START_TIME, Time.toLong(timeEntry.getStart()));
-        editTimeEntry.putExtra(TimeModifier.BUNDLE_END_TIME, Time.toLong(timeEntry.getEnd()));
+        if(timeEntry.getEnd() == null) {
+            // If the end is null that means that the activity-entry is currently active and running.
+            editTimeEntry.putExtra(TimeModifier.BUNDLE_STILL_ACTIVE, true);
+        } else {
+            editTimeEntry.putExtra(TimeModifier.BUNDLE_STILL_ACTIVE, false);
+            editTimeEntry.putExtra(TimeModifier.BUNDLE_END_TIME, Time.toLong(timeEntry.getEnd()));
+        }
         editTimeEntry.putExtra(TimeModifier.BUNDLE_ACTIVITY_ID, timeEntry.getActivityID());
 
         startActivity(editTimeEntry);

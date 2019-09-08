@@ -25,6 +25,7 @@ import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.alamkanak.weekview.WeekViewUtil;
 import com.uni.time_tracking.R;
+import com.uni.time_tracking.Time;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -116,6 +117,11 @@ abstract class BaseCalendarFragment extends Fragment implements
         // Set up a date time interpreter to interpret how the date and time will be formatted in
         // the week view. This is optional.
         setupDateTimeInterpreter(false);
+        weekView.goToHour(Math.max(Time.getCurrentTime().getHourOfDay() - 5, 0));
+        Calendar yesterday = Calendar.getInstance();
+        //TODO: Is using Calendar.DAY_OF_YEAR a problem for example on the 01.01?
+        yesterday.add(Calendar.DAY_OF_YEAR, -1);
+        weekView.goToDate(yesterday);
     }
 
     @Override
