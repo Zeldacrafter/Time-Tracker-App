@@ -550,8 +550,9 @@ public class DBHelper extends SQLiteOpenHelper {
                     " ON " + TimeDB.FeedEntry.COLUMN_ACTIVITY_ID + " = " + ActivityDB.FeedEntry.TABLE_NAME + "." + ActivityDB.FeedEntry._ID +
                 " WHERE " + TimeDB.FeedEntry.TABLE_NAME + "." + TimeDB.FeedEntry.COLUMN_START +
                         " <= " + year + (month < 10 ? "0" : "") + month + "99999999" +
-                    " AND " + TimeDB.FeedEntry.TABLE_NAME + "." + TimeDB.FeedEntry.COLUMN_END +
+                    " AND (" + TimeDB.FeedEntry.TABLE_NAME + "." + TimeDB.FeedEntry.COLUMN_END +
                         " >= " + year + (month < 10 ? "0" : "") + month + "00000000" +
+                    " OR " + TimeDB.FeedEntry.COLUMN_END + " IS NULL)" +
                     " AND " + ActivityDB.FeedEntry.COLUMN_ACTIVE + " = 1";
 
         Cursor c = db.rawQuery(query, null);
