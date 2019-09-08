@@ -167,6 +167,54 @@ public abstract class TimeModifier extends ActivityWithBackButton implements Ada
         dialog.show(fragmentManager, null);
     }
 
+    @OnClick(R.id.add_time_minus_15_start_time)
+    public void minus15StartClicked() {
+        timeEntry.setStart(timeEntry.getStart().minusMinutes(15));
+        startTime.setText(Time.toTimeString(timeEntry.getStart()));
+    }
+
+    @OnClick(R.id.add_time_minus_5_start_time)
+    public void minus5StartClicked() {
+        timeEntry.setStart(timeEntry.getStart().minusMinutes(5));
+        startTime.setText(Time.toTimeString(timeEntry.getStart()));
+    }
+
+    @OnClick(R.id.add_time_plus_5_start_time)
+    public void plus5StartClicked() {
+        timeEntry.setStart(timeEntry.getStart().plusMinutes(5));
+        startTime.setText(Time.toTimeString(timeEntry.getStart()));
+    }
+
+    @OnClick(R.id.add_time_plus_15_start_time)
+    public void plus15StartClicked() {
+        timeEntry.setStart(timeEntry.getStart().plusMinutes(15));
+        startTime.setText(Time.toTimeString(timeEntry.getStart()));
+    }
+
+    @OnClick(R.id.add_time_minus_15_end_time)
+    public void minus15EndClicked() {
+        timeEntry.setEnd(timeEntry.getEnd().minusMinutes(15));
+        endTime.setText(Time.toTimeString(timeEntry.getEnd()));
+    }
+
+    @OnClick(R.id.add_time_minus_5_end_time)
+    public void minus5EndClicked() {
+        timeEntry.setEnd(timeEntry.getEnd().minusMinutes(5));
+        endTime.setText(Time.toTimeString(timeEntry.getEnd()));
+    }
+
+    @OnClick(R.id.add_time_plus_5_end_time)
+    public void plus5EndClicked() {
+        timeEntry.setEnd(timeEntry.getEnd().plusMinutes(5));
+        endTime.setText(Time.toTimeString(timeEntry.getEnd()));
+    }
+
+    @OnClick(R.id.add_time_plus_15_end_time)
+    public void plus15EndClicked() {
+        timeEntry.setEnd(timeEntry.getEnd().plusMinutes(15));
+        endTime.setText(Time.toTimeString(timeEntry.getEnd()));
+    }
+
     protected void newStartTime(int hour, int minute) {
         timeEntry.setStart(new DateTime(timeEntry.getStart().getYear(), timeEntry.getStart().getMonthOfYear(), timeEntry.getStart().getDayOfMonth(), hour, minute));
         startTime.setText(Time.toTimeString(timeEntry.getStart()));

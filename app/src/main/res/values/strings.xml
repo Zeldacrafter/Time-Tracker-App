@@ -130,5 +130,9 @@
         &#8226; &database_manager;\n\n
         &#8226; &drag_lin_layout;\n\n
     </string>
+    <string name="minus15">-15</string>
+    <string name="minus5">-5</string>
+    <string name="plus5">+5</string>
+    <string name="plus15">+15</string>
 
 </resources>
