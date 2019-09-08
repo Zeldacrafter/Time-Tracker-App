@@ -46,6 +46,13 @@ public abstract class TimeModifier extends ActivityWithBackButton implements Ada
     public static final String BUNDLE_END_TIME = "End_Time";
     public static final String BUNDLE_STILL_ACTIVE = "Still_Active";
 
+    /**
+     * This can only be 'true' if we are in {@link EditTime}.
+     * TODO: Move this there somehow?
+     */
+    protected boolean isStillActive;
+    protected DateTime endTimeAtBeginning;
+
     protected enum Mode {
         START,
         END
@@ -74,11 +81,12 @@ public abstract class TimeModifier extends ActivityWithBackButton implements Ada
         // Get information about entry to edit from caller.
         Bundle extras = getIntent().getExtras();
         _assert(extras != null);
+        isStillActive = extras.getBoolean(BUNDLE_STILL_ACTIVE, false);
         int timeID = extras.getInt(BUNDLE_ID, TimeDB.NO_ID_VALUE);
         DateTime start = Time.fromLong(extras.getLong(BUNDLE_START_TIME));
         // If this has not been passed we are in the following scenario:
         // We want to edit an activity-entry that is still running -> no end set yet.
-        DateTime end = this instanceof EditTime && extras.getBoolean(BUNDLE_STILL_ACTIVE, false) ?
+        DateTime end = this instanceof EditTime && isStillActive ?
                 Time.getCurrentTime()
                     :
                 Time.fromLong(extras.getLong(BUNDLE_END_TIME));
@@ -99,6 +107,10 @@ public abstract class TimeModifier extends ActivityWithBackButton implements Ada
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setOnItemSelectedListener(this);
         categorySpinner.setAdapter(adapter);
+
+        //plus(0) to get a copy not a reference
+        //TODO: This variable is only used in EditTime
+        endTimeAtBeginning = timeEntry.getEnd().plus(0);
     }
 
     @Override

@@ -45,6 +45,9 @@ public class EditTime extends TimeModifier {
                 } else {
                     DBHelper dbHelper = DBHelper.getInstance(getApplicationContext());
                     dbHelper.editEntryTime(timeEntry.getId(), timeEntry.getStart(), timeEntry.getEnd(), activity.getId());
+                    if (isStillActive && timeEntry.getEnd().equals(endTimeAtBeginning)) {
+                        dbHelper.makeTimeEntryEndNull(timeEntry.getId());
+                    } else { /* TODO: Popup with warning? */ }
                     dbHelper.close();
 
                     showToast("Edited Time-Entry!", getApplicationContext());

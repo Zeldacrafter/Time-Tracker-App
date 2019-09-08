@@ -641,6 +641,41 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public boolean isAnyActivityActive() {
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor c = db.query(TimeDB.FeedEntry.TABLE_NAME, new String[]{TimeDB.FeedEntry._ID},
+                TimeDB.FeedEntry.COLUMN_END + " IS NULL",
+                null, null, null, null);
+        int count = c.getCount();
+
+        c.close();
+        db.close();
+
+        return count > 0;
+    }
+
+    /**
+     * This is used to set {@link TimeDB.FeedEntry#COLUMN_END} to null.
+     * This has the effect of the entry running.
+     * TODO: This does not currently check if there is another active activity.
+     * @param id The id of the entry
+     */
+    public void makeTimeEntryEndNull(int id) {
+        _assert(id > 0, "ID = " + id);
+        _assert(!isAnyActivityActive());
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        String query = "UPDATE " + TimeDB.FeedEntry.TABLE_NAME +
+                " SET " + TimeDB.FeedEntry.COLUMN_END + " = NULL WHERE " +
+                TimeDB.FeedEntry._ID + " = " + id;
+        db.execSQL(query);
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+    }
+
     /**
      * This method is for the class 'DevAndroidDatabaseManager'
      * Remove this before release
