@@ -655,6 +655,37 @@ public class DBHelper extends SQLiteOpenHelper {
         return count > 0;
     }
 
+    public TimeDB[] getEntriesInTimespan(int activityID, DateTime start, DateTime end) {
+
+        //TODO: If activity is still running that entry is not considered.
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor c = db.query(TimeDB.FeedEntry.TABLE_NAME,
+                new String[]{
+                    TimeDB.FeedEntry._ID,
+                    TimeDB.FeedEntry.COLUMN_START,
+                    TimeDB.FeedEntry.COLUMN_END},
+                TimeDB.FeedEntry.COLUMN_ACTIVITY_ID + " = ? AND " +
+                        TimeDB.FeedEntry.COLUMN_START + " >= ? AND " +
+                        TimeDB.FeedEntry.COLUMN_END + " <= ?",
+                new String[]{activityID+"", Time.toLong(start)+"", Time.toLong(end)+""},
+                null, null, null);
+
+        TimeDB[] result = new TimeDB[c.getCount()];
+        for(int i = 0; c.moveToNext(); i++) {
+            result[i] = new TimeDB(c.getInt(0),
+                                   Time.fromLong(c.getLong(1)),
+                                   c.getLong(2) != 0 ? Time.fromLong(c.getLong(2)) : Time.getCurrentTime(),
+                                   activityID);
+        }
+
+        c.close();
+        db.close();
+
+        return result;
+    }
+
     /**
      * This is used to set {@link TimeDB.FeedEntry#COLUMN_END} to null.
      * This has the effect of the entry running.

@@ -41,6 +41,11 @@ public class Time {
         return difference(getCurrentTime(), dateTime);
     }
 
+    public static long getDifferenceLong(Period p) {
+        String str = toString(p).replace(":", ""); // HH:mm:ss
+        return Long.parseLong(str);
+    }
+
     /**
      * Compares if the length of the first period is longer than the second.
      * @param p1 The first period.
@@ -96,7 +101,7 @@ public class Time {
         return dateTime.toString(f);
     }
 
-    private static String toString(Period p) {
+    public static String toString(Period p) {
         PeriodFormatter minutesAndSeconds = new PeriodFormatterBuilder()
                 .printZeroAlways()
                 .minimumPrintedDigits(2)

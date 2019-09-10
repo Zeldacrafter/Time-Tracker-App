@@ -1,6 +1,7 @@
 package com.uni.time_tracking.activities.mainScreen;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,12 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.uni.time_tracking.R;
+import com.uni.time_tracking.Time;
+import com.uni.time_tracking.database.DBHelper;
+import com.uni.time_tracking.database.tables.ActivityDB;
+import com.uni.time_tracking.database.tables.TimeDB;
+
+import org.joda.time.Period;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -26,6 +33,8 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static com.uni.time_tracking.Time.getDifferenceLong;
 
 public class EvaluationFragment extends Fragment implements OnChartValueSelectedListener {
 
@@ -62,23 +71,35 @@ public class EvaluationFragment extends Fragment implements OnChartValueSelected
 
     private void setData() {
 
+        DBHelper dbHelper = DBHelper.getInstance(getContext());
+
         ArrayList<IBarDataSet> dataSets = new ArrayList<>();
 
-        Random rand = new Random();
-        for (int i = 0; i < 10; i++){
+        ActivityDB[] activities = dbHelper.getActiveActivities();
+
+        int pos = 1;
+        for (ActivityDB activity : activities){
+
+            float totalTimeSpent = 0;
+            TimeDB[] entries = dbHelper.getEntriesInTimespan(
+                    activity.getId(),
+                    Time.getCurrentTime().minusDays(7),
+                    Time.getCurrentTime());
+
+            for(TimeDB entry : entries) {
+                totalTimeSpent += getDifferenceLong(new Period(entry.getStart(), entry.getEnd())) / 10000.0f;
+            }
+
             ArrayList<BarEntry> values = new ArrayList<>();
-            values.add(new BarEntry(i, (float) (Math.random() * (30 + 1))));
+            values.add(new BarEntry(pos, totalTimeSpent));
 
-            int r = rand.nextInt(255);
-            int g = rand.nextInt(255);
-            int b = rand.nextInt(255);
-            int color = (0xff) << 24 | (r & 0xff) << 16 | (g & 0xff) << 8 | (b & 0xff);
-
-            BarDataSet set1 = new BarDataSet(values, randomString());
+            BarDataSet set1 = new BarDataSet(values, activity.getName());
             set1.setDrawIcons(false);
-            set1.setColor(color);
+            set1.setColor(activity.getColor());
 
             dataSets.add(set1);
+
+            pos++;
         }
 
         BarData data = new BarData(dataSets);
@@ -87,13 +108,14 @@ public class EvaluationFragment extends Fragment implements OnChartValueSelected
 
         chart.setData(data);
         chart.invalidate();
+
+        dbHelper.close();
     }
 
     public String randomString() {
         byte[] array = new byte[7]; // length is bounded by 7
         new Random().nextBytes(array);
-        String generatedString = new String(array, Charset.forName("UTF-8"));
-        return generatedString;
+        return new String(array, Charset.forName("UTF-8"));
     }
 
     @Override
