@@ -9,4 +9,25 @@
         android:text="@string/evaluation_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:gravity="center_horizontal"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/evaluation_bar_chart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+
+        </LinearLayout>
+
+    </LinearLayout>
 </LinearLayout>
