@@ -580,7 +580,7 @@ public class DBHelper extends SQLiteOpenHelper {
             if(endYearMonth > wantedYearMonth) {
                 // End time ends too late.
                 // Set to wanted month, last day, 23 hours, 59 mins/secs.
-                long maxDaysInMonth = (new GregorianCalendar(year, month, 1)).getActualMaximum(Calendar.DAY_OF_MONTH);
+                long maxDaysInMonth = (new GregorianCalendar(year, month-1, 1)).getActualMaximum(Calendar.DAY_OF_MONTH);
                 end = wantedYearMonth*100000000 + maxDaysInMonth*1000000 + 235959; //eg 31 23:59:59
             }
             result.add(new TimeDB(id, Time.fromLong(start), Time.fromLong(end), activity_id));
